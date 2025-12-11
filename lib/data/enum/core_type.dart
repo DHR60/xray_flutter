@@ -1,0 +1,4 @@
+enum ECoreType {
+  unknown,
+  xray,
+}
