@@ -8,7 +8,7 @@ abstract class UiItemDto with _$UiItemDto {
   const factory UiItemDto({
     int? fontSize,
     String? fontFamily,
-    bool? isDarkMode,
+    int? isDarkMode,
   }) = _UiItemDto;
 
   factory UiItemDto.fromJson(Map<String, dynamic> json) =>

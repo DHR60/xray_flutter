@@ -9,7 +9,7 @@ part of 'ui_item_dto.dart';
 _UiItemDto _$UiItemDtoFromJson(Map<String, dynamic> json) => _UiItemDto(
   fontSize: (json['fontSize'] as num?)?.toInt(),
   fontFamily: json['fontFamily'] as String?,
-  isDarkMode: json['isDarkMode'] as bool?,
+  isDarkMode: (json['isDarkMode'] as num?)?.toInt(),
 );
 
 Map<String, dynamic> _$UiItemDtoToJson(_UiItemDto instance) =>

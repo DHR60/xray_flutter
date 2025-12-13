@@ -7,6 +7,7 @@ class ProfileItem extends Table {
   late final configType = textEnum<EConfigType>().clientDefault(() => 'unknown')();
   late final configVersion = integer().clientDefault(() => 0)();
   late final remarks = text().clientDefault(() => '')();
+  late final orderIndex = integer().clientDefault(() => 0)();
   late final subid = text().clientDefault(() => '')();
   late final isSub = boolean().clientDefault(() => true)();
   late final address = text().clientDefault(() => '')();

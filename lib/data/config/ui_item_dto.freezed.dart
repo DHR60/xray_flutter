@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$UiItemDto {
 
- int? get fontSize; String? get fontFamily; bool? get isDarkMode;
+ int? get fontSize; String? get fontFamily; int? get isDarkMode;
 /// Create a copy of UiItemDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $UiItemDtoCopyWith<$Res>  {
   factory $UiItemDtoCopyWith(UiItemDto value, $Res Function(UiItemDto) _then) = _$UiItemDtoCopyWithImpl;
 @useResult
 $Res call({
- int? fontSize, String? fontFamily, bool? isDarkMode
+ int? fontSize, String? fontFamily, int? isDarkMode
 });
 
 
@@ -70,7 +70,7 @@ class _$UiItemDtoCopyWithImpl<$Res>
 fontSize: freezed == fontSize ? _self.fontSize : fontSize // ignore: cast_nullable_to_non_nullable
 as int?,fontFamily: freezed == fontFamily ? _self.fontFamily : fontFamily // ignore: cast_nullable_to_non_nullable
 as String?,isDarkMode: freezed == isDarkMode ? _self.isDarkMode : isDarkMode // ignore: cast_nullable_to_non_nullable
-as bool?,
+as int?,
   ));
 }
 
@@ -155,7 +155,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? fontSize,  String? fontFamily,  bool? isDarkMode)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? fontSize,  String? fontFamily,  int? isDarkMode)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UiItemDto() when $default != null:
 return $default(_that.fontSize,_that.fontFamily,_that.isDarkMode);case _:
@@ -176,7 +176,7 @@ return $default(_that.fontSize,_that.fontFamily,_that.isDarkMode);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? fontSize,  String? fontFamily,  bool? isDarkMode)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? fontSize,  String? fontFamily,  int? isDarkMode)  $default,) {final _that = this;
 switch (_that) {
 case _UiItemDto():
 return $default(_that.fontSize,_that.fontFamily,_that.isDarkMode);case _:
@@ -196,7 +196,7 @@ return $default(_that.fontSize,_that.fontFamily,_that.isDarkMode);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? fontSize,  String? fontFamily,  bool? isDarkMode)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? fontSize,  String? fontFamily,  int? isDarkMode)?  $default,) {final _that = this;
 switch (_that) {
 case _UiItemDto() when $default != null:
 return $default(_that.fontSize,_that.fontFamily,_that.isDarkMode);case _:
@@ -216,7 +216,7 @@ class _UiItemDto implements UiItemDto {
 
 @override final  int? fontSize;
 @override final  String? fontFamily;
-@override final  bool? isDarkMode;
+@override final  int? isDarkMode;
 
 /// Create a copy of UiItemDto
 /// with the given fields replaced by the non-null parameter values.
@@ -251,7 +251,7 @@ abstract mixin class _$UiItemDtoCopyWith<$Res> implements $UiItemDtoCopyWith<$Re
   factory _$UiItemDtoCopyWith(_UiItemDto value, $Res Function(_UiItemDto) _then) = __$UiItemDtoCopyWithImpl;
 @override @useResult
 $Res call({
- int? fontSize, String? fontFamily, bool? isDarkMode
+ int? fontSize, String? fontFamily, int? isDarkMode
 });
 
 
@@ -273,7 +273,7 @@ class __$UiItemDtoCopyWithImpl<$Res>
 fontSize: freezed == fontSize ? _self.fontSize : fontSize // ignore: cast_nullable_to_non_nullable
 as int?,fontFamily: freezed == fontFamily ? _self.fontFamily : fontFamily // ignore: cast_nullable_to_non_nullable
 as String?,isDarkMode: freezed == isDarkMode ? _self.isDarkMode : isDarkMode // ignore: cast_nullable_to_non_nullable
-as bool?,
+as int?,
   ));
 }
 

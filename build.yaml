@@ -5,3 +5,14 @@ targets:
         options:
           databases:
             my_database: lib/data/db/app_database.dart
+
+global_options:
+  drift_dev|drift_dev:
+    runs_before:
+      - riverpod_generator|riverpod_generator
+  freezed|freezed:
+    runs_before:
+      - riverpod_generator|riverpod_generator
+  json_serializable|json_serializable:
+    runs_before:
+      - riverpod_generator|riverpod_generator

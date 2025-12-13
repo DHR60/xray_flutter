@@ -21,7 +21,7 @@ final class AppDatabaseProvider
         argument: null,
         retry: null,
         name: r'appDatabaseProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -48,7 +48,7 @@ final class AppDatabaseProvider
   }
 }
 
-String _$appDatabaseHash() => r'18ce5c8c4d8ddbfe5a7d819d8fb7d5aca76bf416';
+String _$appDatabaseHash() => r'8c69eb46d45206533c176c88a926608e79ca927d';
 
 @ProviderFor(profileRepo)
 const profileRepoProvider = ProfileRepoProvider._();
@@ -62,7 +62,7 @@ final class ProfileRepoProvider
         argument: null,
         retry: null,
         name: r'profileRepoProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -89,53 +89,184 @@ final class ProfileRepoProvider
   }
 }
 
-String _$profileRepoHash() => r'e310b082aa8b96de5fde4b4186393217dca26d69';
+String _$profileRepoHash() => r'cdce737508e299e9009e67c21785e96c1f922d92';
 
-@ProviderFor(appConfigManager)
-const appConfigManagerProvider = AppConfigManagerProvider._();
+@ProviderFor(saveProfileUseCase)
+const saveProfileUseCaseProvider = SaveProfileUseCaseProvider._();
 
-final class AppConfigManagerProvider
+final class SaveProfileUseCaseProvider
     extends
         $FunctionalProvider<
-          AppConfigManager,
-          AppConfigManager,
-          AppConfigManager
+          SaveProfileUseCase,
+          SaveProfileUseCase,
+          SaveProfileUseCase
         >
-    with $Provider<AppConfigManager> {
-  const AppConfigManagerProvider._()
+    with $Provider<SaveProfileUseCase> {
+  const SaveProfileUseCaseProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'appConfigManagerProvider',
+        name: r'saveProfileUseCaseProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$saveProfileUseCaseHash();
+
+  @$internal
+  @override
+  $ProviderElement<SaveProfileUseCase> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  SaveProfileUseCase create(Ref ref) {
+    return saveProfileUseCase(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(SaveProfileUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<SaveProfileUseCase>(value),
+    );
+  }
+}
+
+String _$saveProfileUseCaseHash() =>
+    r'b809d74a1136e8e94694b15316f053208348924b';
+
+@ProviderFor(exportProfileConfigUseCase)
+const exportProfileConfigUseCaseProvider = ExportProfileConfigUseCaseFamily._();
+
+final class ExportProfileConfigUseCaseProvider
+    extends
+        $FunctionalProvider<
+          ExportProfileConfigUseCase,
+          ExportProfileConfigUseCase,
+          ExportProfileConfigUseCase
+        >
+    with $Provider<ExportProfileConfigUseCase> {
+  const ExportProfileConfigUseCaseProvider._({
+    required ExportProfileConfigUseCaseFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'exportProfileConfigUseCaseProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$exportProfileConfigUseCaseHash();
+
+  @override
+  String toString() {
+    return r'exportProfileConfigUseCaseProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $ProviderElement<ExportProfileConfigUseCase> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  ExportProfileConfigUseCase create(Ref ref) {
+    final argument = this.argument as String;
+    return exportProfileConfigUseCase(ref, argument);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ExportProfileConfigUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ExportProfileConfigUseCase>(value),
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ExportProfileConfigUseCaseProvider &&
+        other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$exportProfileConfigUseCaseHash() =>
+    r'92b6dbd7e799812a67d153b82ce7d8ca79796fbc';
+
+final class ExportProfileConfigUseCaseFamily extends $Family
+    with $FunctionalFamilyOverride<ExportProfileConfigUseCase, String> {
+  const ExportProfileConfigUseCaseFamily._()
+    : super(
+        retry: null,
+        name: r'exportProfileConfigUseCaseProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  ExportProfileConfigUseCaseProvider call(String profileIndexId) =>
+      ExportProfileConfigUseCaseProvider._(
+        argument: profileIndexId,
+        from: this,
+      );
+
+  @override
+  String toString() => r'exportProfileConfigUseCaseProvider';
+}
+
+@ProviderFor(storeService)
+const storeServiceProvider = StoreServiceProvider._();
+
+final class StoreServiceProvider
+    extends $FunctionalProvider<StoreService, StoreService, StoreService>
+    with $Provider<StoreService> {
+  const StoreServiceProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'storeServiceProvider',
         isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$appConfigManagerHash();
+  String debugGetCreateSourceHash() => _$storeServiceHash();
 
   @$internal
   @override
-  $ProviderElement<AppConfigManager> $createElement($ProviderPointer pointer) =>
+  $ProviderElement<StoreService> $createElement($ProviderPointer pointer) =>
       $ProviderElement(pointer);
 
   @override
-  AppConfigManager create(Ref ref) {
-    return appConfigManager(ref);
+  StoreService create(Ref ref) {
+    return storeService(ref);
   }
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(AppConfigManager value) {
+  Override overrideWithValue(StoreService value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<AppConfigManager>(value),
+      providerOverride: $SyncValueProvider<StoreService>(value),
     );
   }
 }
 
-String _$appConfigManagerHash() => r'0a99d50297287d81ce89ea52970d373799e19aee';
+String _$storeServiceHash() => r'2179cb250c407b9c32b28e9f4d6157bc404b4beb';
 
 @ProviderFor(configInitializer)
 const configInitializerProvider = ConfigInitializerProvider._();
@@ -168,4 +299,4 @@ final class ConfigInitializerProvider
   }
 }
 
-String _$configInitializerHash() => r'3481b54a4ad4b85cdf24a1ca524ad7a861a68889';
+String _$configInitializerHash() => r'8772d36c78348efeea2b20551c992d553228bb42';

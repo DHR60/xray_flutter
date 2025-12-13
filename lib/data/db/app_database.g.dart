@@ -54,6 +54,18 @@ class $ProfileItemTable extends ProfileItem
     requiredDuringInsert: false,
     clientDefault: () => '',
   );
+  static const VerificationMeta _orderIndexMeta = const VerificationMeta(
+    'orderIndex',
+  );
+  @override
+  late final GeneratedColumn<int> orderIndex = GeneratedColumn<int>(
+    'order_index',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    clientDefault: () => 0,
+  );
   static const VerificationMeta _subidMeta = const VerificationMeta('subid');
   @override
   late final GeneratedColumn<String> subid = GeneratedColumn<String>(
@@ -368,6 +380,7 @@ class $ProfileItemTable extends ProfileItem
     configType,
     configVersion,
     remarks,
+    orderIndex,
     subid,
     isSub,
     address,
@@ -429,6 +442,12 @@ class $ProfileItemTable extends ProfileItem
       context.handle(
         _remarksMeta,
         remarks.isAcceptableOrUnknown(data['remarks']!, _remarksMeta),
+      );
+    }
+    if (data.containsKey('order_index')) {
+      context.handle(
+        _orderIndexMeta,
+        orderIndex.isAcceptableOrUnknown(data['order_index']!, _orderIndexMeta),
       );
     }
     if (data.containsKey('subid')) {
@@ -629,6 +648,10 @@ class $ProfileItemTable extends ProfileItem
         DriftSqlType.string,
         data['${effectivePrefix}remarks'],
       )!,
+      orderIndex: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}order_index'],
+      )!,
       subid: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}subid'],
@@ -760,6 +783,7 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
   final EConfigType configType;
   final int configVersion;
   final String remarks;
+  final int orderIndex;
   final String subid;
   final bool isSub;
   final String address;
@@ -792,6 +816,7 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
     required this.configType,
     required this.configVersion,
     required this.remarks,
+    required this.orderIndex,
     required this.subid,
     required this.isSub,
     required this.address,
@@ -831,6 +856,7 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
     }
     map['config_version'] = Variable<int>(configVersion);
     map['remarks'] = Variable<String>(remarks);
+    map['order_index'] = Variable<int>(orderIndex);
     map['subid'] = Variable<String>(subid);
     map['is_sub'] = Variable<bool>(isSub);
     map['address'] = Variable<String>(address);
@@ -873,6 +899,7 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
       configType: Value(configType),
       configVersion: Value(configVersion),
       remarks: Value(remarks),
+      orderIndex: Value(orderIndex),
       subid: Value(subid),
       isSub: Value(isSub),
       address: Value(address),
@@ -919,6 +946,7 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
       ),
       configVersion: serializer.fromJson<int>(json['configVersion']),
       remarks: serializer.fromJson<String>(json['remarks']),
+      orderIndex: serializer.fromJson<int>(json['orderIndex']),
       subid: serializer.fromJson<String>(json['subid']),
       isSub: serializer.fromJson<bool>(json['isSub']),
       address: serializer.fromJson<String>(json['address']),
@@ -960,6 +988,7 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
       ),
       'configVersion': serializer.toJson<int>(configVersion),
       'remarks': serializer.toJson<String>(remarks),
+      'orderIndex': serializer.toJson<int>(orderIndex),
       'subid': serializer.toJson<String>(subid),
       'isSub': serializer.toJson<bool>(isSub),
       'address': serializer.toJson<String>(address),
@@ -997,6 +1026,7 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
     EConfigType? configType,
     int? configVersion,
     String? remarks,
+    int? orderIndex,
     String? subid,
     bool? isSub,
     String? address,
@@ -1029,6 +1059,7 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
     configType: configType ?? this.configType,
     configVersion: configVersion ?? this.configVersion,
     remarks: remarks ?? this.remarks,
+    orderIndex: orderIndex ?? this.orderIndex,
     subid: subid ?? this.subid,
     isSub: isSub ?? this.isSub,
     address: address ?? this.address,
@@ -1069,6 +1100,9 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
           ? data.configVersion.value
           : this.configVersion,
       remarks: data.remarks.present ? data.remarks.value : this.remarks,
+      orderIndex: data.orderIndex.present
+          ? data.orderIndex.value
+          : this.orderIndex,
       subid: data.subid.present ? data.subid.value : this.subid,
       isSub: data.isSub.present ? data.isSub.value : this.isSub,
       address: data.address.present ? data.address.value : this.address,
@@ -1124,6 +1158,7 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
           ..write('configType: $configType, ')
           ..write('configVersion: $configVersion, ')
           ..write('remarks: $remarks, ')
+          ..write('orderIndex: $orderIndex, ')
           ..write('subid: $subid, ')
           ..write('isSub: $isSub, ')
           ..write('address: $address, ')
@@ -1161,6 +1196,7 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
     configType,
     configVersion,
     remarks,
+    orderIndex,
     subid,
     isSub,
     address,
@@ -1197,6 +1233,7 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
           other.configType == this.configType &&
           other.configVersion == this.configVersion &&
           other.remarks == this.remarks &&
+          other.orderIndex == this.orderIndex &&
           other.subid == this.subid &&
           other.isSub == this.isSub &&
           other.address == this.address &&
@@ -1231,6 +1268,7 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
   final Value<EConfigType> configType;
   final Value<int> configVersion;
   final Value<String> remarks;
+  final Value<int> orderIndex;
   final Value<String> subid;
   final Value<bool> isSub;
   final Value<String> address;
@@ -1264,6 +1302,7 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
     this.configType = const Value.absent(),
     this.configVersion = const Value.absent(),
     this.remarks = const Value.absent(),
+    this.orderIndex = const Value.absent(),
     this.subid = const Value.absent(),
     this.isSub = const Value.absent(),
     this.address = const Value.absent(),
@@ -1298,6 +1337,7 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
     this.configType = const Value.absent(),
     this.configVersion = const Value.absent(),
     this.remarks = const Value.absent(),
+    this.orderIndex = const Value.absent(),
     this.subid = const Value.absent(),
     this.isSub = const Value.absent(),
     this.address = const Value.absent(),
@@ -1332,6 +1372,7 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
     Expression<String>? configType,
     Expression<int>? configVersion,
     Expression<String>? remarks,
+    Expression<int>? orderIndex,
     Expression<String>? subid,
     Expression<bool>? isSub,
     Expression<String>? address,
@@ -1366,6 +1407,7 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
       if (configType != null) 'config_type': configType,
       if (configVersion != null) 'config_version': configVersion,
       if (remarks != null) 'remarks': remarks,
+      if (orderIndex != null) 'order_index': orderIndex,
       if (subid != null) 'subid': subid,
       if (isSub != null) 'is_sub': isSub,
       if (address != null) 'address': address,
@@ -1402,6 +1444,7 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
     Value<EConfigType>? configType,
     Value<int>? configVersion,
     Value<String>? remarks,
+    Value<int>? orderIndex,
     Value<String>? subid,
     Value<bool>? isSub,
     Value<String>? address,
@@ -1436,6 +1479,7 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
       configType: configType ?? this.configType,
       configVersion: configVersion ?? this.configVersion,
       remarks: remarks ?? this.remarks,
+      orderIndex: orderIndex ?? this.orderIndex,
       subid: subid ?? this.subid,
       isSub: isSub ?? this.isSub,
       address: address ?? this.address,
@@ -1483,6 +1527,9 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
     }
     if (remarks.present) {
       map['remarks'] = Variable<String>(remarks.value);
+    }
+    if (orderIndex.present) {
+      map['order_index'] = Variable<int>(orderIndex.value);
     }
     if (subid.present) {
       map['subid'] = Variable<String>(subid.value);
@@ -1580,6 +1627,7 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
           ..write('configType: $configType, ')
           ..write('configVersion: $configVersion, ')
           ..write('remarks: $remarks, ')
+          ..write('orderIndex: $orderIndex, ')
           ..write('subid: $subid, ')
           ..write('isSub: $isSub, ')
           ..write('address: $address, ')
@@ -2409,6 +2457,7 @@ typedef $$ProfileItemTableCreateCompanionBuilder =
       Value<EConfigType> configType,
       Value<int> configVersion,
       Value<String> remarks,
+      Value<int> orderIndex,
       Value<String> subid,
       Value<bool> isSub,
       Value<String> address,
@@ -2444,6 +2493,7 @@ typedef $$ProfileItemTableUpdateCompanionBuilder =
       Value<EConfigType> configType,
       Value<int> configVersion,
       Value<String> remarks,
+      Value<int> orderIndex,
       Value<String> subid,
       Value<bool> isSub,
       Value<String> address,
@@ -2501,6 +2551,11 @@ class $$ProfileItemTableFilterComposer
 
   ColumnFilters<String> get remarks => $composableBuilder(
     column: $table.remarks,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get orderIndex => $composableBuilder(
+    column: $table.orderIndex,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -2670,6 +2725,11 @@ class $$ProfileItemTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<int> get orderIndex => $composableBuilder(
+    column: $table.orderIndex,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get subid => $composableBuilder(
     column: $table.subid,
     builder: (column) => ColumnOrderings(column),
@@ -2832,6 +2892,11 @@ class $$ProfileItemTableAnnotationComposer
   GeneratedColumn<String> get remarks =>
       $composableBuilder(column: $table.remarks, builder: (column) => column);
 
+  GeneratedColumn<int> get orderIndex => $composableBuilder(
+    column: $table.orderIndex,
+    builder: (column) => column,
+  );
+
   GeneratedColumn<String> get subid =>
       $composableBuilder(column: $table.subid, builder: (column) => column);
 
@@ -2967,6 +3032,7 @@ class $$ProfileItemTableTableManager
                 Value<EConfigType> configType = const Value.absent(),
                 Value<int> configVersion = const Value.absent(),
                 Value<String> remarks = const Value.absent(),
+                Value<int> orderIndex = const Value.absent(),
                 Value<String> subid = const Value.absent(),
                 Value<bool> isSub = const Value.absent(),
                 Value<String> address = const Value.absent(),
@@ -3000,6 +3066,7 @@ class $$ProfileItemTableTableManager
                 configType: configType,
                 configVersion: configVersion,
                 remarks: remarks,
+                orderIndex: orderIndex,
                 subid: subid,
                 isSub: isSub,
                 address: address,
@@ -3035,6 +3102,7 @@ class $$ProfileItemTableTableManager
                 Value<EConfigType> configType = const Value.absent(),
                 Value<int> configVersion = const Value.absent(),
                 Value<String> remarks = const Value.absent(),
+                Value<int> orderIndex = const Value.absent(),
                 Value<String> subid = const Value.absent(),
                 Value<bool> isSub = const Value.absent(),
                 Value<String> address = const Value.absent(),
@@ -3068,6 +3136,7 @@ class $$ProfileItemTableTableManager
                 configType: configType,
                 configVersion: configVersion,
                 remarks: remarks,
+                orderIndex: orderIndex,
                 subid: subid,
                 isSub: isSub,
                 address: address,

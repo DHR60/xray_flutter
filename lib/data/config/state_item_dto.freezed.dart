@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$StateItemDto {
 
- String? get subId; String? get profileId;
+ String get subId; String get profileId; String get routingId;
 /// Create a copy of StateItemDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $StateItemDtoCopyWith<StateItemDto> get copyWith => _$StateItemDtoCopyWithImpl<S
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is StateItemDto&&(identical(other.subId, subId) || other.subId == subId)&&(identical(other.profileId, profileId) || other.profileId == profileId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is StateItemDto&&(identical(other.subId, subId) || other.subId == subId)&&(identical(other.profileId, profileId) || other.profileId == profileId)&&(identical(other.routingId, routingId) || other.routingId == routingId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,subId,profileId);
+int get hashCode => Object.hash(runtimeType,subId,profileId,routingId);
 
 @override
 String toString() {
-  return 'StateItemDto(subId: $subId, profileId: $profileId)';
+  return 'StateItemDto(subId: $subId, profileId: $profileId, routingId: $routingId)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $StateItemDtoCopyWith<$Res>  {
   factory $StateItemDtoCopyWith(StateItemDto value, $Res Function(StateItemDto) _then) = _$StateItemDtoCopyWithImpl;
 @useResult
 $Res call({
- String? subId, String? profileId
+ String subId, String profileId, String routingId
 });
 
 
@@ -65,11 +65,12 @@ class _$StateItemDtoCopyWithImpl<$Res>
 
 /// Create a copy of StateItemDto
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? subId = freezed,Object? profileId = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? subId = null,Object? profileId = null,Object? routingId = null,}) {
   return _then(_self.copyWith(
-subId: freezed == subId ? _self.subId : subId // ignore: cast_nullable_to_non_nullable
-as String?,profileId: freezed == profileId ? _self.profileId : profileId // ignore: cast_nullable_to_non_nullable
-as String?,
+subId: null == subId ? _self.subId : subId // ignore: cast_nullable_to_non_nullable
+as String,profileId: null == profileId ? _self.profileId : profileId // ignore: cast_nullable_to_non_nullable
+as String,routingId: null == routingId ? _self.routingId : routingId // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 
@@ -154,10 +155,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? subId,  String? profileId)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String subId,  String profileId,  String routingId)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _StateItemDto() when $default != null:
-return $default(_that.subId,_that.profileId);case _:
+return $default(_that.subId,_that.profileId,_that.routingId);case _:
   return orElse();
 
 }
@@ -175,10 +176,10 @@ return $default(_that.subId,_that.profileId);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? subId,  String? profileId)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String subId,  String profileId,  String routingId)  $default,) {final _that = this;
 switch (_that) {
 case _StateItemDto():
-return $default(_that.subId,_that.profileId);case _:
+return $default(_that.subId,_that.profileId,_that.routingId);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -195,10 +196,10 @@ return $default(_that.subId,_that.profileId);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? subId,  String? profileId)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String subId,  String profileId,  String routingId)?  $default,) {final _that = this;
 switch (_that) {
 case _StateItemDto() when $default != null:
-return $default(_that.subId,_that.profileId);case _:
+return $default(_that.subId,_that.profileId,_that.routingId);case _:
   return null;
 
 }
@@ -210,11 +211,12 @@ return $default(_that.subId,_that.profileId);case _:
 @JsonSerializable()
 
 class _StateItemDto implements StateItemDto {
-  const _StateItemDto({this.subId, this.profileId});
+  const _StateItemDto({this.subId = '', this.profileId = '', this.routingId = ''});
   factory _StateItemDto.fromJson(Map<String, dynamic> json) => _$StateItemDtoFromJson(json);
 
-@override final  String? subId;
-@override final  String? profileId;
+@override@JsonKey() final  String subId;
+@override@JsonKey() final  String profileId;
+@override@JsonKey() final  String routingId;
 
 /// Create a copy of StateItemDto
 /// with the given fields replaced by the non-null parameter values.
@@ -229,16 +231,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _StateItemDto&&(identical(other.subId, subId) || other.subId == subId)&&(identical(other.profileId, profileId) || other.profileId == profileId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _StateItemDto&&(identical(other.subId, subId) || other.subId == subId)&&(identical(other.profileId, profileId) || other.profileId == profileId)&&(identical(other.routingId, routingId) || other.routingId == routingId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,subId,profileId);
+int get hashCode => Object.hash(runtimeType,subId,profileId,routingId);
 
 @override
 String toString() {
-  return 'StateItemDto(subId: $subId, profileId: $profileId)';
+  return 'StateItemDto(subId: $subId, profileId: $profileId, routingId: $routingId)';
 }
 
 
@@ -249,7 +251,7 @@ abstract mixin class _$StateItemDtoCopyWith<$Res> implements $StateItemDtoCopyWi
   factory _$StateItemDtoCopyWith(_StateItemDto value, $Res Function(_StateItemDto) _then) = __$StateItemDtoCopyWithImpl;
 @override @useResult
 $Res call({
- String? subId, String? profileId
+ String subId, String profileId, String routingId
 });
 
 
@@ -266,11 +268,12 @@ class __$StateItemDtoCopyWithImpl<$Res>
 
 /// Create a copy of StateItemDto
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? subId = freezed,Object? profileId = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? subId = null,Object? profileId = null,Object? routingId = null,}) {
   return _then(_StateItemDto(
-subId: freezed == subId ? _self.subId : subId // ignore: cast_nullable_to_non_nullable
-as String?,profileId: freezed == profileId ? _self.profileId : profileId // ignore: cast_nullable_to_non_nullable
-as String?,
+subId: null == subId ? _self.subId : subId // ignore: cast_nullable_to_non_nullable
+as String,profileId: null == profileId ? _self.profileId : profileId // ignore: cast_nullable_to_non_nullable
+as String,routingId: null == routingId ? _self.routingId : routingId // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 
