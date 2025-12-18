@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:xray_flutter/di/app_config_provider.dart';
 import 'package:xray_flutter/di/profile_filter_provider.dart';
 import 'package:xray_flutter/di/provider.dart';
+import 'package:xray_flutter/di/use_case_provider.dart';
 import 'package:xray_flutter/domain/core/result.dart';
 import 'package:xray_flutter/ui/page/profile_list/profile_list_view.dart';
 import 'package:xray_flutter/ui/page/profile_setting/shared/profile_setting_result.dart';
@@ -110,7 +111,7 @@ class _MyHomePageStateState extends ConsumerState<MyHomePageState> {
                 );
                 switch (intent) {
                   case ProfileSettingUpsert(profile: final profile):
-                    await ref.read(storeServiceProvider).upsertProfile(profile);
+                    await ref.read(upsertProfileUseCaseProvider).call(profile);
                     break;
                   default:
                     break;
@@ -215,14 +216,12 @@ class _MyHomePageStateState extends ConsumerState<MyHomePageState> {
                         intent = await showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                            title: const Text('Confirm Deletion'),
-                            content: const Text(
-                              'Are you sure you want to delete this sub item?',
-                            ),
+                            title: const Text('确认删除'),
+                            content: const Text('您确定要删除此子项吗？'),
                             actions: [
                               TextButton(
                                 onPressed: () => Navigator.pop(context),
-                                child: const Text('Cancel'),
+                                child: const Text('取消'),
                               ),
                               TextButton(
                                 onPressed: () {
@@ -235,7 +234,7 @@ class _MyHomePageStateState extends ConsumerState<MyHomePageState> {
                                     ),
                                   );
                                 },
-                                child: const Text('Delete'),
+                                child: const Text('删除'),
                               ),
                             ],
                           ),
@@ -298,24 +297,19 @@ class _MyHomePageStateState extends ConsumerState<MyHomePageState> {
                   _isLoading = true;
                 });
                 try {
-                  final profileId = ref
-                      .read(appConfigProvider)
-                      .stateItem
-                      .profileId;
-                  final useCase = ref.read(
-                    exportProfileConfigUseCaseProvider(profileId),
-                  );
-                  final result = await useCase.call();
+                  final result = await ref
+                      .read(startCoreServiceUseCareProvider)
+                      .call();
                   if (result is Success) {
                     if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('配置已复制到剪贴板')),
-                      );
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(const SnackBar(content: Text('启动服务成功')));
                     }
                   } else if (result is Failure) {
                     if (context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('导出失败: ${result.error}')),
+                        SnackBar(content: Text('启动服务失败: ${result.error}')),
                       );
                     }
                   }

@@ -1,12 +1,12 @@
 import 'package:xray_flutter/data/db/app_database.dart';
 import 'package:xray_flutter/domain/core/domain_error.dart';
 import 'package:xray_flutter/domain/core/result.dart';
-import 'package:xray_flutter/domain/repo/profile_repo.dart';
+import 'package:xray_flutter/domain/service/store/store_service.dart';
 
-class SaveProfileUseCase {
-  final ProfileRepo _repository;
+class UpsertProfileUseCase {
+  final StoreService _store;
 
-  SaveProfileUseCase(this._repository);
+  UpsertProfileUseCase(this._store);
 
   Future<Result<void>> call(ProfileItemData profile) async {
     if (profile.address.isEmpty) {
@@ -17,7 +17,7 @@ class SaveProfileUseCase {
     }
 
     try {
-      await _repository.upsertProfile(profile);
+      await _store.upsertProfile(profile);
     } catch (e) {
       return Failure(UnexpectedError(e));
     }

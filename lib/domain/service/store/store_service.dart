@@ -1,4 +1,5 @@
 import 'package:xray_flutter/core/utils.dart';
+import 'package:xray_flutter/data/config/app_config.dart';
 import 'package:xray_flutter/data/config/routing_item_dto.dart';
 import 'package:xray_flutter/data/config/sub_item_dto.dart';
 import 'package:xray_flutter/data/db/app_database.dart';
@@ -10,6 +11,9 @@ class StoreService {
   final AppConfigNotifier _appConfigNotifier;
   final ProfileRepo _profileRepo;
   StoreService(this._appConfigNotifier, this._profileRepo);
+
+  AppConfig get currentConfig => _appConfigNotifier.manager.config;
+  ProfileRepo get profileRepo => _profileRepo;
 
   Future<void> init() async {
     if (_appConfigNotifier.manager.config.stateItem.profileId.isEmpty) {
@@ -65,9 +69,7 @@ class StoreService {
     if (newActiveProfileId != config.stateItem.profileId) {
       await _appConfigNotifier.update(
         config.copyWith(
-          stateItem: config.stateItem.copyWith(
-            profileId: newActiveProfileId,
-          ),
+          stateItem: config.stateItem.copyWith(profileId: newActiveProfileId),
         ),
       );
     }
@@ -75,12 +77,25 @@ class StoreService {
 
   Future<ProfileItemData> generateNewProfile() async {
     var orderIndex = await _profileRepo.getMaxOrderIndex();
-    final newProfile = ProfileItemFactory.createDefault(Utils.generateUUID(), orderIndex);
+    final newProfile = ProfileItemFactory.createDefault(
+      Utils.generateUUID(),
+      orderIndex,
+    );
     return newProfile;
   }
 
-  Future<int> reorderProfile(int oldIndex, int newIndex) async {
-    final result = await _profileRepo.reorderProfile(oldIndex, newIndex);
+  Future<int> reorderProfile(
+    int oldIndex,
+    int newIndex, {
+    String? keyword,
+    String? subId,
+  }) async {
+    final result = await _profileRepo.reorderProfile(
+      oldIndex,
+      newIndex,
+      keyword: keyword,
+      subId: subId,
+    );
     return result;
   }
 
@@ -229,8 +244,7 @@ class StoreService {
   Future<void> deleteRoutingItemById(String routingId) async {
     final currentConfig = _appConfigNotifier.manager.config;
     final newRoutingItems = [
-      ...currentConfig.routingItems
-          .where((element) => element.id != routingId),
+      ...currentConfig.routingItems.where((element) => element.id != routingId),
     ];
     var newConfig = currentConfig.copyWith(routingItems: newRoutingItems);
     if (currentConfig.stateItem.routingId == routingId) {

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:xray_flutter/di/provider.dart';
+import 'package:xray_flutter/di/profile_filter_provider.dart';
+import 'package:xray_flutter/di/use_case_provider.dart';
+import 'package:xray_flutter/domain/core/result.dart';
 import 'package:xray_flutter/ui/page/profile_list/profile_list_notifier.dart';
 import 'package:xray_flutter/ui/page/profile_setting/shared/profile_setting_result.dart';
 import 'package:xray_flutter/ui/page/profile_setting/vless_setting_widget.dart';
@@ -71,21 +74,93 @@ class ProfileListView extends ConsumerWidget {
                             profile: final updatedProfile,
                           ):
                             await ref
-                                .read(storeServiceProvider)
-                                .upsertProfile(updatedProfile);
+                                .read(upsertProfileUseCaseProvider)
+                                .call(updatedProfile);
                             break;
                           case ProfileSettingDelete(
                             profile: final deletedProfile,
                           ):
                             await ref
-                                .read(storeServiceProvider)
-                                .deleteProfile(deletedProfile.indexId);
+                                .read(deleteProfileUseCaseProvider)
+                                .call(deletedProfile.indexId);
                             break;
                           default:
                             break;
                         }
                       },
                       icon: const Icon(Icons.edit),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.more_vert),
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(16),
+                            ),
+                          ),
+                          builder: (context) {
+                            return DraggableScrollableSheet(
+                              expand: false,
+                              builder: (context, scrollController) {
+                                return SingleChildScrollView(
+                                  controller: scrollController,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.only(
+                                          top: 8,
+                                          bottom: 12,
+                                        ),
+                                        height: 4,
+                                        width: 40,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[400],
+                                          borderRadius: BorderRadius.circular(
+                                            2,
+                                          ),
+                                        ),
+                                      ),
+                                      ListTile(
+                                        leading: const Icon(Icons.copy),
+                                        title: const Text('导出配置到剪贴板'),
+                                        onTap: () async {
+                                          Navigator.pop(context);
+                                          final messenger =
+                                              ScaffoldMessenger.of(context);
+                                          final result = await ref
+                                              .read(
+                                                exportProfileConfigUseCaseProvider,
+                                              )
+                                              .call(profile.indexId);
+                                          if (result is Success<void>) {
+                                            messenger.showSnackBar(
+                                              const SnackBar(
+                                                content: Text('配置已复制到剪贴板'),
+                                              ),
+                                            );
+                                          } else if (result is Failure<void>) {
+                                            messenger.showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  '导出失败: ${result.error}',
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        );
+                      },
                     ),
                     IconButton(
                       icon: const Icon(Icons.delete),
@@ -113,7 +188,15 @@ class ProfileListView extends ConsumerWidget {
             );
           },
           onReorder: (oldIndex, newIndex) {
-            ref.read(storeServiceProvider).reorderProfile(oldIndex, newIndex);
+            final filter = ref.read(profileFilterProvider);
+            ref
+                .read(storeServiceProvider)
+                .reorderProfile(
+                  oldIndex,
+                  newIndex,
+                  keyword: filter.keyword,
+                  subId: filter.subId,
+                );
           },
         );
       },

@@ -7,6 +7,11 @@ class ValidationError extends DomainError {
   const ValidationError(this.message);
 }
 
+class InvalidStateError extends DomainError {
+  final String message;
+  const InvalidStateError(this.message);
+}
+
 class NotFoundError extends DomainError {}
 
 class ConflictError extends DomainError {}

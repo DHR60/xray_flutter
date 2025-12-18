@@ -4,8 +4,6 @@ import 'package:xray_flutter/data/repo/profile_repo_impl.dart';
 import 'package:xray_flutter/di/app_config_provider.dart';
 import 'package:xray_flutter/domain/repo/profile_repo.dart';
 import 'package:xray_flutter/domain/service/store/store_service.dart';
-import 'package:xray_flutter/domain/usecase/export_profile_config_use_case.dart';
-import 'package:xray_flutter/domain/usecase/save_profile_use_case.dart';
 
 part 'provider.g.dart';
 
@@ -18,17 +16,6 @@ AppDatabase appDatabase(Ref ref) {
 ProfileRepo profileRepo(Ref ref) {
   final database = ref.watch(appDatabaseProvider);
   return ProfileRepoImpl(database);
-}
-
-@riverpod
-SaveProfileUseCase saveProfileUseCase(Ref ref) {
-  final repo = ref.watch(profileRepoProvider);
-  return SaveProfileUseCase(repo);
-}
-
-@riverpod
-ExportProfileConfigUseCase exportProfileConfigUseCase(Ref ref, String profileIndexId) {
-  return ExportProfileConfigUseCase(profileIndexId);
 }
 
 @Riverpod(keepAlive: true)

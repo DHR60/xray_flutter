@@ -94,9 +94,9 @@ class ProfileRepoImpl implements ProfileRepo {
   @override
   Future<void> fixOrderIndices() async {
     await _database.transaction(() async {
-      final profiles = await (_database.select(_database.profileItem)
-            ..orderBy([(tbl) => OrderingTerm(expression: tbl.orderIndex)]))
-          .get();
+      final profiles = await (_database.select(
+        _database.profileItem,
+      )..orderBy([(tbl) => OrderingTerm(expression: tbl.orderIndex)])).get();
 
       for (int i = 0; i < profiles.length; i++) {
         final profile = profiles[i];
@@ -118,35 +118,85 @@ class ProfileRepoImpl implements ProfileRepo {
   }
 
   @override
-  Future<int> reorderProfile(int oldIndex, int newIndex) async {
+  Future<int> reorderProfile(
+    int oldIndex,
+    int newIndex, {
+    String? keyword,
+    String? subId,
+  }) async {
     return _database.transaction(() async {
+      // Flutter's ReorderableListView gives newIndex in the list *after* removal.
       if (oldIndex < newIndex) {
         newIndex -= 1;
       }
 
-      final profiles = await (_database.select(_database.profileItem)
-            ..orderBy([(tbl) => OrderingTerm(expression: tbl.orderIndex)]))
-          .get();
+      // Only read the fields needed for reordering.
+      final query = _database.selectOnly(_database.profileItem)
+        ..addColumns([
+          _database.profileItem.indexId,
+          _database.profileItem.orderIndex,
+        ])
+        ..orderBy([OrderingTerm(expression: _database.profileItem.orderIndex)]);
+
+      final List<Expression<bool>> expressions = [];
+      if (subId != null && subId.isNotEmpty) {
+        expressions.add(_database.profileItem.subid.equals(subId));
+      }
+      if (keyword != null && keyword.isNotEmpty) {
+        expressions.add(_database.profileItem.remarks.like('%$keyword%'));
+      }
+      if (expressions.isNotEmpty) {
+        query.where(expressions.reduce((a, b) => a & b));
+      }
+
+      final rows = await query.get();
+      if (rows.isEmpty) return 0;
 
       if (oldIndex < 0 ||
-          oldIndex >= profiles.length ||
+          oldIndex >= rows.length ||
           newIndex < 0 ||
-          newIndex >= profiles.length) {
+          newIndex >= rows.length) {
         return 0;
       }
 
-      final item = profiles.removeAt(oldIndex);
-      profiles.insert(newIndex, item);
+      final items = rows
+          .map(
+            (r) => (
+              id: r.read(_database.profileItem.indexId)!,
+              orderIndex: r.read(_database.profileItem.orderIndex)!,
+            ),
+          )
+          .toList();
 
-      for (int i = 0; i < profiles.length; i++) {
-        final profile = profiles[i];
-        if (profile.orderIndex != i) {
-          await (_database.update(_database.profileItem)
-                ..where((tbl) => tbl.indexId.equals(profile.indexId)))
-              .write(profile.copyWith(orderIndex: i));
+      // Keep other (non-filtered) profiles fixed by only reusing the existing
+      // orderIndex "slots" of the filtered set.
+      final orderSlots = items.map((e) => e.orderIndex).toList();
+
+      final reordered = [...items];
+      final moved = reordered.removeAt(oldIndex);
+      reordered.insert(newIndex, moved);
+
+      final updates = <(String id, int desiredOrderIndex)>[];
+      for (int i = 0; i < reordered.length; i++) {
+        final item = reordered[i];
+        final desiredOrderIndex = orderSlots[i];
+        if (item.orderIndex != desiredOrderIndex) {
+          updates.add((item.id, desiredOrderIndex));
         }
       }
-      return 0;
+      if (updates.isEmpty) return 0;
+
+      await _database.batch((batch) {
+        for (final (id, desiredOrderIndex) in updates) {
+          batch.update(
+            _database.profileItem,
+            ProfileItemCompanion(orderIndex: Value(desiredOrderIndex)),
+            where: (tbl) => tbl.indexId.equals(id),
+          );
+        }
+      });
+
+      return updates.length;
     });
   }
 }

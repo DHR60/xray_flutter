@@ -13,5 +13,10 @@ abstract class ProfileRepo {
   Future<int> deleteProfilesBySubId(String subId);
   Future<void> fixOrderIndices();
   Future<int> getMaxOrderIndex();
-  Future<int> reorderProfile(int oldIndex, int newIndex);
+  Future<int> reorderProfile(
+    int oldIndex,
+    int newIndex, {
+    String? keyword,
+    String? subId,
+  });
 }
