@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:path/path.dart' as p;
@@ -35,5 +36,50 @@ class Utils {
   static String generateUUID() {
     var uuid = const Uuid();
     return uuid.v4();
+  }
+
+  static String? prettyJson(String jsonString) {
+    try {
+      final jsonObject = jsonString.isNotEmpty ? jsonDecode(jsonString) : {};
+      final encoder = JsonEncoder.withIndent('  ');
+      return encoder.convert(jsonObject);
+    } catch (e) {
+      return null; // Return original string if parsing fails
+    }
+  }
+
+  static String toJsonString(Map<String, dynamic> jsonMap) {
+    return jsonEncode(jsonMap);
+  }
+
+  static Map<String, dynamic> fromJsonString(String jsonString) {
+    return jsonDecode(jsonString) as Map<String, dynamic>;
+  }
+
+  static List<String> splitRules(String rulesString) {
+    return rulesString
+        .replaceAll('\r', '')
+        .replaceAll('\n', '')
+        .split(',')
+        .map((line) => line.trim())
+        .where((line) => line.isNotEmpty)
+        .toList();
+  }
+
+  static String convert2Comma(String str) {
+    return str.replaceAll('，', ',').replaceAll('\n', ',').replaceAll('\r', ',');
+  }
+
+  static List<String> normalizeRulesToList(String str) {
+    return convert2Comma(str)
+        .split(',')
+        .map((e) => e.trim())
+        .where((e) => e.isNotEmpty)
+        .toList();
+  }
+
+  static String normalizeRulesToString(String str) {
+    final list = normalizeRulesToList(str);
+    return list.join(',');
   }
 }

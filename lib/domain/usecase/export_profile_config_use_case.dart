@@ -1,3 +1,4 @@
+import 'package:xray_flutter/core/utils.dart';
 import 'package:xray_flutter/domain/core/domain_error.dart';
 import 'package:xray_flutter/domain/core/result.dart';
 import 'package:xray_flutter/domain/infra/clipboard_service.dart';
@@ -30,7 +31,7 @@ class ExportProfileConfigUseCase {
       final xrayConfigService = XrayConfigService(profileContext);
       final configString = xrayConfigService.genConfig();
       ClipboardService clipboardService = ClipboardServiceImpl();
-      await clipboardService.copyToClipboard(configString);
+      await clipboardService.copyToClipboard(Utils.prettyJson(configString) ?? configString);
       return const Success(null);
     } catch (e) {
       return Failure(UnexpectedError(e));

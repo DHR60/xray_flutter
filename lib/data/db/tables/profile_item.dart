@@ -14,7 +14,6 @@ class ProfileItem extends Table {
   late final port = integer().clientDefault(() => 0)();
   late final ports = text().clientDefault(() => '')();
   late final id = text().clientDefault(() => '')();
-  late final alterId = integer().clientDefault(() => 0)();
   late final security = text().clientDefault(() => '')();
   late final network = text().clientDefault(() => '')();
   late final headerType = text().clientDefault(() => '')();

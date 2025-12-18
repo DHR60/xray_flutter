@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:xray_flutter/core/utils.dart';
 import 'package:xray_flutter/data/db/app_database.dart';
+import 'package:xray_flutter/data/dto/profile_extra_item_dto.dart';
 import 'package:xray_flutter/di/app_config_provider.dart';
 import 'package:xray_flutter/ui/page/profile_setting/shared/profile_setting_result.dart';
 
@@ -19,18 +21,46 @@ class VlessSettingWidget extends ConsumerStatefulWidget {
 }
 
 class _VlessSettingWidgetState extends ConsumerState<VlessSettingWidget> {
+  late ProfileExtraItemDto _extraDto;
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _remarkController;
   late TextEditingController _addressController;
   late TextEditingController _portController;
+  late TextEditingController _idController;
+  late TextEditingController _flowController;
+  late TextEditingController _vlessEncryptionController;
+  late TextEditingController _networkController;
+  late TextEditingController _streamSecurityController;
+  late TextEditingController _sniController;
+  late TextEditingController _allowInsecureController;
 
   @override
   void initState() {
     super.initState();
+    if (widget.profile.jsonData.isNotEmpty) {
+      _extraDto = ProfileExtraItemDto.fromJson(
+        Utils.fromJsonString(widget.profile.jsonData),
+      );
+    } else {
+      _extraDto = const ProfileExtraItemDto();
+    }
     _remarkController = TextEditingController(text: widget.profile.remarks);
     _addressController = TextEditingController(text: widget.profile.address);
     _portController = TextEditingController(
       text: widget.profile.port.toString(),
+    );
+    _idController = TextEditingController(text: widget.profile.id);
+    _flowController = TextEditingController(text: _extraDto.flow);
+    _vlessEncryptionController = TextEditingController(
+      text: _extraDto.vlessEncryption,
+    );
+    _networkController = TextEditingController(text: widget.profile.network);
+    _streamSecurityController = TextEditingController(
+      text: widget.profile.streamSecurity,
+    );
+    _sniController = TextEditingController(text: widget.profile.sni);
+    _allowInsecureController = TextEditingController(
+      text: widget.profile.allowInsecure,
     );
   }
 
@@ -39,16 +69,35 @@ class _VlessSettingWidgetState extends ConsumerState<VlessSettingWidget> {
     _remarkController.dispose();
     _addressController.dispose();
     _portController.dispose();
+    _idController.dispose();
+    _flowController.dispose();
+    _vlessEncryptionController.dispose();
+    _networkController.dispose();
+    _streamSecurityController.dispose();
+    _sniController.dispose();
+    _allowInsecureController.dispose();
     super.dispose();
   }
 
   void _saveProfile() {
     if (!_formKey.currentState!.validate()) return;
 
+    final vlessEncryption = _vlessEncryptionController.text;
+
+    _extraDto = _extraDto.copyWith(
+      flow: _flowController.text,
+      vlessEncryption: vlessEncryption.isNotEmpty ? vlessEncryption : 'none',
+    );
+
     var profile = widget.profile.copyWith(
       remarks: _remarkController.text,
       address: _addressController.text,
       port: int.tryParse(_portController.text) ?? 0,
+      id: _idController.text,
+      streamSecurity: _streamSecurityController.text,
+      sni: _sniController.text,
+      allowInsecure: _allowInsecureController.text,
+      jsonData: Utils.toJsonString(_extraDto.toJson()),
     );
 
     if (widget.isNew) {
@@ -104,6 +153,43 @@ class _VlessSettingWidgetState extends ConsumerState<VlessSettingWidget> {
                   }
                   return null;
                 },
+              ),
+              const Divider(),
+              // Additional VLESS-specific settings can be added here
+              TextFormField(
+                controller: _idController,
+                decoration: const InputDecoration(labelText: '用户ID (UUID)'),
+                validator: (value) => value?.isEmpty == true ? '请输入用户ID' : null,
+              ),
+              TextFormField(
+                controller: _flowController,
+                decoration: const InputDecoration(labelText: '流控 (Flow)'),
+              ),
+              TextFormField(
+                controller: _vlessEncryptionController,
+                decoration: const InputDecoration(
+                  labelText: '加密方式 (VLESS Encryption)',
+                ),
+              ),
+              TextFormField(
+                controller: _networkController,
+                decoration: const InputDecoration(labelText: '网络类型 (Network)'),
+              ),
+              TextFormField(
+                controller: _streamSecurityController,
+                decoration: const InputDecoration(
+                  labelText: '传输安全 (Stream Security)',
+                ),
+              ),
+              TextFormField(
+                controller: _sniController,
+                decoration: const InputDecoration(labelText: 'SNI'),
+              ),
+              TextFormField(
+                controller: _allowInsecureController,
+                decoration: const InputDecoration(
+                  labelText: '允许不安全 (Allow Insecure)',
+                ),
               ),
             ],
           ),

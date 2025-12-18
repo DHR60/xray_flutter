@@ -12,7 +12,6 @@ class ProfileItemFactory {
       port: 0,
       allowInsecure: '',
       alpn: '',
-      alterId: 0,
       cert: '',
       configType: EConfigType.vless,
       configVersion: 0,

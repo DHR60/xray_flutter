@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:xray_flutter/core/utils.dart';
 import 'package:xray_flutter/data/config/rule_item_dto.dart';
 
 class RuleSettingWidget extends ConsumerStatefulWidget {
@@ -60,12 +61,12 @@ class _RuleSettingWidgetState extends ConsumerState<RuleSettingWidget> {
     return _ruleItem.copyWith(
       remark: _remarkController.text,
       outboundTag: _outboundTagController.text,
-      inboundTag: _inboundTagController.text,
-      ip: _ipController.text,
-      domain: _domainController.text,
-      port: _portController.text,
-      network: _networkController.text,
-      protocol: _protocolController.text,
+      inboundTag: Utils.convert2Comma(_inboundTagController.text),
+      ip: Utils.convert2Comma(_ipController.text),
+      domain: Utils.convert2Comma(_domainController.text),
+      port: Utils.convert2Comma(_portController.text),
+      network: Utils.convert2Comma(_networkController.text),
+      protocol: Utils.convert2Comma(_protocolController.text),
     );
   }
 

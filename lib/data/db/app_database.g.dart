@@ -131,18 +131,6 @@ class $ProfileItemTable extends ProfileItem
     requiredDuringInsert: false,
     clientDefault: () => '',
   );
-  static const VerificationMeta _alterIdMeta = const VerificationMeta(
-    'alterId',
-  );
-  @override
-  late final GeneratedColumn<int> alterId = GeneratedColumn<int>(
-    'alter_id',
-    aliasedName,
-    false,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    clientDefault: () => 0,
-  );
   static const VerificationMeta _securityMeta = const VerificationMeta(
     'security',
   );
@@ -387,7 +375,6 @@ class $ProfileItemTable extends ProfileItem
     port,
     ports,
     id,
-    alterId,
     security,
     network,
     headerType,
@@ -482,12 +469,6 @@ class $ProfileItemTable extends ProfileItem
     }
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    if (data.containsKey('alter_id')) {
-      context.handle(
-        _alterIdMeta,
-        alterId.isAcceptableOrUnknown(data['alter_id']!, _alterIdMeta),
-      );
     }
     if (data.containsKey('security')) {
       context.handle(
@@ -676,10 +657,6 @@ class $ProfileItemTable extends ProfileItem
         DriftSqlType.string,
         data['${effectivePrefix}id'],
       )!,
-      alterId: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}alter_id'],
-      )!,
       security: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}security'],
@@ -790,7 +767,6 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
   final int port;
   final String ports;
   final String id;
-  final int alterId;
   final String security;
   final String network;
   final String headerType;
@@ -823,7 +799,6 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
     required this.port,
     required this.ports,
     required this.id,
-    required this.alterId,
     required this.security,
     required this.network,
     required this.headerType,
@@ -863,7 +838,6 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
     map['port'] = Variable<int>(port);
     map['ports'] = Variable<String>(ports);
     map['id'] = Variable<String>(id);
-    map['alter_id'] = Variable<int>(alterId);
     map['security'] = Variable<String>(security);
     map['network'] = Variable<String>(network);
     map['header_type'] = Variable<String>(headerType);
@@ -906,7 +880,6 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
       port: Value(port),
       ports: Value(ports),
       id: Value(id),
-      alterId: Value(alterId),
       security: Value(security),
       network: Value(network),
       headerType: Value(headerType),
@@ -953,7 +926,6 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
       port: serializer.fromJson<int>(json['port']),
       ports: serializer.fromJson<String>(json['ports']),
       id: serializer.fromJson<String>(json['id']),
-      alterId: serializer.fromJson<int>(json['alterId']),
       security: serializer.fromJson<String>(json['security']),
       network: serializer.fromJson<String>(json['network']),
       headerType: serializer.fromJson<String>(json['headerType']),
@@ -995,7 +967,6 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
       'port': serializer.toJson<int>(port),
       'ports': serializer.toJson<String>(ports),
       'id': serializer.toJson<String>(id),
-      'alterId': serializer.toJson<int>(alterId),
       'security': serializer.toJson<String>(security),
       'network': serializer.toJson<String>(network),
       'headerType': serializer.toJson<String>(headerType),
@@ -1033,7 +1004,6 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
     int? port,
     String? ports,
     String? id,
-    int? alterId,
     String? security,
     String? network,
     String? headerType,
@@ -1066,7 +1036,6 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
     port: port ?? this.port,
     ports: ports ?? this.ports,
     id: id ?? this.id,
-    alterId: alterId ?? this.alterId,
     security: security ?? this.security,
     network: network ?? this.network,
     headerType: headerType ?? this.headerType,
@@ -1109,7 +1078,6 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
       port: data.port.present ? data.port.value : this.port,
       ports: data.ports.present ? data.ports.value : this.ports,
       id: data.id.present ? data.id.value : this.id,
-      alterId: data.alterId.present ? data.alterId.value : this.alterId,
       security: data.security.present ? data.security.value : this.security,
       network: data.network.present ? data.network.value : this.network,
       headerType: data.headerType.present
@@ -1165,7 +1133,6 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
           ..write('port: $port, ')
           ..write('ports: $ports, ')
           ..write('id: $id, ')
-          ..write('alterId: $alterId, ')
           ..write('security: $security, ')
           ..write('network: $network, ')
           ..write('headerType: $headerType, ')
@@ -1203,7 +1170,6 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
     port,
     ports,
     id,
-    alterId,
     security,
     network,
     headerType,
@@ -1240,7 +1206,6 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
           other.port == this.port &&
           other.ports == this.ports &&
           other.id == this.id &&
-          other.alterId == this.alterId &&
           other.security == this.security &&
           other.network == this.network &&
           other.headerType == this.headerType &&
@@ -1275,7 +1240,6 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
   final Value<int> port;
   final Value<String> ports;
   final Value<String> id;
-  final Value<int> alterId;
   final Value<String> security;
   final Value<String> network;
   final Value<String> headerType;
@@ -1309,7 +1273,6 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
     this.port = const Value.absent(),
     this.ports = const Value.absent(),
     this.id = const Value.absent(),
-    this.alterId = const Value.absent(),
     this.security = const Value.absent(),
     this.network = const Value.absent(),
     this.headerType = const Value.absent(),
@@ -1344,7 +1307,6 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
     this.port = const Value.absent(),
     this.ports = const Value.absent(),
     this.id = const Value.absent(),
-    this.alterId = const Value.absent(),
     this.security = const Value.absent(),
     this.network = const Value.absent(),
     this.headerType = const Value.absent(),
@@ -1379,7 +1341,6 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
     Expression<int>? port,
     Expression<String>? ports,
     Expression<String>? id,
-    Expression<int>? alterId,
     Expression<String>? security,
     Expression<String>? network,
     Expression<String>? headerType,
@@ -1414,7 +1375,6 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
       if (port != null) 'port': port,
       if (ports != null) 'ports': ports,
       if (id != null) 'id': id,
-      if (alterId != null) 'alter_id': alterId,
       if (security != null) 'security': security,
       if (network != null) 'network': network,
       if (headerType != null) 'header_type': headerType,
@@ -1451,7 +1411,6 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
     Value<int>? port,
     Value<String>? ports,
     Value<String>? id,
-    Value<int>? alterId,
     Value<String>? security,
     Value<String>? network,
     Value<String>? headerType,
@@ -1486,7 +1445,6 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
       port: port ?? this.port,
       ports: ports ?? this.ports,
       id: id ?? this.id,
-      alterId: alterId ?? this.alterId,
       security: security ?? this.security,
       network: network ?? this.network,
       headerType: headerType ?? this.headerType,
@@ -1548,9 +1506,6 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
     }
     if (id.present) {
       map['id'] = Variable<String>(id.value);
-    }
-    if (alterId.present) {
-      map['alter_id'] = Variable<int>(alterId.value);
     }
     if (security.present) {
       map['security'] = Variable<String>(security.value);
@@ -1634,7 +1589,6 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
           ..write('port: $port, ')
           ..write('ports: $ports, ')
           ..write('id: $id, ')
-          ..write('alterId: $alterId, ')
           ..write('security: $security, ')
           ..write('network: $network, ')
           ..write('headerType: $headerType, ')
@@ -2464,7 +2418,6 @@ typedef $$ProfileItemTableCreateCompanionBuilder =
       Value<int> port,
       Value<String> ports,
       Value<String> id,
-      Value<int> alterId,
       Value<String> security,
       Value<String> network,
       Value<String> headerType,
@@ -2500,7 +2453,6 @@ typedef $$ProfileItemTableUpdateCompanionBuilder =
       Value<int> port,
       Value<String> ports,
       Value<String> id,
-      Value<int> alterId,
       Value<String> security,
       Value<String> network,
       Value<String> headerType,
@@ -2586,11 +2538,6 @@ class $$ProfileItemTableFilterComposer
 
   ColumnFilters<String> get id => $composableBuilder(
     column: $table.id,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<int> get alterId => $composableBuilder(
-    column: $table.alterId,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -2760,11 +2707,6 @@ class $$ProfileItemTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get alterId => $composableBuilder(
-    column: $table.alterId,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<String> get security => $composableBuilder(
     column: $table.security,
     builder: (column) => ColumnOrderings(column),
@@ -2915,9 +2857,6 @@ class $$ProfileItemTableAnnotationComposer
   GeneratedColumn<String> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
-  GeneratedColumn<int> get alterId =>
-      $composableBuilder(column: $table.alterId, builder: (column) => column);
-
   GeneratedColumn<String> get security =>
       $composableBuilder(column: $table.security, builder: (column) => column);
 
@@ -3039,7 +2978,6 @@ class $$ProfileItemTableTableManager
                 Value<int> port = const Value.absent(),
                 Value<String> ports = const Value.absent(),
                 Value<String> id = const Value.absent(),
-                Value<int> alterId = const Value.absent(),
                 Value<String> security = const Value.absent(),
                 Value<String> network = const Value.absent(),
                 Value<String> headerType = const Value.absent(),
@@ -3073,7 +3011,6 @@ class $$ProfileItemTableTableManager
                 port: port,
                 ports: ports,
                 id: id,
-                alterId: alterId,
                 security: security,
                 network: network,
                 headerType: headerType,
@@ -3109,7 +3046,6 @@ class $$ProfileItemTableTableManager
                 Value<int> port = const Value.absent(),
                 Value<String> ports = const Value.absent(),
                 Value<String> id = const Value.absent(),
-                Value<int> alterId = const Value.absent(),
                 Value<String> security = const Value.absent(),
                 Value<String> network = const Value.absent(),
                 Value<String> headerType = const Value.absent(),
@@ -3143,7 +3079,6 @@ class $$ProfileItemTableTableManager
                 port: port,
                 ports: ports,
                 id: id,
-                alterId: alterId,
                 security: security,
                 network: network,
                 headerType: headerType,
