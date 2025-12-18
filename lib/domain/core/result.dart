@@ -8,10 +8,16 @@ class Success<T> extends Result<T> {
   final T data;
 
   const Success(this.data);
+
+  @override
+  String toString() => 'Success(data: $data)';
 }
 
 class Failure<T> extends Result<T>
 {
     final DomainError error;
     const Failure(this.error);
+
+    @override
+    String toString() => 'Failure(error: $error)';
 }
