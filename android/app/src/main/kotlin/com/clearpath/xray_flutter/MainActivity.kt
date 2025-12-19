@@ -35,7 +35,8 @@ class MainActivity : FlutterActivity() {
                 }
             } else if (call.method == "stopVpn") {
                 val intent = Intent(this, SimpleVpnService::class.java)
-                stopService(intent)
+                intent.action = "STOP_VPN"
+                startService(intent)
                 result.success(null)
             } else {
                 result.notImplemented()

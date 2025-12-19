@@ -35,6 +35,12 @@ class SimpleVpnService : VpnService() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        if (intent?.action == "STOP_VPN") {
+            stopV2Ray()
+            stopSelf()
+            return START_NOT_STICKY
+        }
+
         val config = intent?.getStringExtra("config")
         val socksPort = intent?.getIntExtra("socksPort", 10808) ?: 10808
 
@@ -110,11 +116,30 @@ class SimpleVpnService : VpnService() {
 
     override fun onDestroy() {
         super.onDestroy()
-        tProxyService?.stopTun2Socks()
-        if (::coreController.isInitialized) {
-             coreController.stopLoop()
+        stopV2Ray()
+    }
+
+    private fun stopV2Ray() {
+        stopForeground(true)
+        try {
+            tProxyService?.stopTun2Socks()
+            tProxyService = null
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
-        vpnInterface?.close()
+        try {
+            if (::coreController.isInitialized) {
+                 coreController.stopLoop()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        try {
+            vpnInterface?.close()
+            vpnInterface = null
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private fun createNotificationChannel() {
