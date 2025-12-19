@@ -11,16 +11,14 @@ extension XrayConfigMiscService on XrayConfigService {
 
   Policy4Ray _genPolicy() {
     return Policy4Ray(
-      levels: PolicyLevels4Ray(
-        levels: {
-          '8': PolicyLevelObject4Ray(
-            connIdle: 300,
-            downlinkOnly: 1,
-            handshake: 4,
-            uplinkOnly: 1,
-          ),
-        },
-      ),
+      levels: {
+        '8': PolicyLevelObject4Ray(
+          connIdle: 300,
+          downlinkOnly: 1,
+          handshake: 4,
+          uplinkOnly: 1,
+        ),
+      },
       system: PolicySystem4Ray(
         statsOutboundDownlink: true,
         statsOutboundUplink: true,
