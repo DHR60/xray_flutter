@@ -13,6 +13,7 @@ import 'package:xray_flutter/ui/page/sub/sub_list_view.dart';
 import 'package:xray_flutter/ui/page/routing/routing_list_widget.dart';
 import 'package:xray_flutter/ui/page/sub/sub_setting_result.dart';
 import 'package:xray_flutter/ui/page/sub/sub_setting_widget.dart';
+import 'package:xray_flutter/domain/service/core_manager.dart';
 
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});
@@ -45,7 +46,6 @@ class MyHomePageState extends ConsumerStatefulWidget {
 }
 
 class _MyHomePageStateState extends ConsumerState<MyHomePageState> {
-  bool _isLoading = false;
   bool _isSearching = false;
   final _searchController = TextEditingController();
 
@@ -289,42 +289,50 @@ class _MyHomePageStateState extends ConsumerState<MyHomePageState> {
           Expanded(child: ProfileListView()),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _isLoading
-            ? null
-            : () async {
-                setState(() {
-                  _isLoading = true;
-                });
-                try {
-                  final result = await ref
-                      .read(startCoreServiceUseCareProvider)
-                      .call();
-                  if (result is Success) {
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(
-                        context,
-                      ).showSnackBar(const SnackBar(content: Text('启动服务成功')));
+      floatingActionButton: Consumer(
+        builder: (context, ref, child) {
+          final coreStatusAsync = ref.watch(coreStatusProvider);
+          final coreStatus = coreStatusAsync.maybeWhen(
+            data: (status) => status,
+            orElse: () => CoreStatus.stopped,
+          );
+          final isRunning = coreStatus == CoreStatus.running;
+          final isStarting = coreStatus == CoreStatus.starting;
+
+          return FloatingActionButton(
+            onPressed: isStarting
+                ? null
+                : () async {
+                    if (isRunning) {
+                      await ref.read(stopCoreServiceUseCaseProvider).call();
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(const SnackBar(content: Text('服务已停止')));
+                      }
+                    } else {
+                      final result = await ref
+                          .read(startCoreServiceUseCareProvider)
+                          .call();
+                      if (context.mounted) {
+                        if (result is Success) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('启动服务成功')),
+                          );
+                        } else if (result is Failure) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('启动服务失败: ${result.error}')),
+                          );
+                        }
+                      }
                     }
-                  } else if (result is Failure) {
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('启动服务失败: ${result.error}')),
-                      );
-                    }
-                  }
-                } finally {
-                  if (mounted) {
-                    setState(() {
-                      _isLoading = false;
-                    });
-                  }
-                }
-              },
-        tooltip: 'Start',
-        child: _isLoading
-            ? const CircularProgressIndicator()
-            : const Icon(Icons.flight_takeoff),
+                  },
+            tooltip: isRunning ? 'Stop' : 'Start',
+            child: isStarting
+                ? const CircularProgressIndicator()
+                : Icon(isRunning ? Icons.stop : Icons.flight_takeoff),
+          );
+        },
       ),
     );
   }

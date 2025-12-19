@@ -111,11 +111,11 @@ const startCoreServiceUseCareProvider = StartCoreServiceUseCareProvider._();
 final class StartCoreServiceUseCareProvider
     extends
         $FunctionalProvider<
-          StartCoreServiceUseCare,
-          StartCoreServiceUseCare,
-          StartCoreServiceUseCare
+          StartCoreServiceUseCase,
+          StartCoreServiceUseCase,
+          StartCoreServiceUseCase
         >
-    with $Provider<StartCoreServiceUseCare> {
+    with $Provider<StartCoreServiceUseCase> {
   const StartCoreServiceUseCareProvider._()
     : super(
         from: null,
@@ -132,26 +132,74 @@ final class StartCoreServiceUseCareProvider
 
   @$internal
   @override
-  $ProviderElement<StartCoreServiceUseCare> $createElement(
+  $ProviderElement<StartCoreServiceUseCase> $createElement(
     $ProviderPointer pointer,
   ) => $ProviderElement(pointer);
 
   @override
-  StartCoreServiceUseCare create(Ref ref) {
+  StartCoreServiceUseCase create(Ref ref) {
     return startCoreServiceUseCare(ref);
   }
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(StartCoreServiceUseCare value) {
+  Override overrideWithValue(StartCoreServiceUseCase value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<StartCoreServiceUseCare>(value),
+      providerOverride: $SyncValueProvider<StartCoreServiceUseCase>(value),
     );
   }
 }
 
 String _$startCoreServiceUseCareHash() =>
-    r'852af36cdbf56677b53c6301b9a2808c86e3f4af';
+    r'c0bee61870f7c287061908a4746ac5ef2b6d0c45';
+
+@ProviderFor(stopCoreServiceUseCase)
+const stopCoreServiceUseCaseProvider = StopCoreServiceUseCaseProvider._();
+
+final class StopCoreServiceUseCaseProvider
+    extends
+        $FunctionalProvider<
+          StopCoreServiceUseCase,
+          StopCoreServiceUseCase,
+          StopCoreServiceUseCase
+        >
+    with $Provider<StopCoreServiceUseCase> {
+  const StopCoreServiceUseCaseProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'stopCoreServiceUseCaseProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$stopCoreServiceUseCaseHash();
+
+  @$internal
+  @override
+  $ProviderElement<StopCoreServiceUseCase> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  StopCoreServiceUseCase create(Ref ref) {
+    return stopCoreServiceUseCase(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(StopCoreServiceUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<StopCoreServiceUseCase>(value),
+    );
+  }
+}
+
+String _$stopCoreServiceUseCaseHash() =>
+    r'c168d6daa5c6e08f98a5be985c4905e90e5bbd78';
 
 @ProviderFor(exportProfileConfigUseCase)
 const exportProfileConfigUseCaseProvider =

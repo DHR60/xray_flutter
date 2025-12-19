@@ -1,15 +1,14 @@
-import 'dart:io';
-
 import 'package:xray_flutter/domain/core/domain_error.dart';
 import 'package:xray_flutter/domain/core/result.dart';
 import 'package:xray_flutter/domain/model/profile_context.dart';
+import 'package:xray_flutter/domain/service/core_manager.dart';
 import 'package:xray_flutter/domain/service/core_config/xray/xray_config_service.dart';
 import 'package:xray_flutter/domain/service/store/store_service.dart';
-import 'package:xray_flutter/infra/android/vpn_platform.dart';
 
-class StartCoreServiceUseCare {
+class StartCoreServiceUseCase {
   final StoreService _storeService;
-  StartCoreServiceUseCare(this._storeService);
+  final CoreManager _coreManager;
+  StartCoreServiceUseCase(this._storeService, this._coreManager);
 
   Future<Result<void>> call() async {
     try {
@@ -33,12 +32,7 @@ class StartCoreServiceUseCare {
           int.tryParse(_storeService.currentConfig.coreItem.inboundPort) ??
           10808;
 
-      if (Platform.isAndroid) {
-        await VpnPlatform.startVpn(
-          v2rayConfigJson: configString,
-          socksPort: socksPort,
-        );
-      }
+      await _coreManager.start(configString, socksPort);
 
       return const Success(null);
     } catch (e) {

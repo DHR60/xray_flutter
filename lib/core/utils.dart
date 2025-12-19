@@ -33,6 +33,24 @@ class Utils {
     return dataDir;
   }
 
+  static Future<Directory> getBinDirectory() async {
+    final directory = await getTargetDirectory();
+    final binDir = Directory(p.join(directory.path, 'bin'));
+    if (!await binDir.exists()) {
+      await binDir.create(recursive: true);
+    }
+    return binDir;
+  }
+
+  static Future<Directory> getBinConfigDirectory() async {
+    final binDir = await getBinDirectory();
+    final configDir = Directory(p.join(binDir.path, 'config'));
+    if (!await configDir.exists()) {
+      await configDir.create(recursive: true);
+    }
+    return configDir;
+  }
+
   static String generateUUID() {
     var uuid = const Uuid();
     return uuid.v4();
@@ -71,11 +89,9 @@ class Utils {
   }
 
   static List<String> normalizeRulesToList(String str) {
-    return convert2Comma(str)
-        .split(',')
-        .map((e) => e.trim())
-        .where((e) => e.isNotEmpty)
-        .toList();
+    return convert2Comma(
+      str,
+    ).split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
   }
 
   static String normalizeRulesToString(String str) {

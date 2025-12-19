@@ -2,8 +2,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:xray_flutter/di/provider.dart';
 import 'package:xray_flutter/domain/usecase/delete_profile_use_case.dart';
 import 'package:xray_flutter/domain/usecase/export_profile_config_use_case.dart';
-import 'package:xray_flutter/domain/usecase/start_core_service_use_care.dart';
+import 'package:xray_flutter/domain/usecase/start_core_service_use_case.dart';
+import 'package:xray_flutter/domain/usecase/stop_core_service_use_case.dart';
 import 'package:xray_flutter/domain/usecase/upsert_profile_use_case.dart';
+import 'package:xray_flutter/domain/service/core_manager.dart';
 
 part 'use_case_provider.g.dart';
 
@@ -20,9 +22,16 @@ DeleteProfileUseCase deleteProfileUseCase(Ref ref) {
 }
 
 @riverpod
-StartCoreServiceUseCare startCoreServiceUseCare(Ref ref) {
+StartCoreServiceUseCase startCoreServiceUseCare(Ref ref) {
   final store = ref.watch(storeServiceProvider);
-  return StartCoreServiceUseCare(store);
+  final coreManager = ref.watch(coreManagerProvider);
+  return StartCoreServiceUseCase(store, coreManager);
+}
+
+@riverpod
+StopCoreServiceUseCase stopCoreServiceUseCase(Ref ref) {
+  final coreManager = ref.watch(coreManagerProvider);
+  return StopCoreServiceUseCase(coreManager);
 }
 
 @riverpod
