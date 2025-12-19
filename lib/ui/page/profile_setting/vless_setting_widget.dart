@@ -52,7 +52,7 @@ class _VlessSettingWidgetState extends ConsumerState<VlessSettingWidget> {
     _idController = TextEditingController(text: widget.profile.id);
     _flowController = TextEditingController(text: _extraDto.flow);
     _vlessEncryptionController = TextEditingController(
-      text: _extraDto.vlessEncryption,
+      text: _extraDto.vlessEncryption?.isNotEmpty == true ? _extraDto.vlessEncryption : 'none',
     );
     _networkController = TextEditingController(text: widget.profile.network);
     _streamSecurityController = TextEditingController(
@@ -94,6 +94,7 @@ class _VlessSettingWidgetState extends ConsumerState<VlessSettingWidget> {
       address: _addressController.text,
       port: int.tryParse(_portController.text) ?? 0,
       id: _idController.text,
+      network: _networkController.text,
       streamSecurity: _streamSecurityController.text,
       sni: _sniController.text,
       allowInsecure: _allowInsecureController.text,

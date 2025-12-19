@@ -8,10 +8,10 @@ part of 'profile_extra_item_dto.dart';
 
 _ProfileExtraItemDto _$ProfileExtraItemDtoFromJson(Map<String, dynamic> json) =>
     _ProfileExtraItemDto(
-      flow: json['flow'] as String? ?? null,
-      alterId: json['alterId'] as String? ?? null,
-      vlessEncryption: json['vlessEncryption'] as String? ?? null,
-      vlessVisionSeed: json['vlessVisionSeed'] as String? ?? null,
+      flow: json['flow'] as String?,
+      alterId: json['alterId'] as String?,
+      vlessEncryption: json['vlessEncryption'] as String?,
+      vlessVisionSeed: json['vlessVisionSeed'] as String?,
     );
 
 Map<String, dynamic> _$ProfileExtraItemDtoToJson(

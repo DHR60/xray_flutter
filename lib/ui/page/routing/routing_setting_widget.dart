@@ -29,10 +29,19 @@ class _RoutingSettingWidgetState extends ConsumerState<RoutingSettingWidget> {
   void initState() {
     super.initState();
     _remarkController = TextEditingController(text: widget.routingItem.remark);
+    _remarkController.addListener(_onRemarkChanged);
+  }
+
+  void _onRemarkChanged() {
+    final notifier = ref.read(
+      routingSettingProvider(widget.routingItem).notifier,
+    );
+    notifier.updateRemark(_remarkController.text);
   }
 
   @override
   void dispose() {
+    _remarkController.removeListener(_onRemarkChanged);
     _remarkController.dispose();
     super.dispose();
   }
@@ -46,10 +55,7 @@ class _RoutingSettingWidgetState extends ConsumerState<RoutingSettingWidget> {
       routingSettingProvider(widget.routingItem).notifier,
     );
 
-    final currentRoutingItem = routingSetting.copyWith(
-      remark: _remarkController.text,
-    );
-    final hasChanges = widget.routingItem != currentRoutingItem;
+    final hasChanges = widget.routingItem != routingSetting;
 
     return PopScope(
       canPop: _allowPop || !hasChanges,
@@ -109,7 +115,7 @@ class _RoutingSettingWidgetState extends ConsumerState<RoutingSettingWidget> {
               icon: const Icon(Icons.save),
               onPressed: () {
                 if (!_formKey.currentState!.validate()) return;
-                Navigator.pop(context, RoutingSettingUpsert(currentRoutingItem));
+                Navigator.pop(context, RoutingSettingUpsert(routingSetting));
               },
             ),
           ],

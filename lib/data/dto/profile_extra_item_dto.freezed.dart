@@ -212,13 +212,13 @@ return $default(_that.flow,_that.alterId,_that.vlessEncryption,_that.vlessVision
 @JsonSerializable()
 
 class _ProfileExtraItemDto implements ProfileExtraItemDto {
-  const _ProfileExtraItemDto({this.flow = null, this.alterId = null, this.vlessEncryption = null, this.vlessVisionSeed = null});
+  const _ProfileExtraItemDto({this.flow, this.alterId, this.vlessEncryption, this.vlessVisionSeed});
   factory _ProfileExtraItemDto.fromJson(Map<String, dynamic> json) => _$ProfileExtraItemDtoFromJson(json);
 
-@override@JsonKey() final  String? flow;
-@override@JsonKey() final  String? alterId;
-@override@JsonKey() final  String? vlessEncryption;
-@override@JsonKey() final  String? vlessVisionSeed;
+@override final  String? flow;
+@override final  String? alterId;
+@override final  String? vlessEncryption;
+@override final  String? vlessVisionSeed;
 
 /// Create a copy of ProfileExtraItemDto
 /// with the given fields replaced by the non-null parameter values.
