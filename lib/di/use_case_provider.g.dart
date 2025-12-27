@@ -151,7 +151,7 @@ final class StartCoreServiceUseCareProvider
 }
 
 String _$startCoreServiceUseCareHash() =>
-    r'c0bee61870f7c287061908a4746ac5ef2b6d0c45';
+    r'43dfeb2ea7282393aa948b64cf5a4a6f153776f0';
 
 @ProviderFor(stopCoreServiceUseCase)
 const stopCoreServiceUseCaseProvider = StopCoreServiceUseCaseProvider._();
@@ -199,7 +199,7 @@ final class StopCoreServiceUseCaseProvider
 }
 
 String _$stopCoreServiceUseCaseHash() =>
-    r'c168d6daa5c6e08f98a5be985c4905e90e5bbd78';
+    r'5de41fe50c2ade30e5059cc273f986f90260e761';
 
 @ProviderFor(exportProfileConfigUseCase)
 const exportProfileConfigUseCaseProvider =

@@ -1,19 +1,59 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as p;
 import 'package:xray_flutter/core/utils.dart';
+import 'package:xray_flutter/domain/core/core_process.dart';
 import 'package:xray_flutter/domain/infra/start_core_service.dart';
 import 'package:xray_flutter/infra/android/vpn_platform.dart';
+
+class _ProcessCore implements CoreProcess {
+  final Process _process;
+  final Stream<String> _out;
+  final Stream<String> _err;
+
+  _ProcessCore(this._process)
+    : _out = _process.stdout
+          .transform(SystemEncoding().decoder)
+          .asBroadcastStream(),
+      _err = _process.stderr
+          .transform(SystemEncoding().decoder)
+          .asBroadcastStream();
+
+  @override
+  Stream<String> get out => _out;
+
+  @override
+  Stream<String> get err => _err;
+
+  @override
+  Future<void> stop() async {
+    _process.kill();
+  }
+}
+
+class _AndroidCore implements CoreProcess {
+  @override
+  Stream<String> get out => const Stream.empty();
+
+  @override
+  Stream<String> get err => const Stream.empty();
+
+  @override
+  Future<void> stop() async {
+    await VpnPlatform.stopVpn();
+  }
+}
 
 class StartCoreServiceImpl implements StartCoreService {
   Process? _xrayProcess;
 
   @override
-  Future<void> startCore(Map<String, Object> config) async {
+  Future<CoreProcess> startCore(Map<String, Object> config) async {
     if (Platform.isAndroid) {
       await VpnPlatform.startVpn(config: config);
-      return;
+      return _AndroidCore();
     }
     var xrayProcessPath = p.join((await Utils.getBinDirectory()).path, 'xray');
     if (Platform.isWindows) {
@@ -34,12 +74,18 @@ class StartCoreServiceImpl implements StartCoreService {
       '-c',
       xrayConfigFile,
     ], mode: ProcessStartMode.normal);
-    _xrayProcess?.stdout.transform(SystemEncoding().decoder).listen((data) {
+
+    final core = _ProcessCore(_xrayProcess!);
+
+    // Keep logging to debug console for now as well
+    core.out.listen((data) {
       debugPrint('OUT: $data');
     });
-    _xrayProcess?.stderr.transform(SystemEncoding().decoder).listen((data) {
+    core.err.listen((data) {
       debugPrint('ERR: $data');
     });
+
+    return core;
   }
 
   @override

@@ -48,7 +48,7 @@ final class AppDatabaseProvider
   }
 }
 
-String _$appDatabaseHash() => r'8c69eb46d45206533c176c88a926608e79ca927d';
+String _$appDatabaseHash() => r'edefc8d12d0cd187f886975f01ab8b28e1d52352';
 
 @ProviderFor(profileRepo)
 const profileRepoProvider = ProfileRepoProvider._();
@@ -89,7 +89,7 @@ final class ProfileRepoProvider
   }
 }
 
-String _$profileRepoHash() => r'cdce737508e299e9009e67c21785e96c1f922d92';
+String _$profileRepoHash() => r'c66ef90d83c145a127d2ff122f019870e3c907a9';
 
 @ProviderFor(storeService)
 const storeServiceProvider = StoreServiceProvider._();
@@ -131,36 +131,3 @@ final class StoreServiceProvider
 }
 
 String _$storeServiceHash() => r'2179cb250c407b9c32b28e9f4d6157bc404b4beb';
-
-@ProviderFor(configInitializer)
-const configInitializerProvider = ConfigInitializerProvider._();
-
-final class ConfigInitializerProvider
-    extends $FunctionalProvider<AsyncValue<void>, void, FutureOr<void>>
-    with $FutureModifier<void>, $FutureProvider<void> {
-  const ConfigInitializerProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'configInitializerProvider',
-        isAutoDispose: false,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
-
-  @override
-  String debugGetCreateSourceHash() => _$configInitializerHash();
-
-  @$internal
-  @override
-  $FutureProviderElement<void> $createElement($ProviderPointer pointer) =>
-      $FutureProviderElement(pointer);
-
-  @override
-  FutureOr<void> create(Ref ref) {
-    return configInitializer(ref);
-  }
-}
-
-String _$configInitializerHash() => r'8772d36c78348efeea2b20551c992d553228bb42';

@@ -15,26 +15,6 @@ class StoreService {
   AppConfig get currentConfig => _appConfigNotifier.manager.config;
   ProfileRepo get profileRepo => _profileRepo;
 
-  Future<void> init() async {
-    if (_appConfigNotifier.manager.config.stateItem.profileId.isEmpty) {
-      final profiles = await _profileRepo.getAllProfiles();
-      if (profiles.isNotEmpty) {
-        await updateActiveProfile(profiles.first.indexId);
-      }
-    }
-    if (_appConfigNotifier.manager.config.stateItem.routingId.isEmpty) {
-      final routingItems = _appConfigNotifier.manager.config.routingItems;
-      if (routingItems.isNotEmpty) {
-        final newConfig = _appConfigNotifier.manager.config.copyWith(
-          stateItem: _appConfigNotifier.manager.config.stateItem.copyWith(
-            routingId: routingItems.first.id,
-          ),
-        );
-        await _appConfigNotifier.update(newConfig);
-      }
-    }
-  }
-
   Future<ProfileItemData?> getCurrentProfile() async {
     final profileId = _appConfigNotifier.manager.config.stateItem.profileId;
     return await _profileRepo.getProfileById(profileId);

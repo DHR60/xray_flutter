@@ -1,4 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:xray_flutter/core/app_runtime.dart';
 import 'package:xray_flutter/data/config/app_config.dart';
 import 'package:xray_flutter/data/config/app_config_manager.dart';
 
@@ -6,23 +7,16 @@ part 'app_config_provider.g.dart';
 
 @Riverpod(keepAlive: true)
 class AppConfigNotifier extends _$AppConfigNotifier {
-  final AppConfigManager _manager = AppConfigManager();
-
   // ignore: avoid_public_notifier_properties
-  AppConfigManager get manager => _manager;
+  AppConfigManager get manager => AppRuntime.instance.appConfigManager;
 
   @override
   AppConfig build() {
-    return _manager.config;
-  }
-
-  Future<void> init() async {
-    await _manager.init();
-    state = _manager.config;
+    return manager.config;
   }
 
   Future<void> update(AppConfig newConfig) async {
-    await _manager.update(newConfig);
+    await manager.update(newConfig);
     state = newConfig;
   }
 

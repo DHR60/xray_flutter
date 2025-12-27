@@ -1,25 +1,15 @@
 import 'dart:async';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:xray_flutter/core/app_runtime.dart';
+import 'package:xray_flutter/domain/core/core_process.dart';
 import 'package:xray_flutter/domain/infra/start_core_service.dart';
-import 'package:xray_flutter/infra/start_core_service_impl.dart';
 
 part 'core_manager.g.dart';
 
 @Riverpod(keepAlive: true)
-StartCoreService startCoreService(Ref ref) {
-  return StartCoreServiceImpl();
-}
-
-@Riverpod(keepAlive: true)
-CoreManager coreManager(Ref ref) {
-  final startCoreService = ref.watch(startCoreServiceProvider);
-  return CoreManager(startCoreService);
-}
-
-@Riverpod(keepAlive: true)
 Stream<CoreStatus> coreStatus(Ref ref) async* {
-  final manager = ref.watch(coreManagerProvider);
+  final manager = AppRuntime.instance.coreManager;
   yield manager.status;
   yield* manager.statusStream;
 }
@@ -39,7 +29,14 @@ class CoreManager {
   CoreStatus get status => _currentStatus;
   Stream<CoreStatus> get statusStream => _statusController.stream;
 
+  // Active core processes
+  final Map<String, CoreProcess> _activeProcesses = {};
+  static const String _mainCoreId = 'main';
+
   CoreManager(this._startCoreService);
+
+  Stream<String> get mainLogOut => _activeProcesses[_mainCoreId]?.out ?? const Stream.empty();
+  Stream<String> get mainLogErr => _activeProcesses[_mainCoreId]?.err ?? const Stream.empty();
 
   Future<void> start(String config, int port) async {
     if (_currentStatus == CoreStatus.running) {
@@ -48,10 +45,11 @@ class CoreManager {
     
     _updateStatus(CoreStatus.starting);
     try {
-      await _startCoreService.startCore({
+      final process = await _startCoreService.startCore({
         'config': config,
         'socksPort': port,
       });
+      _activeProcesses[_mainCoreId] = process;
       _updateStatus(CoreStatus.running);
     } catch (e) {
       _updateStatus(CoreStatus.error);
@@ -60,16 +58,21 @@ class CoreManager {
   }
 
   Future<void> stop() async {
-    try {
-      await _startCoreService.stopCore();
-    } finally {
-      _updateStatus(CoreStatus.stopped);
+    await _startCoreService.stopCore();
+    
+    // Also stop the tracked process if it exists
+    final mainProcess = _activeProcesses.remove(_mainCoreId);
+    // Note: _startCoreService.stopCore() might have already killed it, 
+    // but we ensure cleanup here.
+    if (mainProcess != null) {
+      // We don't await here strictly if the process is already dead, 
+      // but it's safe to call stop() on our wrapper.
+      try {
+        await mainProcess.stop();
+      } catch (_) {}
     }
-  }
-
-  Future<void> restart(String config, int port) async {
-    await stop();
-    await start(config, port);
+    
+    _updateStatus(CoreStatus.stopped);
   }
 
   void _updateStatus(CoreStatus status) {
