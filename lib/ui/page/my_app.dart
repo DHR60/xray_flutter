@@ -6,7 +6,7 @@ import 'package:xray_flutter/di/provider.dart';
 import 'package:xray_flutter/di/use_case_provider.dart';
 import 'package:xray_flutter/domain/core/result.dart';
 import 'package:xray_flutter/ui/page/profile_list/profile_list_view.dart';
-import 'package:xray_flutter/ui/page/profile_setting/shared/profile_setting_result.dart';
+import 'package:xray_flutter/ui/page/profile_setting/profile_setting_result.dart';
 import 'package:xray_flutter/ui/page/profile_setting/vless_setting_widget.dart';
 import 'package:xray_flutter/ui/page/setting/setting_widget.dart';
 import 'package:xray_flutter/ui/page/sub/sub_list_view.dart';

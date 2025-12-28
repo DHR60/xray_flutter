@@ -4,7 +4,13 @@ import 'package:xray_flutter/core/utils.dart';
 import 'package:xray_flutter/data/db/app_database.dart';
 import 'package:xray_flutter/data/dto/profile_extra_item_dto.dart';
 import 'package:xray_flutter/di/app_config_provider.dart';
-import 'package:xray_flutter/ui/page/profile_setting/shared/profile_setting_result.dart';
+import 'package:xray_flutter/ui/page/profile_setting/profile_setting_result.dart';
+import 'package:xray_flutter/ui/page/profile_setting/shared/profile_listen_controller.dart';
+import 'package:xray_flutter/ui/page/profile_setting/shared/profile_listen_view.dart';
+import 'package:xray_flutter/ui/page/profile_setting/shared/ray_like/profile_security_controller.dart';
+import 'package:xray_flutter/ui/page/profile_setting/shared/ray_like/profile_security_view.dart';
+import 'package:xray_flutter/ui/page/profile_setting/shared/ray_like/profile_transport_controller.dart';
+import 'package:xray_flutter/ui/page/profile_setting/shared/ray_like/profile_transport_view.dart';
 
 class VlessSettingWidget extends ConsumerStatefulWidget {
   const VlessSettingWidget({
@@ -24,15 +30,12 @@ class _VlessSettingWidgetState extends ConsumerState<VlessSettingWidget> {
   late ProfileExtraItemDto _extraDto;
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _remarkController;
-  late TextEditingController _addressController;
-  late TextEditingController _portController;
+  late ProfileListenController _listenController;
   late TextEditingController _idController;
   late TextEditingController _flowController;
   late TextEditingController _vlessEncryptionController;
-  late TextEditingController _networkController;
-  late TextEditingController _streamSecurityController;
-  late TextEditingController _sniController;
-  late TextEditingController _allowInsecureController;
+  late ProfileTransportController _transportController;
+  late ProfileSecurityController _securityController;
 
   @override
   void initState() {
@@ -45,37 +48,46 @@ class _VlessSettingWidgetState extends ConsumerState<VlessSettingWidget> {
       _extraDto = const ProfileExtraItemDto();
     }
     _remarkController = TextEditingController(text: widget.profile.remarks);
-    _addressController = TextEditingController(text: widget.profile.address);
-    _portController = TextEditingController(
-      text: widget.profile.port.toString(),
+    _listenController = ProfileListenController(
+      address: widget.profile.address,
+      port: widget.profile.port,
     );
     _idController = TextEditingController(text: widget.profile.id);
     _flowController = TextEditingController(text: _extraDto.flow);
     _vlessEncryptionController = TextEditingController(
-      text: _extraDto.vlessEncryption?.isNotEmpty == true ? _extraDto.vlessEncryption : 'none',
+      text: _extraDto.vlessEncryption?.isNotEmpty == true
+          ? _extraDto.vlessEncryption
+          : 'none',
     );
-    _networkController = TextEditingController(text: widget.profile.network);
-    _streamSecurityController = TextEditingController(
-      text: widget.profile.streamSecurity,
+    _transportController = ProfileTransportController(
+      transport: widget.profile.network,
+      subType: widget.profile.headerType,
+      host: widget.profile.requestHost,
+      path: widget.profile.path,
+      xhttpExtra: widget.profile.xhttpExtra,
     );
-    _sniController = TextEditingController(text: widget.profile.sni);
-    _allowInsecureController = TextEditingController(
-      text: widget.profile.allowInsecure,
+    _securityController = ProfileSecurityController(
+      security: widget.profile.streamSecurity,
+      sni: widget.profile.sni,
+      utlsFingerprint: widget.profile.fingerprint,
+      alpn: widget.profile.alpn,
+      allowInsecure: widget.profile.allowInsecure,
+      realityPbk: widget.profile.publicKey,
+      realityShortId: widget.profile.shortId,
+      realitySpdx: widget.profile.spiderX,
+      mldsa65Ver: widget.profile.mldsa65Verify,
     );
   }
 
   @override
   void dispose() {
     _remarkController.dispose();
-    _addressController.dispose();
-    _portController.dispose();
+    _listenController.dispose();
     _idController.dispose();
     _flowController.dispose();
     _vlessEncryptionController.dispose();
-    _networkController.dispose();
-    _streamSecurityController.dispose();
-    _sniController.dispose();
-    _allowInsecureController.dispose();
+    _transportController.dispose();
+    _securityController.dispose();
     super.dispose();
   }
 
@@ -91,13 +103,23 @@ class _VlessSettingWidgetState extends ConsumerState<VlessSettingWidget> {
 
     var profile = widget.profile.copyWith(
       remarks: _remarkController.text,
-      address: _addressController.text,
-      port: int.tryParse(_portController.text) ?? 0,
+      address: _listenController.addressText,
+      port: _listenController.portValue,
       id: _idController.text,
-      network: _networkController.text,
-      streamSecurity: _streamSecurityController.text,
-      sni: _sniController.text,
-      allowInsecure: _allowInsecureController.text,
+      network: _transportController.transport,
+      headerType: _transportController.subType,
+      requestHost: _transportController.host,
+      path: _transportController.path,
+      xhttpExtra: _transportController.xhttpExtra,
+      streamSecurity: _securityController.security,
+      sni: _securityController.sni,
+      fingerprint: _securityController.utlsFingerprint,
+      alpn: _securityController.alpn,
+      allowInsecure: _securityController.allowInsecure,
+      publicKey: _securityController.realityPbk,
+      shortId: _securityController.realityShortId,
+      spiderX: _securityController.realitySpdx,
+      mldsa65Verify: _securityController.mldsa65Ver,
       jsonData: Utils.toJsonString(_extraDto.toJson()),
     );
 
@@ -137,24 +159,7 @@ class _VlessSettingWidgetState extends ConsumerState<VlessSettingWidget> {
                 decoration: const InputDecoration(labelText: '配置名称'),
                 validator: (value) => value?.isEmpty == true ? '请输入配置名称' : null,
               ),
-              TextFormField(
-                controller: _addressController,
-                decoration: const InputDecoration(labelText: '服务器地址'),
-                validator: (value) => value?.isEmpty == true ? '请输入地址' : null,
-              ),
-              TextFormField(
-                controller: _portController,
-                decoration: const InputDecoration(labelText: '服务器端口'),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) return '请输入端口';
-                  final port = int.tryParse(value);
-                  if (port == null || port <= 0 || port > 65535) {
-                    return '端口号无效';
-                  }
-                  return null;
-                },
-              ),
+              ProfileListenView(controller: _listenController),
               const Divider(),
               // Additional VLESS-specific settings can be added here
               TextFormField(
@@ -172,26 +177,10 @@ class _VlessSettingWidgetState extends ConsumerState<VlessSettingWidget> {
                   labelText: '加密方式 (VLESS Encryption)',
                 ),
               ),
-              TextFormField(
-                controller: _networkController,
-                decoration: const InputDecoration(labelText: '网络类型 (Network)'),
-              ),
-              TextFormField(
-                controller: _streamSecurityController,
-                decoration: const InputDecoration(
-                  labelText: '传输安全 (Stream Security)',
-                ),
-              ),
-              TextFormField(
-                controller: _sniController,
-                decoration: const InputDecoration(labelText: 'SNI'),
-              ),
-              TextFormField(
-                controller: _allowInsecureController,
-                decoration: const InputDecoration(
-                  labelText: '允许不安全 (Allow Insecure)',
-                ),
-              ),
+              const Divider(),
+              ProfileTransportView(controller: _transportController),
+              const Divider(),
+              ProfileSecurityView(controller: _securityController),
             ],
           ),
         ),

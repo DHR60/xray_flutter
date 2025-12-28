@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
-import 'package:xray_flutter/data/enum/config_type.dart';
-import 'package:xray_flutter/data/enum/core_type.dart';
+import 'package:xray_flutter/core/enum/config_type.dart';
+import 'package:xray_flutter/core/enum/core_type.dart';
 
 class ProfileItem extends Table {
   late final indexId = text()();

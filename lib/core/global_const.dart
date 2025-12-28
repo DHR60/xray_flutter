@@ -1,0 +1,110 @@
+import 'package:xray_flutter/core/enum/transport.dart';
+
+class GlobalConst {
+  static const String appName = "MyFlutterApp";
+
+  static const String loopbackAddress = "127.0.0.1";
+  static const int defaultPort = 10808;
+  static const String proxyTag = "proxy";
+  static const String directTag = "direct";
+  static const String blockTag = "block";
+
+  static const List<String> proxyModes = [proxyTag, directTag, blockTag];
+  static const String configFileName = "config.json";
+
+  static const Map<String, ETransport> transportMap = {
+    "raw": ETransport.raw,
+    "tcp": ETransport.raw,
+    "xhttp": ETransport.xhttp,
+    "grpc": ETransport.grpc,
+    "ws": ETransport.ws,
+    "httpupgrade": ETransport.httpupgrade,
+    "kcp": ETransport.kcp,
+  };
+
+  static const List<String> rawTypes = [
+    "none",
+    "http",
+  ];
+
+  static const List<String> xhttpTypes = [
+    "auto",
+    "packet-up",
+    "stream-up",
+    "stream-one",
+  ];
+
+  static const List<String> grpcTypes = [
+    "gun",
+    "mutli",
+  ];
+
+  static const List<String> noneTypes = [
+    "none",
+  ];
+
+  static const List<String> kcpTypes = [
+    "none",
+    "srtp",
+    "utp",
+    "wechat-video",
+    "dtls",
+    "wireguard",
+    "dns",
+  ];
+
+  static const Map<ETransport, List<String>> transportTypeMap = {
+    ETransport.raw: rawTypes,
+    ETransport.xhttp: xhttpTypes,
+    ETransport.grpc: grpcTypes,
+    ETransport.ws: noneTypes,
+    ETransport.httpupgrade: noneTypes,
+    ETransport.kcp: kcpTypes,
+  };
+
+  static const String transportSecurityTls = "tls";
+  static const String transportSecurityReality = "reality";
+  static const List<String> transportSecurityList = [
+    "",
+    transportSecurityTls,
+    transportSecurityReality,
+  ];
+
+  static const List<String> alpnList = [
+    "",
+    "h3",
+    "h2",
+    "http/1.1",
+    "h3,h2",
+    "h2,http/1.1",
+    "h3,h2,http/1.1",
+  ];
+
+  static const List<String> allowInsecureList = [
+    "",
+    "false",
+    "true",
+  ];
+
+  static const List<String> utlsFingerprintList = [
+    "",
+    "chrome",
+    "firefox",
+    "safari",
+    "edge",
+    "ios",
+    "android",
+    "360",
+    "qq",
+    "random",
+    "randomized",
+  ];
+
+  static const String vlessVisionFlow = "xtls-rprx-vision";
+  static const String vlessVisionAllowQuicFlow = "xtls-rprx-vision-udp443";
+  static const List<String> vlessFlowList = [
+    "",
+    vlessVisionFlow,
+    vlessVisionAllowQuicFlow,
+  ];
+}

@@ -1,8 +1,9 @@
 import 'package:x_config_gen/xray.dart';
+import 'package:xray_flutter/core/global_const.dart';
 import 'package:xray_flutter/core/utils.dart';
 import 'package:xray_flutter/data/config/rule_item_dto.dart';
 import 'package:xray_flutter/data/dto/profile_extra_item_dto.dart';
-import 'package:xray_flutter/data/enum/config_type.dart';
+import 'package:xray_flutter/core/enum/config_type.dart';
 import 'package:xray_flutter/domain/model/profile_context.dart';
 
 part 'xray_config_dns_service.dart';

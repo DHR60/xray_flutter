@@ -1,6 +1,6 @@
 import 'package:xray_flutter/data/db/app_database.dart';
-import 'package:xray_flutter/data/enum/config_type.dart';
-import 'package:xray_flutter/data/enum/core_type.dart';
+import 'package:xray_flutter/core/enum/config_type.dart';
+import 'package:xray_flutter/core/enum/core_type.dart';
 
 class ProfileItemFactory {
   static ProfileItemData createDefault(String indexId, int orderIndex) {

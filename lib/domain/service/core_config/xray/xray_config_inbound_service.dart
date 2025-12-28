@@ -6,8 +6,8 @@ extension XrayConfigInboundService on XrayConfigService {
     // This is a placeholder implementation
     return [
       Inbound4Ray(
-        listen: '127.0.0.1',
-        port: MultiValueMixed.single(int.parse(_profileContext.coreItem?.inboundPort ?? '10808')),
+        listen: GlobalConst.loopbackAddress,
+        port: MultiValueMixed.single(int.parse(_profileContext.coreItem?.inboundPort ?? '${GlobalConst.defaultPort}')),
         protocol: 'socks',
         settings: InboundSettings4Ray.socks(
           settings: SocksInboundSettings4Ray(

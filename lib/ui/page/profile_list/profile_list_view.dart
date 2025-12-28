@@ -5,7 +5,7 @@ import 'package:xray_flutter/di/profile_filter_provider.dart';
 import 'package:xray_flutter/di/use_case_provider.dart';
 import 'package:xray_flutter/domain/core/result.dart';
 import 'package:xray_flutter/ui/page/profile_list/profile_list_notifier.dart';
-import 'package:xray_flutter/ui/page/profile_setting/shared/profile_setting_result.dart';
+import 'package:xray_flutter/ui/page/profile_setting/profile_setting_result.dart';
 import 'package:xray_flutter/ui/page/profile_setting/vless_setting_widget.dart';
 
 class ProfileListView extends ConsumerWidget {

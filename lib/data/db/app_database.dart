@@ -5,8 +5,8 @@ import 'package:drift/native.dart';
 import 'package:path/path.dart' as p;
 import 'package:xray_flutter/core/utils.dart';
 import 'package:xray_flutter/data/db/tables/profile_item.dart';
-import 'package:xray_flutter/data/enum/config_type.dart';
-import 'package:xray_flutter/data/enum/core_type.dart';
+import 'package:xray_flutter/core/enum/config_type.dart';
+import 'package:xray_flutter/core/enum/core_type.dart';
 import 'package:xray_flutter/data/db/tables/profile_stat_item.dart';
 import 'package:xray_flutter/data/db/tables/profile_test_item.dart';
 
