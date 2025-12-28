@@ -105,7 +105,10 @@ extension XrayConfigOutboundService on XrayConfigService {
     final extra = ProfileExtraItemDto.fromString(
       _profileContext.profile.jsonData,
     );
-    // TODO: _profileContext.profile.address IPV6 handling
+    var address = _profileContext.profile.address;
+    if (Utils.isIPv6(address)) {
+      address = '[$address]';
+    }
     return Outbound4Ray(
       protocol: 'wireguard',
       settings: OutboundSettings4Ray.wireguard(
@@ -121,8 +124,7 @@ extension XrayConfigOutboundService on XrayConfigService {
             WireguardOutboundPeer4Ray(
               publicKey: extra.wireguardPublicKey ?? '',
               preSharedKey: extra.wireguardPreSharedKey,
-              endpoint:
-                  '${_profileContext.profile.address}:${_profileContext.profile.port}',
+              endpoint: '$address:${_profileContext.profile.port}',
             ),
           ],
         ),

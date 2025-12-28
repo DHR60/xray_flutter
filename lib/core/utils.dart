@@ -98,4 +98,18 @@ class Utils {
     final list = normalizeRulesToList(str);
     return list.join(',');
   }
+
+  static bool isIPv6(String str) {
+    final address = InternetAddress.tryParse(str);
+    return address?.type == InternetAddressType.IPv6;
+  }
+
+  static bool isDomain(String str) {
+    if (InternetAddress.tryParse(str) != null) {
+      return false;
+    }
+    final regex = RegExp(
+        r'^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$');
+    return regex.hasMatch(str);
+  }
 }
