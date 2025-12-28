@@ -8,7 +8,7 @@ import 'package:xray_flutter/di/provider.dart';
 import 'package:xray_flutter/di/use_case_provider.dart';
 import 'package:xray_flutter/domain/core/result.dart';
 import 'package:xray_flutter/ui/page/profile_list/profile_list_view.dart';
-import 'package:xray_flutter/ui/page/profile_setting/profile_fac_setting_widget.dart';
+import 'package:xray_flutter/ui/page/profile_setting/profile_fact_setting_widget.dart';
 import 'package:xray_flutter/ui/page/profile_setting/profile_setting_result.dart';
 import 'package:xray_flutter/ui/page/setting/setting_widget.dart';
 import 'package:xray_flutter/ui/page/sub/sub_list_view.dart';
@@ -100,7 +100,7 @@ class _MyHomePageStateState extends ConsumerState<MyHomePageState> {
                 final intent = await Navigator.push<ProfileSettingResult>(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ProfileFacSettingWidget(
+                    builder: (context) => ProfileFactSettingWidget(
                       configType: configType,
                       profile: profile,
                       isNew: true,

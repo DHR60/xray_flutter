@@ -10,13 +10,13 @@ import 'package:xray_flutter/ui/page/profile_setting/vless_setting_widget.dart';
 import 'package:xray_flutter/ui/page/profile_setting/vmess_setting_widget.dart';
 import 'package:xray_flutter/ui/page/profile_setting/wireguard_setting_widget.dart';
 
-class ProfileFacSettingWidget extends ConsumerWidget {
+class ProfileFactSettingWidget extends ConsumerWidget {
   final EConfigType configType;
   final ProfileItemData profile;
   final bool isNew;
   final String? subId;
 
-  const ProfileFacSettingWidget({
+  const ProfileFactSettingWidget({
     super.key,
     required this.configType,
     required this.profile,

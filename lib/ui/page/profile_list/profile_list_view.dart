@@ -5,7 +5,7 @@ import 'package:xray_flutter/di/profile_filter_provider.dart';
 import 'package:xray_flutter/di/use_case_provider.dart';
 import 'package:xray_flutter/domain/core/result.dart';
 import 'package:xray_flutter/ui/page/profile_list/profile_list_notifier.dart';
-import 'package:xray_flutter/ui/page/profile_setting/profile_fac_setting_widget.dart';
+import 'package:xray_flutter/ui/page/profile_setting/profile_fact_setting_widget.dart';
 import 'package:xray_flutter/ui/page/profile_setting/profile_setting_result.dart';
 
 class ProfileListView extends ConsumerWidget {
@@ -63,7 +63,7 @@ class ProfileListView extends ConsumerWidget {
                             await Navigator.push<ProfileSettingResult>(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ProfileFacSettingWidget(
+                                builder: (context) => ProfileFactSettingWidget(
                                   configType: profile.configType,
                                   profile: profile,
                                   isNew: false,
