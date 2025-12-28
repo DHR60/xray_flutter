@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:xray_flutter/core/global_const.dart';
 import 'package:xray_flutter/core/utils.dart';
 import 'package:xray_flutter/data/config/rule_item_dto.dart';
 
@@ -29,23 +31,60 @@ class _RuleSettingWidgetState extends ConsumerState<RuleSettingWidget> {
   late TextEditingController _networkController;
   late TextEditingController _protocolController;
   bool _allowPop = false;
+  bool _setStateScheduled = false;
 
   @override
   void initState() {
     super.initState();
     _ruleItem = widget.ruleItem;
     _remarkController = TextEditingController(text: _ruleItem.remark);
-    _outboundTagController = TextEditingController(text: _ruleItem.outboundTag);
+    _outboundTagController = TextEditingController(
+      text: GlobalConst.ruleOutTags.contains(_ruleItem.outboundTag)
+          ? _ruleItem.outboundTag
+          : GlobalConst.ruleOutTags.first,
+    );
     _inboundTagController = TextEditingController(text: _ruleItem.inboundTag);
     _ipController = TextEditingController(text: _ruleItem.ip);
     _domainController = TextEditingController(text: _ruleItem.domain);
     _portController = TextEditingController(text: _ruleItem.port);
     _networkController = TextEditingController(text: _ruleItem.network);
     _protocolController = TextEditingController(text: _ruleItem.protocol);
+    
+    _remarkController.addListener(_onControllerChanged);
+    _outboundTagController.addListener(_onControllerChanged);
+    _inboundTagController.addListener(_onControllerChanged);
+    _ipController.addListener(_onControllerChanged);
+    _domainController.addListener(_onControllerChanged);
+    _portController.addListener(_onControllerChanged);
+    _networkController.addListener(_onControllerChanged);
+    _protocolController.addListener(_onControllerChanged);
+  }
+  
+  void _onControllerChanged() {
+    _requestRebuild();
+  }
+
+  void _requestRebuild() {
+    if (!mounted) return;
+    if (_setStateScheduled) return;
+    _setStateScheduled = true;
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      _setStateScheduled = false;
+      if (mounted) setState(() {});
+    });
   }
 
   @override
   void dispose() {
+    _remarkController.removeListener(_onControllerChanged);
+    _outboundTagController.removeListener(_onControllerChanged);
+    _inboundTagController.removeListener(_onControllerChanged);
+    _ipController.removeListener(_onControllerChanged);
+    _domainController.removeListener(_onControllerChanged);
+    _portController.removeListener(_onControllerChanged);
+    _networkController.removeListener(_onControllerChanged);
+    _protocolController.removeListener(_onControllerChanged);
+    
     _remarkController.dispose();
     _outboundTagController.dispose();
     _inboundTagController.dispose();
@@ -143,74 +182,47 @@ class _RuleSettingWidgetState extends ConsumerState<RuleSettingWidget> {
                 TextFormField(
                   controller: _remarkController,
                   decoration: InputDecoration(labelText: 'Remark'),
-                  onChanged: (value) {
-                    setState(() {
-                      _ruleItem = _ruleItem.copyWith(remark: value);
-                    });
-                  },
                 ),
-                TextFormField(
-                  controller: _outboundTagController,
+                DropdownButtonFormField<String>(
+                  initialValue: _outboundTagController.text,
                   decoration: InputDecoration(labelText: 'Outbound Tag'),
+                  items: GlobalConst.ruleOutTags
+                      .map(
+                        (tag) => DropdownMenuItem<String>(
+                          value: tag,
+                          child: Text(tag),
+                        ),
+                      )
+                      .toList(),
                   onChanged: (value) {
-                    setState(() {
-                      _ruleItem = _ruleItem.copyWith(outboundTag: value);
-                    });
+                    if (value != null) {
+                      _outboundTagController.text = value;
+                    }
                   },
                 ),
-                TextFormField(
-                  controller: _inboundTagController,
-                  decoration: InputDecoration(labelText: 'Inbound Tag'),
-                  onChanged: (value) {
-                    setState(() {
-                      _ruleItem = _ruleItem.copyWith(inboundTag: value);
-                    });
-                  },
-                ),
+                // TextFormField(
+                //   controller: _inboundTagController,
+                //   decoration: InputDecoration(labelText: 'Inbound Tag'),
+                // ),
                 TextFormField(
                   controller: _ipController,
                   decoration: InputDecoration(labelText: 'IP'),
-                  onChanged: (value) {
-                    setState(() {
-                      _ruleItem = _ruleItem.copyWith(ip: value);
-                    });
-                  },
                 ),
                 TextFormField(
                   controller: _domainController,
                   decoration: InputDecoration(labelText: 'Domain'),
-                  onChanged: (value) {
-                    setState(() {
-                      _ruleItem = _ruleItem.copyWith(domain: value);
-                    });
-                  },
                 ),
                 TextFormField(
                   controller: _portController,
                   decoration: InputDecoration(labelText: 'Port'),
-                  onChanged: (value) {
-                    setState(() {
-                      _ruleItem = _ruleItem.copyWith(port: value);
-                    });
-                  },
                 ),
                 TextFormField(
                   controller: _networkController,
                   decoration: InputDecoration(labelText: 'Network'),
-                  onChanged: (value) {
-                    setState(() {
-                      _ruleItem = _ruleItem.copyWith(network: value);
-                    });
-                  },
                 ),
                 TextFormField(
                   controller: _protocolController,
                   decoration: InputDecoration(labelText: 'Protocol'),
-                  onChanged: (value) {
-                    setState(() {
-                      _ruleItem = _ruleItem.copyWith(protocol: value);
-                    });
-                  },
                 ),
               ],
             ),

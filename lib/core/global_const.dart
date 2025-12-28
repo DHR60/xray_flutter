@@ -10,7 +10,7 @@ class GlobalConst {
   static const String directTag = "direct";
   static const String blockTag = "block";
 
-  static const List<String> proxyModes = [proxyTag, directTag, blockTag];
+  static const List<String> ruleOutTags = [proxyTag, directTag, blockTag];
   static const String configFileName = "config.json";
 
   static const Map<String, ETransport> transportMap = {

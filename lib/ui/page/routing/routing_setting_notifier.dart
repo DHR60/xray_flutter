@@ -35,6 +35,16 @@ class RoutingSettingNotifier extends Notifier<RoutingItemDto> {
     }
   }
 
+  void updateRuleEnabled(String ruleId, bool enabled) {
+    final rules = state.rules.map((r) {
+      if (r.id == ruleId) {
+        return r.copyWith(enabled: enabled);
+      }
+      return r;
+    }).toList();
+    state = state.copyWith(rules: rules);
+  }
+
   void handleRuleSettingResult(RuleSettingResult? intent) {
     if (intent is RuleSettingUpsert) {
       upsertRule(intent.ruleItem);
@@ -70,9 +80,7 @@ class RoutingSettingNotifier extends Notifier<RoutingItemDto> {
   }
 }
 
-final routingSettingProvider =
-    NotifierProvider.family.autoDispose<
-      RoutingSettingNotifier,
-      RoutingItemDto,
-      RoutingItemDto
-    >(RoutingSettingNotifier.new);
+final routingSettingProvider = NotifierProvider.family
+    .autoDispose<RoutingSettingNotifier, RoutingItemDto, RoutingItemDto>(
+      RoutingSettingNotifier.new,
+    );

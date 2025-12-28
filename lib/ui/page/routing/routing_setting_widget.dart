@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:xray_flutter/core/utils.dart';
 import 'package:xray_flutter/data/config/app_config_manager.dart';
 import 'package:xray_flutter/data/config/routing_item_dto.dart';
+import 'package:xray_flutter/data/config/rule_item_dto.dart';
 import 'package:xray_flutter/ui/page/routing/routing_setting_notifier.dart';
 import 'package:xray_flutter/ui/page/routing/rule_setting_widget.dart';
 
@@ -46,6 +48,20 @@ class _RoutingSettingWidgetState extends ConsumerState<RoutingSettingWidget> {
     super.dispose();
   }
 
+  String getRuleSummaryInfo(RuleItemDto rule) {
+    final buffer = StringBuffer();
+    final ip = Utils.normalizeRulesToList(rule.ip);
+    final domain = Utils.normalizeRulesToList(rule.domain);
+    if (ip.isNotEmpty) {
+      buffer.write('IP: ${ip.take(2).join(', ')}; \n');
+    }
+    if (domain.isNotEmpty) {
+      buffer.write('Domain: ${domain.take(2).join(', ')}; \n');
+    }
+    buffer.write('Outbound: ${rule.outboundTag}');
+    return buffer.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     final routingSetting = ref.watch(
@@ -67,9 +83,7 @@ class _RoutingSettingWidgetState extends ConsumerState<RoutingSettingWidget> {
           builder: (context) {
             return AlertDialog(
               title: const Text('是否丢弃更改?'),
-              content: const Text(
-                '您有未保存的更改。您想要丢弃它们吗？',
-              ),
+              content: const Text('您有未保存的更改。您想要丢弃它们吗？'),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context, false),
@@ -186,41 +200,88 @@ class _RoutingSettingWidgetState extends ConsumerState<RoutingSettingWidget> {
                   return ReorderableDelayedDragStartListener(
                     key: ValueKey(rule.id),
                     index: index,
-                    child: ListTile(
-                      title: Text('Rule ${index + 1}: $rule'),
-                      leading: ReorderableDragStartListener(
-                        index: index,
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Icon(Icons.drag_handle, color: Colors.grey),
-                        ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
                       ),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
+                      child: Row(
                         children: [
-                          IconButton(
-                            icon: Icon(Icons.edit),
-                            onPressed: () async {
-                              final intent =
-                                  await Navigator.push<RuleSettingResult>(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => RuleSettingWidget(
-                                        isNew: false,
-                                        ruleItem: rule,
-                                      ),
-                                    ),
-                                  );
-                              routingSettingNotifier.handleRuleSettingResult(
-                                intent,
-                              );
-                            },
+                          ReorderableDragStartListener(
+                            index: index,
+                            child: const Padding(
+                              padding: EdgeInsets.only(right: 16.0),
+                              child: Icon(
+                                Icons.drag_handle,
+                                color: Colors.grey,
+                              ),
+                            ),
                           ),
-                          IconButton(
-                            icon: Icon(Icons.delete),
-                            onPressed: () {
-                              routingSettingNotifier.removeRuleById(rule.id);
-                            },
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  rule.remark,
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.titleMedium,
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  getRuleSummaryInfo(rule),
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.edit),
+                                    onPressed: () async {
+                                      final intent =
+                                          await Navigator.push<
+                                            RuleSettingResult
+                                          >(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  RuleSettingWidget(
+                                                    isNew: false,
+                                                    ruleItem: rule,
+                                                  ),
+                                            ),
+                                          );
+                                      routingSettingNotifier
+                                          .handleRuleSettingResult(intent);
+                                    },
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.delete),
+                                    onPressed: () {
+                                      routingSettingNotifier.removeRuleById(
+                                        rule.id,
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                              Switch(
+                                value: rule.enabled,
+                                onChanged: (value) {
+                                  routingSettingNotifier.updateRuleEnabled(
+                                    rule.id,
+                                    value,
+                                  );
+                                },
+                              ),
+                            ],
                           ),
                         ],
                       ),

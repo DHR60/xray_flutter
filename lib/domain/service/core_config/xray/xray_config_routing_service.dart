@@ -12,13 +12,19 @@ extension XrayConfigRoutingService on XrayConfigService {
   }
 
   RoutingRule4Ray _genRoutingRule(RuleItemDto ruleItem) {
+    final ip = Utils.normalizeRulesToList(ruleItem.ip);
+    final domain = Utils.normalizeRulesToList(ruleItem.domain);
+    final port = Utils.normalizeRulesToString(ruleItem.port);
+    final network = Utils.normalizeRulesToString(ruleItem.network);
+    final protocol = Utils.normalizeRulesToList(ruleItem.protocol);
+
     return RoutingRule4Ray(
       outboundTag: ruleItem.outboundTag,
-      ip: Utils.normalizeRulesToList(ruleItem.ip),
-      domain: Utils.normalizeRulesToList(ruleItem.domain),
-      port: Utils.normalizeRulesToString(ruleItem.port),
-      network: Utils.normalizeRulesToString(ruleItem.network),
-      protocol: Utils.normalizeRulesToList(ruleItem.protocol),
+      ip: ip.isEmpty ? null : ip,
+      domain: domain.isEmpty ? null : domain,
+      port: port.isEmpty ? null : port,
+      network: network.isEmpty ? null : network,
+      protocol: protocol.isEmpty ? null : protocol,
     );
   }
 }
