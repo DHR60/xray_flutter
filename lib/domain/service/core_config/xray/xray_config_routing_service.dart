@@ -2,9 +2,25 @@ part of 'xray_config_service.dart';
 
 extension XrayConfigRoutingService on XrayConfigService {
   Routing4Ray _genRouting() {
-    final rules = _profileContext.routingItem?.rules
-        .map((ruleItem) => _genRoutingRule(ruleItem))
-        .toList();
+    // if ip and domain are both non-empty, split into two rules
+    final rules = <RoutingRule4Ray>[];
+
+    if (_profileContext.routingItem?.rules != null) {
+      for (var ruleItem in _profileContext.routingItem!.rules) {
+        if (!ruleItem.enabled) continue;
+
+        final ip = Utils.normalizeRulesToList(ruleItem.ip);
+        final domain = Utils.normalizeRulesToList(ruleItem.domain);
+
+        if (ip.isNotEmpty && domain.isNotEmpty) {
+          rules.add(_genRoutingRule(ruleItem.copyWith(domain: '')));
+          rules.add(_genRoutingRule(ruleItem.copyWith(ip: '')));
+        } else {
+          rules.add(_genRoutingRule(ruleItem));
+        }
+      }
+    }
+
     return Routing4Ray(
       domainStrategy: _profileContext.routingItem?.strategy ?? 'AsIs',
       rules: rules,
