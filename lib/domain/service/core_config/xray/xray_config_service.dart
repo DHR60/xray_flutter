@@ -1,4 +1,5 @@
 import 'package:x_config_gen/xray.dart';
+import 'package:xray_flutter/core/enum/transport.dart';
 import 'package:xray_flutter/core/global_const.dart';
 import 'package:xray_flutter/core/utils.dart';
 import 'package:xray_flutter/data/config/rule_item_dto.dart';

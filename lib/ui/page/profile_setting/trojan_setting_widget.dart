@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:xray_flutter/core/global_const.dart';
 import 'package:xray_flutter/core/utils.dart';
 import 'package:xray_flutter/data/db/app_database.dart';
 import 'package:xray_flutter/data/dto/profile_extra_item_dto.dart';
@@ -35,7 +34,6 @@ class _TrojanSettingWidgetState extends ConsumerState<TrojanSettingWidget> {
   late TextEditingController _remarkController;
   late ProfileListenController _listenController;
   late TextEditingController _passwordController;
-  late TextEditingController _flowController;
   late ProfileTransportController _transportController;
   late ProfileSecurityController _securityController;
 
@@ -50,7 +48,6 @@ class _TrojanSettingWidgetState extends ConsumerState<TrojanSettingWidget> {
     _remarkController = TextEditingController(text: widget.profile.remarks);
     _listenController = ProfileListenController.fromData(widget.profile);
     _passwordController = TextEditingController(text: widget.profile.id);
-    _flowController = TextEditingController(text: _extraDto.flow);
     _transportController = ProfileTransportController.fromData(widget.profile);
     _securityController = ProfileSecurityController.fromData(widget.profile);
   }
@@ -60,7 +57,6 @@ class _TrojanSettingWidgetState extends ConsumerState<TrojanSettingWidget> {
     _remarkController.dispose();
     _listenController.dispose();
     _passwordController.dispose();
-    _flowController.dispose();
     _transportController.dispose();
     _securityController.dispose();
     super.dispose();
@@ -68,8 +64,6 @@ class _TrojanSettingWidgetState extends ConsumerState<TrojanSettingWidget> {
 
   void _saveProfile() {
     if (!_formKey.currentState!.validate()) return;
-
-    _extraDto = _extraDto.copyWith(flow: _flowController.text);
 
     var profile = widget.profile.copyWith(
       remarks: _remarkController.text,
@@ -134,25 +128,6 @@ class _TrojanSettingWidgetState extends ConsumerState<TrojanSettingWidget> {
                 controller: _passwordController,
                 decoration: const InputDecoration(labelText: '密码 (Password)'),
                 validator: (value) => value?.isEmpty == true ? '请输入密码' : null,
-              ),
-              DropdownButtonFormField<String>(
-                initialValue: _flowController.text.isNotEmpty
-                    ? _flowController.text
-                    : null,
-                decoration: const InputDecoration(labelText: '流控 (Flow)'),
-                items: GlobalConst.vlessFlowList
-                    .map(
-                      (flow) => DropdownMenuItem<String>(
-                        value: flow,
-                        child: Text(flow),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (value) {
-                  if (value != null) {
-                    _flowController.text = value;
-                  }
-                },
               ),
               const Divider(),
               const Text('底层传输方式'),

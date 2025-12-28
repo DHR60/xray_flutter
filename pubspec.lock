@@ -916,11 +916,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v0.0.5"
-      resolved-ref: "62545009bd4c9171f6eb841984aafe5ce6bd1339"
+      ref: "v0.0.7"
+      resolved-ref: eca71280c52bd200d6140ac10cbe662186d61191
       url: "https://github.com/DHR60/x_config_gen"
     source: git
-    version: "0.0.5"
+    version: "0.0.7"
   xdg_directories:
     dependency: transitive
     description:

@@ -89,6 +89,7 @@ class _ShadowsocksSettingWidgetState
       address: _listenController.addressText,
       port: _listenController.portValue,
       id: _passwordController.text,
+      security: _methodController.text,
       network: _transportController.transport,
       headerType: _transportController.subType,
       requestHost: _transportController.host,
