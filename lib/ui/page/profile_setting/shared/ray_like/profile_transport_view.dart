@@ -98,6 +98,10 @@ class _ProfileTransportViewState extends ConsumerState<ProfileTransportView> {
 
   @override
   Widget build(BuildContext context) {
+    final pureRaw =
+        GlobalConst.transportMap[widget.controller.transportController.text] ==
+            ETransport.raw &&
+        widget.controller.subTypeController.text == 'none';
     return Column(
       children: [
         DropdownButtonFormField<String>(
@@ -132,24 +136,16 @@ class _ProfileTransportViewState extends ConsumerState<ProfileTransportView> {
             }
           },
         ),
-        if (!(GlobalConst.transportMap[widget
-                    .controller
-                    .transportController
-                    .text] ==
-                ETransport.raw &&
-            widget.controller.subTypeController.text == 'none'))
-          Column(
-            children: [
-              TextFormField(
-                controller: widget.controller.hostController,
-                decoration: const InputDecoration(labelText: "Host"),
-              ),
-              TextFormField(
-                controller: widget.controller.pathController,
-                decoration: const InputDecoration(labelText: "Path"),
-              ),
-            ],
+        if (!pureRaw) ...[
+          TextFormField(
+            controller: widget.controller.hostController,
+            decoration: const InputDecoration(labelText: "Host"),
           ),
+          TextFormField(
+            controller: widget.controller.pathController,
+            decoration: const InputDecoration(labelText: "Path"),
+          ),
+        ],
         if (widget.controller.transportController.text == ETransport.xhttp.name)
           TextFormField(
             controller: widget.controller.xhttpExtraController,

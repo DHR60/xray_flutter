@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:xray_flutter/core/enum/config_type.dart';
+import 'package:xray_flutter/core/global_const.dart';
 import 'package:xray_flutter/di/app_config_provider.dart';
 import 'package:xray_flutter/di/profile_filter_provider.dart';
 import 'package:xray_flutter/di/provider.dart';
 import 'package:xray_flutter/di/use_case_provider.dart';
 import 'package:xray_flutter/domain/core/result.dart';
 import 'package:xray_flutter/ui/page/profile_list/profile_list_view.dart';
+import 'package:xray_flutter/ui/page/profile_setting/profile_fac_setting_widget.dart';
 import 'package:xray_flutter/ui/page/profile_setting/profile_setting_result.dart';
-import 'package:xray_flutter/ui/page/profile_setting/vless_setting_widget.dart';
 import 'package:xray_flutter/ui/page/setting/setting_widget.dart';
 import 'package:xray_flutter/ui/page/sub/sub_list_view.dart';
 import 'package:xray_flutter/ui/page/routing/routing_list_widget.dart';
@@ -87,9 +89,10 @@ class _MyHomePageStateState extends ConsumerState<MyHomePageState> {
               },
             ),
           if (!_isSearching) ...[
-            IconButton(
+            PopupMenuButton<String>(
               icon: const Icon(Icons.add),
-              onPressed: () async {
+              onSelected: (value) async {
+                var configType = GlobalConst.configTypeMap[value] ?? EConfigType.unknown;
                 final profile = await ref
                     .read(storeServiceProvider)
                     .generateNewProfile();
@@ -97,8 +100,11 @@ class _MyHomePageStateState extends ConsumerState<MyHomePageState> {
                 final intent = await Navigator.push<ProfileSettingResult>(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        VlessSettingWidget(profile: profile, isNew: true),
+                    builder: (context) => ProfileFacSettingWidget(
+                      configType: configType,
+                      profile: profile,
+                      isNew: true,
+                    ),
                   ),
                 );
                 switch (intent) {
@@ -108,6 +114,14 @@ class _MyHomePageStateState extends ConsumerState<MyHomePageState> {
                   default:
                     break;
                 }
+              },
+              itemBuilder: (BuildContext context) {
+                return GlobalConst.configTypeMap.keys.map((String choice) {
+                  return PopupMenuItem<String>(
+                    value: choice,
+                    child: Text(choice),
+                  );
+                }).toList();
               },
             ),
             PopupMenuButton<String>(

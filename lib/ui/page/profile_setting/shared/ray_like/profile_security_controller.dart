@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:xray_flutter/data/db/app_database.dart';
 
 class ProfileSecurityController {
   final TextEditingController securityController;
@@ -31,6 +32,17 @@ class ProfileSecurityController {
        realityShortIdController = TextEditingController(text: realityShortId),
        realitySpdxController = TextEditingController(text: realitySpdx),
        mldsa65VerController = TextEditingController(text: mldsa65Ver);
+
+  ProfileSecurityController.fromData(ProfileItemData data)
+    : securityController = TextEditingController(text: data.streamSecurity),
+      sniController = TextEditingController(text: data.sni),
+      utlsFingerprintController = TextEditingController(text: data.fingerprint),
+      alpnController = TextEditingController(text: data.alpn),
+      allowInsecureController = TextEditingController(text: data.allowInsecure),
+      realityPbkController = TextEditingController(text: data.publicKey),
+      realityShortIdController = TextEditingController(text: data.shortId),
+      realitySpdxController = TextEditingController(text: data.spiderX),
+      mldsa65VerController = TextEditingController(text: data.mldsa65Verify);
 
   void dispose() {
     securityController.dispose();

@@ -1,3 +1,4 @@
+import 'package:xray_flutter/core/enum/config_type.dart';
 import 'package:xray_flutter/core/enum/transport.dart';
 
 class GlobalConst {
@@ -99,6 +100,16 @@ class GlobalConst {
     "random",
     "randomized",
   ];
+  
+  static const Map<String, EConfigType> configTypeMap = {
+    "VLESS": EConfigType.vless,
+    "VMess": EConfigType.vmess,
+    "Shadowsocks": EConfigType.shadowsocks,
+    "Trojan": EConfigType.trojan,
+    "WireGuard": EConfigType.wireguard,
+    "SOCKS": EConfigType.socks,
+    "HTTP": EConfigType.http,
+  };
 
   static const String vlessVisionFlow = "xtls-rprx-vision";
   static const String vlessVisionAllowQuicFlow = "xtls-rprx-vision-udp443";
@@ -106,5 +117,27 @@ class GlobalConst {
     "",
     vlessVisionFlow,
     vlessVisionAllowQuicFlow,
+  ];
+
+  static const List<String> vmessSecurityList = [
+    "auto",
+    "none",
+    "zero",
+    "aes-128-gcm",
+    "chacha20-poly1305",
+  ];
+
+  static const List<String> shadowsocksMethodList = [
+    "aes-256-gcm",
+    "aes-128-gcm",
+    "2022-blake3-aes-128-gcm",
+    "2022-blake3-aes-256-gcm",
+    "2022-blake3-chacha20-poly1305",
+    "chacha20-poly1305",
+    "chacha20-ietf-poly1305",
+    "xchacha20-poly1305",
+    "xchacha20-ietf-poly1305",
+    "none",
+    "plain",
   ];
 }

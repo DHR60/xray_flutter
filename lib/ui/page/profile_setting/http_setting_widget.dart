@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:xray_flutter/core/global_const.dart';
-import 'package:xray_flutter/core/utils.dart';
 import 'package:xray_flutter/data/db/app_database.dart';
 import 'package:xray_flutter/data/dto/profile_extra_item_dto.dart';
 import 'package:xray_flutter/ui/page/profile_setting/profile_setting_result.dart';
@@ -9,15 +7,13 @@ import 'package:xray_flutter/ui/page/profile_setting/shared/profile_listen_contr
 import 'package:xray_flutter/ui/page/profile_setting/shared/profile_listen_view.dart';
 import 'package:xray_flutter/ui/page/profile_setting/shared/ray_like/profile_security_controller.dart';
 import 'package:xray_flutter/ui/page/profile_setting/shared/ray_like/profile_security_view.dart';
-import 'package:xray_flutter/ui/page/profile_setting/shared/ray_like/profile_transport_controller.dart';
-import 'package:xray_flutter/ui/page/profile_setting/shared/ray_like/profile_transport_view.dart';
 
-class VlessSettingWidget extends ConsumerStatefulWidget {
+class HttpSettingWidget extends ConsumerStatefulWidget {
   final ProfileItemData profile;
   final bool isNew;
   final String? subId;
 
-  const VlessSettingWidget({
+  const HttpSettingWidget({
     super.key,
     required this.profile,
     required this.isNew,
@@ -25,20 +21,18 @@ class VlessSettingWidget extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<VlessSettingWidget> createState() => _VlessSettingWidgetState();
+  ConsumerState<HttpSettingWidget> createState() => _HttpSettingWidgetState();
 }
 
-class _VlessSettingWidgetState extends ConsumerState<VlessSettingWidget> {
+class _HttpSettingWidgetState extends ConsumerState<HttpSettingWidget> {
   late ProfileExtraItemDto _extraDto;
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _remarkController;
   late ProfileListenController _listenController;
-  late TextEditingController _idController;
-  late TextEditingController _flowController;
-  late TextEditingController _vlessEncryptionController;
-  late ProfileTransportController _transportController;
+  late TextEditingController _userController;
+  late TextEditingController _passController;
   late ProfileSecurityController _securityController;
-
+  
   @override
   void initState() {
     super.initState();
@@ -49,14 +43,8 @@ class _VlessSettingWidgetState extends ConsumerState<VlessSettingWidget> {
     }
     _remarkController = TextEditingController(text: widget.profile.remarks);
     _listenController = ProfileListenController.fromData(widget.profile);
-    _idController = TextEditingController(text: widget.profile.id);
-    _flowController = TextEditingController(text: _extraDto.flow);
-    _vlessEncryptionController = TextEditingController(
-      text: _extraDto.vlessEncryption?.isNotEmpty == true
-          ? _extraDto.vlessEncryption
-          : 'none',
-    );
-    _transportController = ProfileTransportController.fromData(widget.profile);
+    _userController = TextEditingController(text: widget.profile.security);
+    _passController = TextEditingController(text: widget.profile.id);
     _securityController = ProfileSecurityController.fromData(widget.profile);
   }
 
@@ -64,34 +52,20 @@ class _VlessSettingWidgetState extends ConsumerState<VlessSettingWidget> {
   void dispose() {
     _remarkController.dispose();
     _listenController.dispose();
-    _idController.dispose();
-    _flowController.dispose();
-    _vlessEncryptionController.dispose();
-    _transportController.dispose();
-    _securityController.dispose();
+    _userController.dispose();
+    _passController.dispose();
     super.dispose();
   }
 
   void _saveProfile() {
     if (!_formKey.currentState!.validate()) return;
 
-    final vlessEncryption = _vlessEncryptionController.text;
-
-    _extraDto = _extraDto.copyWith(
-      flow: _flowController.text,
-      vlessEncryption: vlessEncryption.isNotEmpty ? vlessEncryption : 'none',
-    );
-
     var profile = widget.profile.copyWith(
       remarks: _remarkController.text,
       address: _listenController.addressText,
       port: _listenController.portValue,
-      id: _idController.text,
-      network: _transportController.transport,
-      headerType: _transportController.subType,
-      requestHost: _transportController.host,
-      path: _transportController.path,
-      xhttpExtra: _transportController.xhttpExtra,
+      id: _passController.text,
+      security: _userController.text,
       streamSecurity: _securityController.security,
       sni: _securityController.sni,
       fingerprint: _securityController.utlsFingerprint,
@@ -101,7 +75,7 @@ class _VlessSettingWidgetState extends ConsumerState<VlessSettingWidget> {
       shortId: _securityController.realityShortId,
       spiderX: _securityController.realitySpdx,
       mldsa65Verify: _securityController.mldsa65Ver,
-      jsonData: Utils.toJsonString(_extraDto.toJson()),
+      jsonData: _extraDto.toString(),
     );
 
     if (widget.subId != null) {
@@ -115,7 +89,7 @@ class _VlessSettingWidgetState extends ConsumerState<VlessSettingWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('VLESS Setting'),
+        title: const Text('Http Setting'),
         actions: [
           if (!widget.isNew)
             IconButton(
@@ -142,40 +116,14 @@ class _VlessSettingWidgetState extends ConsumerState<VlessSettingWidget> {
               ProfileListenView(controller: _listenController),
               const Divider(),
               TextFormField(
-                controller: _idController,
-                decoration: const InputDecoration(labelText: '用户ID (UUID)'),
-                validator: (value) => value?.isEmpty == true ? '请输入用户ID' : null,
-              ),
-              DropdownButtonFormField<String>(
-                initialValue: _flowController.text.isNotEmpty
-                    ? _flowController.text
-                    : null,
-                decoration: const InputDecoration(labelText: '流控 (Flow)'),
-                items: GlobalConst.vlessFlowList
-                    .map(
-                      (flow) => DropdownMenuItem<String>(
-                        value: flow,
-                        child: Text(flow),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (value) {
-                  if (value != null) {
-                    _flowController.text = value;
-                  }
-                },
+                controller: _userController,
+                decoration: const InputDecoration(labelText: '用户名 (Username)'),
               ),
               TextFormField(
-                controller: _vlessEncryptionController,
-                decoration: const InputDecoration(
-                  labelText: '加密方式 (VLESS Encryption)',
-                ),
+                controller: _passController,
+                decoration: const InputDecoration(labelText: '密码 (Password)'),
               ),
               const Divider(),
-              const Text('底层传输方式'),
-              ProfileTransportView(controller: _transportController),
-              const Divider(),
-              const Text('传输层安全设置'),
               ProfileSecurityView(controller: _securityController),
             ],
           ),

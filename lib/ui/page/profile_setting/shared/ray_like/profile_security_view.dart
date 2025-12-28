@@ -136,85 +136,77 @@ class _ProfileSecurityViewState extends ConsumerState<ProfileSecurityView> {
             }
           },
         ),
-        if (hasSecurity)
-          Column(
-            children: [
-              TextFormField(
-                controller: widget.controller.sniController,
-                decoration: const InputDecoration(labelText: "SNI"),
-              ),
-              DropdownButtonFormField<String>(
-                initialValue: widget.controller.utlsFingerprintController.text.isEmpty
-                    ? null
-                    : widget.controller.utlsFingerprintController.text,
-                decoration: const InputDecoration(labelText: "uTLS 指纹"),
-                items: GlobalConst.utlsFingerprintList
-                    .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                    .toList(),
-                onChanged: (value) {
-                  if (value != null) {
-                    widget.controller.utlsFingerprintController.text = value;
-                  }
-                },
-              ),
-            ],
+        if (hasSecurity) ...[
+          TextFormField(
+            controller: widget.controller.sniController,
+            decoration: const InputDecoration(labelText: "SNI"),
           ),
-        if (isTls)
-          Column(
-            children: [
-              DropdownButtonFormField<String>(
-                initialValue: widget.controller.alpnController.text.isEmpty
-                    ? null
-                    : widget.controller.alpnController.text,
-                decoration: const InputDecoration(labelText: "ALPN"),
-                items: GlobalConst.alpnList
-                    .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                    .toList(),
-                onChanged: (value) {
-                  if (value != null) {
-                    widget.controller.alpnController.text = value;
-                  }
-                },
-              ),
-              DropdownButtonFormField<String>(
-                initialValue: widget.controller.allowInsecureController.text.isEmpty
-                    ? null
-                    : widget.controller.allowInsecureController.text,
-                decoration: const InputDecoration(labelText: "允许不安全"),
-                items: GlobalConst.allowInsecureList
-                    .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                    .toList(),
-                onChanged: (value) {
-                  if (value != null) {
-                    widget.controller.allowInsecureController.text = value;
-                  }
-                },
-              ),
-            ],
+          DropdownButtonFormField<String>(
+            initialValue:
+                widget.controller.utlsFingerprintController.text.isEmpty
+                ? null
+                : widget.controller.utlsFingerprintController.text,
+            decoration: const InputDecoration(labelText: "uTLS 指纹"),
+            items: GlobalConst.utlsFingerprintList
+                .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+                .toList(),
+            onChanged: (value) {
+              if (value != null) {
+                widget.controller.utlsFingerprintController.text = value;
+              }
+            },
           ),
-        if (isReality)
-          Column(
-            children: [
-              TextFormField(
-                controller: widget.controller.realityPbkController,
-                decoration: const InputDecoration(
-                  labelText: "Password (Public Key)",
-                ),
-              ),
-              TextFormField(
-                controller: widget.controller.realityShortIdController,
-                decoration: const InputDecoration(labelText: "Short ID"),
-              ),
-              TextFormField(
-                controller: widget.controller.realitySpdxController,
-                decoration: const InputDecoration(labelText: "SpiderX"),
-              ),
-              TextFormField(
-                controller: widget.controller.mldsa65VerController,
-                decoration: const InputDecoration(labelText: "Mldsa65 验证"),
-              ),
-            ],
+        ],
+        if (isTls) ...[
+          DropdownButtonFormField<String>(
+            initialValue: widget.controller.alpnController.text.isEmpty
+                ? null
+                : widget.controller.alpnController.text,
+            decoration: const InputDecoration(labelText: "ALPN"),
+            items: GlobalConst.alpnList
+                .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+                .toList(),
+            onChanged: (value) {
+              if (value != null) {
+                widget.controller.alpnController.text = value;
+              }
+            },
           ),
+          DropdownButtonFormField<String>(
+            initialValue: widget.controller.allowInsecureController.text.isEmpty
+                ? null
+                : widget.controller.allowInsecureController.text,
+            decoration: const InputDecoration(labelText: "允许不安全"),
+            items: GlobalConst.allowInsecureList
+                .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+                .toList(),
+            onChanged: (value) {
+              if (value != null) {
+                widget.controller.allowInsecureController.text = value;
+              }
+            },
+          ),
+        ],
+        if (isReality) ...[
+          TextFormField(
+            controller: widget.controller.realityPbkController,
+            decoration: const InputDecoration(
+              labelText: "Password (Public Key)",
+            ),
+          ),
+          TextFormField(
+            controller: widget.controller.realityShortIdController,
+            decoration: const InputDecoration(labelText: "Short ID"),
+          ),
+          TextFormField(
+            controller: widget.controller.realitySpdxController,
+            decoration: const InputDecoration(labelText: "SpiderX"),
+          ),
+          TextFormField(
+            controller: widget.controller.mldsa65VerController,
+            decoration: const InputDecoration(labelText: "Mldsa65 验证"),
+          ),
+        ],
       ],
     );
   }

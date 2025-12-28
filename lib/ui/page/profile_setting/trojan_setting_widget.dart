@@ -12,12 +12,12 @@ import 'package:xray_flutter/ui/page/profile_setting/shared/ray_like/profile_sec
 import 'package:xray_flutter/ui/page/profile_setting/shared/ray_like/profile_transport_controller.dart';
 import 'package:xray_flutter/ui/page/profile_setting/shared/ray_like/profile_transport_view.dart';
 
-class VlessSettingWidget extends ConsumerStatefulWidget {
+class TrojanSettingWidget extends ConsumerStatefulWidget {
   final ProfileItemData profile;
   final bool isNew;
   final String? subId;
 
-  const VlessSettingWidget({
+  const TrojanSettingWidget({
     super.key,
     required this.profile,
     required this.isNew,
@@ -25,17 +25,17 @@ class VlessSettingWidget extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<VlessSettingWidget> createState() => _VlessSettingWidgetState();
+  ConsumerState<TrojanSettingWidget> createState() =>
+      _TrojanSettingWidgetState();
 }
 
-class _VlessSettingWidgetState extends ConsumerState<VlessSettingWidget> {
+class _TrojanSettingWidgetState extends ConsumerState<TrojanSettingWidget> {
   late ProfileExtraItemDto _extraDto;
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _remarkController;
   late ProfileListenController _listenController;
-  late TextEditingController _idController;
+  late TextEditingController _passwordController;
   late TextEditingController _flowController;
-  late TextEditingController _vlessEncryptionController;
   late ProfileTransportController _transportController;
   late ProfileSecurityController _securityController;
 
@@ -49,13 +49,8 @@ class _VlessSettingWidgetState extends ConsumerState<VlessSettingWidget> {
     }
     _remarkController = TextEditingController(text: widget.profile.remarks);
     _listenController = ProfileListenController.fromData(widget.profile);
-    _idController = TextEditingController(text: widget.profile.id);
+    _passwordController = TextEditingController(text: widget.profile.id);
     _flowController = TextEditingController(text: _extraDto.flow);
-    _vlessEncryptionController = TextEditingController(
-      text: _extraDto.vlessEncryption?.isNotEmpty == true
-          ? _extraDto.vlessEncryption
-          : 'none',
-    );
     _transportController = ProfileTransportController.fromData(widget.profile);
     _securityController = ProfileSecurityController.fromData(widget.profile);
   }
@@ -64,9 +59,8 @@ class _VlessSettingWidgetState extends ConsumerState<VlessSettingWidget> {
   void dispose() {
     _remarkController.dispose();
     _listenController.dispose();
-    _idController.dispose();
+    _passwordController.dispose();
     _flowController.dispose();
-    _vlessEncryptionController.dispose();
     _transportController.dispose();
     _securityController.dispose();
     super.dispose();
@@ -75,18 +69,13 @@ class _VlessSettingWidgetState extends ConsumerState<VlessSettingWidget> {
   void _saveProfile() {
     if (!_formKey.currentState!.validate()) return;
 
-    final vlessEncryption = _vlessEncryptionController.text;
-
-    _extraDto = _extraDto.copyWith(
-      flow: _flowController.text,
-      vlessEncryption: vlessEncryption.isNotEmpty ? vlessEncryption : 'none',
-    );
+    _extraDto = _extraDto.copyWith(flow: _flowController.text);
 
     var profile = widget.profile.copyWith(
       remarks: _remarkController.text,
       address: _listenController.addressText,
       port: _listenController.portValue,
-      id: _idController.text,
+      id: _passwordController.text,
       network: _transportController.transport,
       headerType: _transportController.subType,
       requestHost: _transportController.host,
@@ -115,7 +104,7 @@ class _VlessSettingWidgetState extends ConsumerState<VlessSettingWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('VLESS Setting'),
+        title: const Text('Trojan Setting'),
         actions: [
           if (!widget.isNew)
             IconButton(
@@ -142,9 +131,9 @@ class _VlessSettingWidgetState extends ConsumerState<VlessSettingWidget> {
               ProfileListenView(controller: _listenController),
               const Divider(),
               TextFormField(
-                controller: _idController,
-                decoration: const InputDecoration(labelText: '用户ID (UUID)'),
-                validator: (value) => value?.isEmpty == true ? '请输入用户ID' : null,
+                controller: _passwordController,
+                decoration: const InputDecoration(labelText: '密码 (Password)'),
+                validator: (value) => value?.isEmpty == true ? '请输入密码' : null,
               ),
               DropdownButtonFormField<String>(
                 initialValue: _flowController.text.isNotEmpty
@@ -164,12 +153,6 @@ class _VlessSettingWidgetState extends ConsumerState<VlessSettingWidget> {
                     _flowController.text = value;
                   }
                 },
-              ),
-              TextFormField(
-                controller: _vlessEncryptionController,
-                decoration: const InputDecoration(
-                  labelText: '加密方式 (VLESS Encryption)',
-                ),
               ),
               const Divider(),
               const Text('底层传输方式'),

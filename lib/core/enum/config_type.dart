@@ -4,6 +4,7 @@ enum EConfigType {
   vmess,
   trojan,
   shadowsocks,
+  wireguard,
   socks,
   http,
   policyGroup,

@@ -17,8 +17,8 @@ extension XrayConfigOutboundService on XrayConfigService {
   }
 
   Outbound4Ray _genVlessOutbound() {
-    final extra = ProfileExtraItemDto.fromJson(
-      Utils.fromJsonString(_profileContext.profile.jsonData),
+    final extra = ProfileExtraItemDto.fromString(
+      _profileContext.profile.jsonData,
     );
     return Outbound4Ray(
       protocol: 'vless',
