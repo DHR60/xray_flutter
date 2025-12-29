@@ -17,6 +17,7 @@ class Failure<T> extends Result<T>
 {
     final DomainError error;
     const Failure(this.error);
+    factory Failure.from(Failure other) => Failure(other.error);
 
     @override
     String toString() => 'Failure(error: $error)';

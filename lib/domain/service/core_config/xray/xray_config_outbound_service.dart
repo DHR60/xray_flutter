@@ -229,7 +229,7 @@ extension XrayConfigOutboundService on XrayConfigService {
             path: _profileContext.profile.path,
             mode: _profileContext.profile.headerType,
             extra: XHttpExtra4Ray.fromJson(
-              Utils.fromJsonString(_profileContext.profile.xhttpExtra),
+              Utils.fromJsonString(_profileContext.profile.xhttpExtra) ?? {},
             ),
           ),
         );

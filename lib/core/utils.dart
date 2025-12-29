@@ -70,8 +70,16 @@ class Utils {
     return jsonEncode(jsonMap);
   }
 
-  static Map<String, dynamic> fromJsonString(String jsonString) {
-    return jsonDecode(jsonString) as Map<String, dynamic>;
+  static Map<String, dynamic>? fromJsonString(String jsonString) {
+    try {
+      final decoded = jsonDecode(jsonString);
+      if (decoded is Map<String, dynamic>) {
+        return decoded;
+      }
+      return null;
+    } catch (_) {
+      return null;
+    }
   }
 
   static List<String> splitRules(String rulesString) {

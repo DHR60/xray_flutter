@@ -26,7 +26,7 @@ abstract class ProfileExtraItemDto with _$ProfileExtraItemDto {
 
   factory ProfileExtraItemDto.fromString(String jsonString) {
     try {
-      final Map<String, dynamic> jsonMap = Utils.fromJsonString(jsonString);
+      final Map<String, dynamic> jsonMap = Utils.fromJsonString(jsonString)!;
       return ProfileExtraItemDto.fromJson(jsonMap);
     } catch (_) {
       return const ProfileExtraItemDto();

@@ -140,4 +140,14 @@ class GlobalConst {
     "none",
     "plain",
   ];
+
+  static const Map<EConfigType, List<String>> protocolShares = {
+    EConfigType.vless: ['vless://'],
+    EConfigType.vmess: ['vmess://'],
+    EConfigType.shadowsocks: ['ss://'],
+    EConfigType.trojan: ['trojan://'],
+    EConfigType.wireguard: ['wireguard://'],
+    EConfigType.socks: ['socks://'],
+    EConfigType.http: ['http://'],
+  };
 }
