@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pretty_qr_code/pretty_qr_code.dart';
+import 'package:xray_flutter/data/db/app_database.dart';
 import 'package:xray_flutter/di/provider.dart';
 import 'package:xray_flutter/di/profile_filter_provider.dart';
 import 'package:xray_flutter/di/use_case_provider.dart';
@@ -94,100 +96,7 @@ class ProfileListView extends ConsumerWidget {
                     IconButton(
                       icon: const Icon(Icons.more_vert),
                       onPressed: () {
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(16),
-                            ),
-                          ),
-                          builder: (context) {
-                            return DraggableScrollableSheet(
-                              expand: false,
-                              builder: (context, scrollController) {
-                                return SingleChildScrollView(
-                                  controller: scrollController,
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Container(
-                                        margin: EdgeInsets.only(
-                                          top: 8,
-                                          bottom: 12,
-                                        ),
-                                        height: 4,
-                                        width: 40,
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey[400],
-                                          borderRadius: BorderRadius.circular(
-                                            2,
-                                          ),
-                                        ),
-                                      ),
-                                      ListTile(
-                                        leading: Icon(Icons.share),
-                                        title: Text('导出分享链接到剪贴板'),
-                                        onTap: () async {
-                                          Navigator.pop(context);
-                                          final messenger =
-                                              ScaffoldMessenger.of(context);
-                                          final result = await ref
-                                              .read(exportUriUseCaseProvider)
-                                              .call(profile.indexId);
-                                          if (result is Success<void>) {
-                                            messenger.showSnackBar(
-                                              const SnackBar(
-                                                content: Text('分享链接已复制到剪贴板'),
-                                              ),
-                                            );
-                                          } else if (result is Failure<void>) {
-                                            messenger.showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                  '导出失败: ${result.error}',
-                                                ),
-                                              ),
-                                            );
-                                          }
-                                        },
-                                      ),
-                                      ListTile(
-                                        leading: const Icon(Icons.file_copy),
-                                        title: const Text('导出配置到剪贴板'),
-                                        onTap: () async {
-                                          Navigator.pop(context);
-                                          final messenger =
-                                              ScaffoldMessenger.of(context);
-                                          final result = await ref
-                                              .read(
-                                                exportProfileConfigUseCaseProvider,
-                                              )
-                                              .call(profile.indexId);
-                                          if (result is Success<void>) {
-                                            messenger.showSnackBar(
-                                              const SnackBar(
-                                                content: Text('配置已复制到剪贴板'),
-                                              ),
-                                            );
-                                          } else if (result is Failure<void>) {
-                                            messenger.showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                  '导出失败: ${result.error}',
-                                                ),
-                                              ),
-                                            );
-                                          }
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                        );
+                        _showProfileOptions(context, ref, profile);
                       },
                     ),
                     IconButton(
@@ -226,6 +135,153 @@ class ProfileListView extends ConsumerWidget {
                   subId: filter.subId,
                 );
           },
+        );
+      },
+    );
+  }
+
+  Future<void> _showProfileOptions(
+    BuildContext context,
+    WidgetRef ref,
+    ProfileItemData profile,
+  ) async {
+    return await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        return DraggableScrollableSheet(
+          expand: false,
+          builder: (context, scrollController) {
+            return SingleChildScrollView(
+              controller: scrollController,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(top: 8, bottom: 12),
+                    height: 4,
+                    width: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[400],
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.qr_code),
+                    title: Text('二维码'),
+                    onTap: () async {
+                      Navigator.pop(context);
+                      await _showQRCode(context, ref, profile);
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.share),
+                    title: Text('导出分享链接到剪贴板'),
+                    onTap: () async {
+                      Navigator.pop(context);
+                      final messenger = ScaffoldMessenger.of(context);
+                      final result = await ref
+                          .read(exportUriUseCaseProvider)
+                          .call(profile.indexId);
+                      if (result is Success<void>) {
+                        messenger.showSnackBar(
+                          const SnackBar(content: Text('分享链接已复制到剪贴板')),
+                        );
+                      } else if (result is Failure<void>) {
+                        messenger.showSnackBar(
+                          SnackBar(content: Text('导出失败: ${result.error}')),
+                        );
+                      }
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.file_copy),
+                    title: const Text('导出配置到剪贴板'),
+                    onTap: () async {
+                      Navigator.pop(context);
+                      final messenger = ScaffoldMessenger.of(context);
+                      final result = await ref
+                          .read(exportProfileConfigUseCaseProvider)
+                          .call(profile.indexId);
+                      if (result is Success<void>) {
+                        messenger.showSnackBar(
+                          const SnackBar(content: Text('配置已复制到剪贴板')),
+                        );
+                      } else if (result is Failure<void>) {
+                        messenger.showSnackBar(
+                          SnackBar(content: Text('导出失败: ${result.error}')),
+                        );
+                      }
+                    },
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> _showQRCode(
+    BuildContext context,
+    WidgetRef ref,
+    ProfileItemData profile,
+  ) async {
+    final getUriUseCase = ref.read(getUriUseCaseProvider);
+    final sharedUriResult = await getUriUseCase.call(profile.indexId);
+    if (sharedUriResult is Failure) {
+      if (context.mounted == false) return;
+      final messenger = ScaffoldMessenger.of(context);
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text('生成分享链接失败: ${(sharedUriResult as Failure).toString()}'),
+        ),
+      );
+      return;
+    }
+    final sharedUri = (sharedUriResult as Success).data;
+    if (context.mounted == false) return;
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Center(child: Icon(Icons.qr_code)),
+          content: SizedBox(
+            width: 300,
+            height: 300,
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Text(
+                    profile.remarks,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 12),
+                  Expanded(
+                    child: AspectRatio(
+                      aspectRatio: 1,
+                      child: PrettyQrView.data(data: sharedUri),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('关闭'),
+            ),
+          ],
         );
       },
     );

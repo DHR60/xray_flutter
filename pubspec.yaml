@@ -48,6 +48,7 @@ dependencies:
       url: https://github.com/DHR60/x_config_gen
       ref: 'v0.0.7'
   punycoder: ^0.2.2
+  pretty_qr_code: ^3.5.0
 
 dev_dependencies:
   flutter_test:

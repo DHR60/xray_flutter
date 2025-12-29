@@ -250,6 +250,47 @@ final class ExportProfileConfigUseCaseProvider
 String _$exportProfileConfigUseCaseHash() =>
     r'8db700f32a354c69cdcd748bf1d627b8af08dffd';
 
+@ProviderFor(getUriUseCase)
+const getUriUseCaseProvider = GetUriUseCaseProvider._();
+
+final class GetUriUseCaseProvider
+    extends $FunctionalProvider<GetUriUseCase, GetUriUseCase, GetUriUseCase>
+    with $Provider<GetUriUseCase> {
+  const GetUriUseCaseProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'getUriUseCaseProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$getUriUseCaseHash();
+
+  @$internal
+  @override
+  $ProviderElement<GetUriUseCase> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  GetUriUseCase create(Ref ref) {
+    return getUriUseCase(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(GetUriUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<GetUriUseCase>(value),
+    );
+  }
+}
+
+String _$getUriUseCaseHash() => r'deee431ed6da26a1c79eb019b8834436798f108b';
+
 @ProviderFor(exportUriUseCase)
 const exportUriUseCaseProvider = ExportUriUseCaseProvider._();
 
