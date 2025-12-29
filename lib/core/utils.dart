@@ -117,7 +117,41 @@ class Utils {
       return false;
     }
     final regex = RegExp(
-        r'^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$');
+      r'^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$',
+    );
     return regex.hasMatch(str);
+  }
+
+  static String base64Encode(String input) {
+    final bytes = utf8.encode(input);
+    return base64Url.encode(bytes);
+  }
+
+  static String? base64Decode(String input) {
+    try {
+      final bytes = base64Url.decode(input);
+      return utf8.decode(bytes);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  static String base64EncodeUrlSafe(String input) {
+    final bytes = utf8.encode(input);
+    return base64Url.encode(bytes);
+  }
+
+  static String? base64DecodeUrlSafe(String input) {
+    try {
+      String normalized = input;
+      final remainder = input.length % 4;
+      if (remainder > 0) {
+        normalized += '=' * (4 - remainder);
+      }
+      final bytes = base64Url.decode(normalized);
+      return utf8.decode(bytes);
+    } catch (_) {
+      return null;
+    }
   }
 }

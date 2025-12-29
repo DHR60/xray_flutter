@@ -18,6 +18,14 @@ class InvalidStateError extends DomainError {
   String toString() => 'InvalidStateError(message: $message)';
 }
 
+class ParseError extends DomainError {
+  final String message;
+  const ParseError(this.message);
+
+  @override
+  String toString() => 'ParseError(message: $message)';
+}
+
 class NotFoundError extends DomainError {}
 
 class ConflictError extends DomainError {}

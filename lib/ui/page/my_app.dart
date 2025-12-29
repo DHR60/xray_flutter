@@ -150,13 +150,15 @@ class _MyHomePageStateState extends ConsumerState<MyHomePageState> {
                         .read(importUriUseCaseProvider)
                         .call(clipboardData);
                     if (context.mounted) {
-                      if (result.every((r) => r is Success)) {
-                        ScaffoldMessenger.of(
-                          context,
-                        ).showSnackBar(const SnackBar(content: Text('导入成功')));
+                      if (result.isNotEmpty &&
+                          result.every((r) => r is Success)) {
+                        final successCount = result.whereType<Success>().length;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('导入成功，共 $successCount 条')),
+                        );
                       } else {
-                        var failureCount = result.whereType<Failure>().length;
-                        var firstError =
+                        final failureCount = result.whereType<Failure>().length;
+                        final firstError =
                             result.firstWhere((r) => r is Failure) as Failure;
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(

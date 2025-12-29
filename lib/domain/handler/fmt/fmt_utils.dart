@@ -321,7 +321,7 @@ class FmtUtils {
     ProfileItemData base,
   ) {
     return base.copyWith(
-      security: getQueryValue(queryParams, 'security'),
+      streamSecurity: getQueryValue(queryParams, 'security'),
       sni: getQueryValue(queryParams, 'sni'),
       fingerprint: getQueryValue(queryParams, 'fp'),
       alpn: getQueryValue(queryParams, 'alpn'),
