@@ -147,9 +147,7 @@ class _VlessSettingWidgetState extends ConsumerState<VlessSettingWidget> {
                 validator: (value) => value?.isEmpty == true ? '请输入用户ID' : null,
               ),
               DropdownButtonFormField<String>(
-                initialValue: _flowController.text.isNotEmpty
-                    ? _flowController.text
-                    : null,
+                initialValue: _flowController.text,
                 decoration: const InputDecoration(labelText: '流控 (Flow)'),
                 items: GlobalConst.vlessFlowList
                     .map(

@@ -131,3 +131,49 @@ final class StoreServiceProvider
 }
 
 String _$storeServiceHash() => r'2179cb250c407b9c32b28e9f4d6157bc404b4beb';
+
+@ProviderFor(clipboardService)
+const clipboardServiceProvider = ClipboardServiceProvider._();
+
+final class ClipboardServiceProvider
+    extends
+        $FunctionalProvider<
+          ClipboardService,
+          ClipboardService,
+          ClipboardService
+        >
+    with $Provider<ClipboardService> {
+  const ClipboardServiceProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'clipboardServiceProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$clipboardServiceHash();
+
+  @$internal
+  @override
+  $ProviderElement<ClipboardService> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  ClipboardService create(Ref ref) {
+    return clipboardService(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ClipboardService value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ClipboardService>(value),
+    );
+  }
+}
+
+String _$clipboardServiceHash() => r'5b87e4a15028df4026a904cfb1509a8fa3456162';

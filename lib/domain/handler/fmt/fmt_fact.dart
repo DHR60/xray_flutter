@@ -21,6 +21,19 @@ class FmtFact {
     }
   }
 
+  static Result<String> buildSharedUri(ProfileItemData data) {
+    try {
+      switch (data.configType) {
+        case EConfigType.vless:
+          return Success(VlessFmt().build(data));
+        default:
+          return Failure(ValidationError('Unsupported shared URI format'));
+      }
+    } catch (e) {
+      return Failure(UnexpectedError(e));
+    }
+  }
+
   static bool _matchProtocol(String uri, EConfigType type) {
     return GlobalConst.protocolShares[type]!.any(
       (prefix) => uri.startsWith(prefix),

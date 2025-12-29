@@ -91,37 +91,90 @@ class _MyHomePageStateState extends ConsumerState<MyHomePageState> {
           if (!_isSearching) ...[
             PopupMenuButton<String>(
               icon: const Icon(Icons.add),
-              onSelected: (value) async {
-                var configType = GlobalConst.configTypeMap[value] ?? EConfigType.unknown;
-                final profile = await ref
-                    .read(storeServiceProvider)
-                    .generateNewProfile();
-                if (!context.mounted) return;
-                final intent = await Navigator.push<ProfileSettingResult>(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ProfileFactSettingWidget(
-                      configType: configType,
-                      profile: profile,
-                      isNew: true,
+              itemBuilder: (context) => [
+                PopupMenuItem(value: "import", child: Text("从剪贴板导入")),
+                PopupMenuItem(
+                  child: PopupMenuButton(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: const [Text("手动填写"), Icon(Icons.arrow_right)],
                     ),
+                    onSelected: (value) async {
+                      var configType =
+                          GlobalConst.configTypeMap[value] ??
+                          EConfigType.unknown;
+                      final profile = await ref
+                          .read(storeServiceProvider)
+                          .generateNewProfile();
+                      if (!context.mounted) return;
+                      final intent = await Navigator.push<ProfileSettingResult>(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProfileFactSettingWidget(
+                            configType: configType,
+                            profile: profile,
+                            isNew: true,
+                          ),
+                        ),
+                      );
+                      switch (intent) {
+                        case ProfileSettingUpsert(profile: final profile):
+                          await ref
+                              .read(upsertProfileUseCaseProvider)
+                              .call(profile);
+                          break;
+                        default:
+                          break;
+                      }
+                    },
+                    itemBuilder: (BuildContext context) {
+                      return GlobalConst.configTypeMap.keys.map((
+                        String choice,
+                      ) {
+                        return PopupMenuItem<String>(
+                          value: choice,
+                          child: Text(choice),
+                        );
+                      }).toList();
+                    },
                   ),
-                );
-                switch (intent) {
-                  case ProfileSettingUpsert(profile: final profile):
-                    await ref.read(upsertProfileUseCaseProvider).call(profile);
-                    break;
-                  default:
-                    break;
+                ),
+              ],
+              onSelected: (value) async {
+                if (value == 'import') {
+                  final clipboardData = await ref
+                      .read(clipboardServiceProvider)
+                      .pasteFromClipboard();
+                  if (clipboardData != null && clipboardData.isNotEmpty) {
+                    final result = await ref
+                        .read(importUriUseCaseProvider)
+                        .call(clipboardData);
+                    if (context.mounted) {
+                      if (result.every((r) => r is Success)) {
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(const SnackBar(content: Text('导入成功')));
+                      } else {
+                        var failureCount = result.whereType<Failure>().length;
+                        var firstError =
+                            result.firstWhere((r) => r is Failure) as Failure;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              '导入失败: ${firstError.toString()}，共 $failureCount 条错误',
+                            ),
+                          ),
+                        );
+                      }
+                    }
+                  } else {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(const SnackBar(content: Text('剪贴板为空')));
+                    }
+                  }
                 }
-              },
-              itemBuilder: (BuildContext context) {
-                return GlobalConst.configTypeMap.keys.map((String choice) {
-                  return PopupMenuItem<String>(
-                    value: choice,
-                    child: Text(choice),
-                  );
-                }).toList();
               },
             ),
             PopupMenuButton<String>(

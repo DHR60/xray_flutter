@@ -150,6 +150,9 @@ class _ProfileTransportViewState extends ConsumerState<ProfileTransportView> {
           TextFormField(
             controller: widget.controller.xhttpExtraController,
             decoration: const InputDecoration(labelText: "XHTTP 额外配置"),
+            keyboardType: TextInputType.multiline,
+            maxLines: null,
+            minLines: 3,
           ),
       ],
     );

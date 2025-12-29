@@ -79,7 +79,7 @@ class FmtUtils {
 
   static String? tryIDNDecode(String domain) {
     try {
-      return PunycodeCodec.simple().decode(domain);
+      return PunycodeCodec().decode(domain);
     } catch (_) {
       return null;
     }
@@ -87,7 +87,7 @@ class FmtUtils {
 
   static String? tryIDNEncode(String domain) {
     try {
-      return PunycodeCodec.simple().encode(domain);
+      return PunycodeCodec().encode(domain);
     } catch (_) {
       return null;
     }
@@ -143,6 +143,7 @@ class FmtUtils {
     }
     var query = <String, String>{};
     final transportType = GlobalConst.transportMap[data.network]!;
+    query['type'] = data.network;
     switch (transportType) {
       case ETransport.raw:
         if (data.headerType.isNotEmpty && data.headerType != 'none') {
@@ -168,7 +169,9 @@ class FmtUtils {
             final xhttpExtra = XHttpExtra4Ray.fromJson(jsonMap);
             final extraJson = xhttpExtra.toJson();
             final extraString = Utils.toJsonString(extraJson);
-            query['xhttpExtra'] = urlEncode(extraString);
+            if (extraString != '{}') {
+              query['extra'] = urlEncode(extraString);
+            }
           }
         }
         break;
@@ -261,10 +264,12 @@ class FmtUtils {
     Map<String, String> queryParams,
     ProfileItemData base,
   ) {
-    var data = base;
-    final transportType = GlobalConst.transportMap[base.network];
+    var data = base.copyWith(
+      network: getQueryValue(queryParams, 'type'),
+    );
+    final transportType = GlobalConst.transportMap[data.network];
     if (transportType == null) {
-      return data;
+      return data.copyWith(network: 'raw');
     }
     switch (transportType) {
       case ETransport.raw:
@@ -274,11 +279,16 @@ class FmtUtils {
         );
         break;
       case ETransport.xhttp:
+        final extraStr = getQueryDecoded(queryParams, 'extra');
+        final extraJson = XHttpExtra4Ray.fromJson(
+          Utils.fromJsonString(extraStr) ?? {},
+        ).toJson();
+        final prettyExtraStr = Utils.prettyJson(Utils.toJsonString(extraJson));
         data = data.copyWith(
           requestHost: getQueryDecoded(queryParams, 'host'),
           path: getQueryDecoded(queryParams, 'path'),
           headerType: getQueryValue(queryParams, 'headerType'),
-          xhttpExtra: getQueryDecoded(queryParams, 'xhttpExtra'),
+          xhttpExtra: prettyExtraStr == '{}' ? null : prettyExtraStr,
         );
         break;
       case ETransport.ws:

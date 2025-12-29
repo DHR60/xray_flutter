@@ -126,7 +126,34 @@ class ProfileListView extends ConsumerWidget {
                                         ),
                                       ),
                                       ListTile(
-                                        leading: const Icon(Icons.copy),
+                                        leading: Icon(Icons.share),
+                                        title: Text('导出分享链接到剪贴板'),
+                                        onTap: () async {
+                                          Navigator.pop(context);
+                                          final messenger =
+                                              ScaffoldMessenger.of(context);
+                                          final result = await ref
+                                              .read(exportUriUseCaseProvider)
+                                              .call(profile.indexId);
+                                          if (result is Success<void>) {
+                                            messenger.showSnackBar(
+                                              const SnackBar(
+                                                content: Text('分享链接已复制到剪贴板'),
+                                              ),
+                                            );
+                                          } else if (result is Failure<void>) {
+                                            messenger.showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  '导出失败: ${result.error}',
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                        },
+                                      ),
+                                      ListTile(
+                                        leading: const Icon(Icons.file_copy),
                                         title: const Text('导出配置到剪贴板'),
                                         onTap: () async {
                                           Navigator.pop(context);

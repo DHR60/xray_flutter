@@ -8,14 +8,25 @@ class ImportUriUseCase {
 
   ImportUriUseCase(this._store);
 
-  Future<Result<void>> call(String uriStr) async {
-    final result = FmtFact.resolveSharedUri(
-      uriStr,
-      await _store.generateNewProfile(),
-    );
-    if (result is Failure) {
-      return Failure.from(result as Failure);
+  Future<List<Result<void>>> call(String uriStr) async {
+    final uriList = uriStr
+        .replaceAll('\r\n', '\n')
+        .split('\n')
+        .where((line) => line.trim().isNotEmpty);
+    var results = <Result<void>>[];
+    for (final uri in uriList) {
+      final result = FmtFact.resolveSharedUri(
+        uri,
+        await _store.generateNewProfile(),
+      );
+      if (result is Failure) {
+        continue;
+      }
+      final upsertResult = await UpsertProfileUseCase(
+        _store,
+      ).call((result as Success).data);
+      results.add(upsertResult);
     }
-    return UpsertProfileUseCase(_store).call((result as Success).data);
+    return results;
   }
 }

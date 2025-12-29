@@ -21,6 +21,11 @@ class VlessFmt implements Fmtable {
     final queryParams = FmtUtils.parseQueryParams(uriStr);
     if (queryParams != null) {
       data = FmtUtils.resolveFromQueryParams(queryParams, data);
+      // resolve allowInsecure for compatibility
+      final allowInsecure = FmtUtils.getQueryValue(queryParams, 'allowInsecure');
+      if (allowInsecure == '1' || allowInsecure == 'true') {
+        data = data.copyWith(allowInsecure: 'true');
+      }
       final extra = ProfileExtraItemDto(
         flow: FmtUtils.getQueryValue(queryParams, 'flow'),
         vlessEncryption: FmtUtils.getQueryValue(queryParams, 'encryption'),
@@ -44,10 +49,12 @@ class VlessFmt implements Fmtable {
     }
     if (extra.vlessEncryption?.isNotEmpty == true) {
       queryParams['encryption'] = extra.vlessEncryption!;
+    } else {
+      queryParams['encryption'] = 'none';
     }
     // add allowInsecure for compatibility
     if (data.allowInsecure == 'true') {
-      queryParams['allowInsecure'] = 'true';
+      queryParams['allowInsecure'] = '1';
     }
     final authority = FmtUtils.buildAuthority(
       FmtUtils.urlEncode(data.id),

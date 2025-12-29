@@ -3,6 +3,8 @@ import 'package:xray_flutter/core/app_runtime.dart';
 import 'package:xray_flutter/di/provider.dart';
 import 'package:xray_flutter/domain/usecase/delete_profile_use_case.dart';
 import 'package:xray_flutter/domain/usecase/export_profile_config_use_case.dart';
+import 'package:xray_flutter/domain/usecase/export_uri_use_case.dart';
+import 'package:xray_flutter/domain/usecase/import_uri_use_case.dart';
 import 'package:xray_flutter/domain/usecase/start_core_service_use_case.dart';
 import 'package:xray_flutter/domain/usecase/stop_core_service_use_case.dart';
 import 'package:xray_flutter/domain/usecase/upsert_profile_use_case.dart';
@@ -38,4 +40,16 @@ StopCoreServiceUseCase stopCoreServiceUseCase(Ref ref) {
 ExportProfileConfigUseCase exportProfileConfigUseCase(Ref ref) {
   final store = ref.watch(storeServiceProvider);
   return ExportProfileConfigUseCase(store);
+}
+
+@riverpod
+ExportUriUseCase exportUriUseCase(Ref ref) {
+  final store = ref.watch(storeServiceProvider);
+  return ExportUriUseCase(store);
+}
+
+@riverpod
+ImportUriUseCase importUriUseCase(Ref ref) {
+  final store = ref.watch(storeServiceProvider);
+  return ImportUriUseCase(store);
 }
