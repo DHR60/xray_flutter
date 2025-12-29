@@ -4,9 +4,9 @@ import 'package:xray_flutter/core/global_const.dart';
 import 'package:xray_flutter/core/utils.dart';
 import 'package:xray_flutter/data/db/app_database.dart';
 import 'package:xray_flutter/data/dto/profile_extra_item_dto.dart';
-import 'package:xray_flutter/ui/page/profile_setting/profile_setting_result.dart';
 import 'package:xray_flutter/ui/page/profile_setting/shared/profile_listen_controller.dart';
 import 'package:xray_flutter/ui/page/profile_setting/shared/profile_listen_view.dart';
+import 'package:xray_flutter/ui/page/profile_setting/shared/profile_setting_scaffold.dart';
 import 'package:xray_flutter/ui/page/profile_setting/shared/ray_like/profile_security_controller.dart';
 import 'package:xray_flutter/ui/page/profile_setting/shared/ray_like/profile_security_view.dart';
 import 'package:xray_flutter/ui/page/profile_setting/shared/ray_like/profile_transport_controller.dart';
@@ -28,9 +28,9 @@ class VmessSettingWidget extends ConsumerStatefulWidget {
   ConsumerState<VmessSettingWidget> createState() => _VmessSettingWidgetState();
 }
 
-class _VmessSettingWidgetState extends ConsumerState<VmessSettingWidget> {
+class _VmessSettingWidgetState extends ConsumerState<VmessSettingWidget>
+    with ProfileEditorMixin {
   late ProfileExtraItemDto _extraDto;
-  final _formKey = GlobalKey<FormState>();
   late TextEditingController _remarkController;
   late ProfileListenController _listenController;
   late TextEditingController _idController;
@@ -38,7 +38,7 @@ class _VmessSettingWidgetState extends ConsumerState<VmessSettingWidget> {
   late TextEditingController _vmessSecurityController;
   late ProfileTransportController _transportController;
   late ProfileSecurityController _securityController;
-  
+
   @override
   void initState() {
     super.initState();
@@ -50,7 +50,9 @@ class _VmessSettingWidgetState extends ConsumerState<VmessSettingWidget> {
     _remarkController = TextEditingController(text: widget.profile.remarks);
     _listenController = ProfileListenController.fromData(widget.profile);
     _idController = TextEditingController(text: widget.profile.id);
-    _alterIdController = TextEditingController(text: _extraDto.alterId?.toString() ?? '0');
+    _alterIdController = TextEditingController(
+      text: _extraDto.alterId?.toString() ?? '0',
+    );
     _vmessSecurityController = TextEditingController(
       text: widget.profile.security.isNotEmpty == true
           ? widget.profile.security
@@ -72,20 +74,24 @@ class _VmessSettingWidgetState extends ConsumerState<VmessSettingWidget> {
     super.dispose();
   }
 
-  void _saveProfile() {
-    if (!_formKey.currentState!.validate()) return;
+  @override
+  ProfileItemData get originalProfile => widget.profile;
 
+  @override
+  String? get subId => widget.subId;
+
+  @override
+  ProfileItemData buildProfile() {
     final vmessAlterId = int.tryParse(_alterIdController.text) ?? 0;
 
-    _extraDto = _extraDto.copyWith(
-      alterId: vmessAlterId.toString(),
-    );
+    _extraDto = _extraDto.copyWith(alterId: vmessAlterId.toString());
 
-    var profile = widget.profile.copyWith(
+    return widget.profile.copyWith(
       remarks: _remarkController.text,
       address: _listenController.addressText,
       port: _listenController.portValue,
       id: _idController.text,
+      security: _vmessSecurityController.text,
       network: _transportController.transport,
       headerType: _transportController.subType,
       requestHost: _transportController.host,
@@ -102,77 +108,60 @@ class _VmessSettingWidgetState extends ConsumerState<VmessSettingWidget> {
       mldsa65Verify: _securityController.mldsa65Ver,
       jsonData: Utils.toJsonString(_extraDto.toJson()),
     );
+  }
 
-    if (widget.subId != null) {
-      profile = profile.copyWith(subid: widget.subId);
-    }
-
-    Navigator.of(context).pop(ProfileSettingUpsert(profile));
+  @override
+  Widget buildFormContent(BuildContext context) {
+    return Column(
+      children: [
+        const Text('配置项'),
+        TextFormField(
+          controller: _remarkController,
+          decoration: const InputDecoration(labelText: '配置名称'),
+          validator: (value) => value?.isEmpty == true ? '请输入配置名称' : null,
+        ),
+        ProfileListenView(controller: _listenController),
+        const Divider(),
+        TextFormField(
+          controller: _idController,
+          decoration: const InputDecoration(labelText: '用户ID (UUID)'),
+          validator: (value) => value?.isEmpty == true ? '请输入用户ID' : null,
+        ),
+        TextFormField(
+          controller: _alterIdController,
+          decoration: const InputDecoration(labelText: 'Alter ID'),
+        ),
+        DropdownButtonFormField<String>(
+          initialValue: _vmessSecurityController.text.isEmpty
+              ? null
+              : _vmessSecurityController.text,
+          decoration: const InputDecoration(labelText: '加密方式'),
+          items: GlobalConst.vmessSecurityList
+              .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+              .toList(),
+          onChanged: (value) {
+            if (value != null) {
+              _vmessSecurityController.text = value;
+            }
+          },
+        ),
+        const Divider(),
+        const Text('底层传输方式'),
+        ProfileTransportView(controller: _transportController),
+        const Divider(),
+        const Text('传输层安全设置'),
+        ProfileSecurityView(controller: _securityController),
+      ],
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('VMess Setting'),
-        actions: [
-          if (!widget.isNew)
-            IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () {
-                Navigator.of(context).pop(ProfileSettingDelete(widget.profile));
-              },
-            ),
-          IconButton(icon: const Icon(Icons.save), onPressed: _saveProfile),
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              const Text('配置项'),
-              TextFormField(
-                controller: _remarkController,
-                decoration: const InputDecoration(labelText: '配置名称'),
-                validator: (value) => value?.isEmpty == true ? '请输入配置名称' : null,
-              ),
-              ProfileListenView(controller: _listenController),
-              const Divider(),
-              TextFormField(
-                controller: _idController,
-                decoration: const InputDecoration(labelText: '用户ID (UUID)'),
-                validator: (value) => value?.isEmpty == true ? '请输入用户ID' : null,
-              ),
-              TextFormField(
-                controller: _alterIdController,
-                decoration: const InputDecoration(labelText: 'Alter ID'),
-              ),
-              DropdownButtonFormField<String>(
-                initialValue: _vmessSecurityController.text.isEmpty
-                    ? null
-                    : _vmessSecurityController.text,
-                decoration: const InputDecoration(labelText: '加密方式'),
-                items: GlobalConst.vmessSecurityList
-                    .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                    .toList(),
-                onChanged: (value) {
-                  if (value != null) {
-                    _vmessSecurityController.text = value;
-                  }
-                },
-              ),
-              const Divider(),
-              const Text('底层传输方式'),
-              ProfileTransportView(controller: _transportController),
-              const Divider(),
-              const Text('传输层安全设置'),
-              ProfileSecurityView(controller: _securityController),
-            ],
-          ),
-        ),
-      ),
+    return ProfileSettingScaffold(
+      title: 'VMess Setting',
+      profile: widget.profile,
+      isNew: widget.isNew,
+      controller: this,
     );
   }
 }

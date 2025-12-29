@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:xray_flutter/core/utils.dart';
 import 'package:xray_flutter/data/db/app_database.dart';
 import 'package:xray_flutter/data/dto/profile_extra_item_dto.dart';
-import 'package:xray_flutter/ui/page/profile_setting/profile_setting_result.dart';
 import 'package:xray_flutter/ui/page/profile_setting/shared/profile_listen_controller.dart';
 import 'package:xray_flutter/ui/page/profile_setting/shared/profile_listen_view.dart';
+import 'package:xray_flutter/ui/page/profile_setting/shared/profile_setting_scaffold.dart';
 import 'package:xray_flutter/ui/page/profile_setting/shared/ray_like/profile_security_controller.dart';
 import 'package:xray_flutter/ui/page/profile_setting/shared/ray_like/profile_security_view.dart';
 import 'package:xray_flutter/ui/page/profile_setting/shared/ray_like/profile_transport_controller.dart';
@@ -28,9 +28,9 @@ class TrojanSettingWidget extends ConsumerStatefulWidget {
       _TrojanSettingWidgetState();
 }
 
-class _TrojanSettingWidgetState extends ConsumerState<TrojanSettingWidget> {
+class _TrojanSettingWidgetState extends ConsumerState<TrojanSettingWidget>
+    with ProfileEditorMixin {
   late ProfileExtraItemDto _extraDto;
-  final _formKey = GlobalKey<FormState>();
   late TextEditingController _remarkController;
   late ProfileListenController _listenController;
   late TextEditingController _passwordController;
@@ -62,10 +62,15 @@ class _TrojanSettingWidgetState extends ConsumerState<TrojanSettingWidget> {
     super.dispose();
   }
 
-  void _saveProfile() {
-    if (!_formKey.currentState!.validate()) return;
+  @override
+  ProfileItemData get originalProfile => widget.profile;
 
-    var profile = widget.profile.copyWith(
+  @override
+  String? get subId => widget.subId;
+
+  @override
+  ProfileItemData buildProfile() {
+    return widget.profile.copyWith(
       remarks: _remarkController.text,
       address: _listenController.addressText,
       port: _listenController.portValue,
@@ -86,59 +91,42 @@ class _TrojanSettingWidgetState extends ConsumerState<TrojanSettingWidget> {
       mldsa65Verify: _securityController.mldsa65Ver,
       jsonData: Utils.toJsonString(_extraDto.toJson()),
     );
+  }
 
-    if (widget.subId != null) {
-      profile = profile.copyWith(subid: widget.subId);
-    }
-
-    Navigator.of(context).pop(ProfileSettingUpsert(profile));
+  @override
+  Widget buildFormContent(BuildContext context) {
+    return Column(
+      children: [
+        const Text('配置项'),
+        TextFormField(
+          controller: _remarkController,
+          decoration: const InputDecoration(labelText: '配置名称'),
+          validator: (value) => value?.isEmpty == true ? '请输入配置名称' : null,
+        ),
+        ProfileListenView(controller: _listenController),
+        const Divider(),
+        TextFormField(
+          controller: _passwordController,
+          decoration: const InputDecoration(labelText: '密码 (Password)'),
+          validator: (value) => value?.isEmpty == true ? '请输入密码' : null,
+        ),
+        const Divider(),
+        const Text('底层传输方式'),
+        ProfileTransportView(controller: _transportController),
+        const Divider(),
+        const Text('传输层安全设置'),
+        ProfileSecurityView(controller: _securityController),
+      ],
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Trojan Setting'),
-        actions: [
-          if (!widget.isNew)
-            IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () {
-                Navigator.of(context).pop(ProfileSettingDelete(widget.profile));
-              },
-            ),
-          IconButton(icon: const Icon(Icons.save), onPressed: _saveProfile),
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              const Text('配置项'),
-              TextFormField(
-                controller: _remarkController,
-                decoration: const InputDecoration(labelText: '配置名称'),
-                validator: (value) => value?.isEmpty == true ? '请输入配置名称' : null,
-              ),
-              ProfileListenView(controller: _listenController),
-              const Divider(),
-              TextFormField(
-                controller: _passwordController,
-                decoration: const InputDecoration(labelText: '密码 (Password)'),
-                validator: (value) => value?.isEmpty == true ? '请输入密码' : null,
-              ),
-              const Divider(),
-              const Text('底层传输方式'),
-              ProfileTransportView(controller: _transportController),
-              const Divider(),
-              const Text('传输层安全设置'),
-              ProfileSecurityView(controller: _securityController),
-            ],
-          ),
-        ),
-      ),
+    return ProfileSettingScaffold(
+      title: 'Trojan Setting',
+      profile: widget.profile,
+      isNew: widget.isNew,
+      controller: this,
     );
   }
 }
