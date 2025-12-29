@@ -20,6 +20,7 @@ class ImportUriUseCase {
         await _store.generateNewProfile(),
       );
       if (result is Failure) {
+        results.add(result);
         continue;
       }
       final upsertResult = await UpsertProfileUseCase(

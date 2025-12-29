@@ -3,6 +3,7 @@ import 'package:xray_flutter/core/enum/transport.dart';
 
 class GlobalConst {
   static const String appName = "MyFlutterApp";
+  static const String customAppFontFamily = "MI_Sans_Regular";
 
   static const String loopbackAddress = "127.0.0.1";
   static const int defaultPort = 10808;

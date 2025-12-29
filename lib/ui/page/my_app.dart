@@ -26,6 +26,7 @@ class MyApp extends ConsumerWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        fontFamily: GlobalConst.customAppFontFamily,
       ),
       home: const MyHomePageState(),
     );
@@ -42,6 +43,112 @@ class MyHomePageState extends ConsumerStatefulWidget {
 class _MyHomePageStateState extends ConsumerState<MyHomePageState> {
   bool _isSearching = false;
   final _searchController = TextEditingController();
+
+  RelativeRect _menuPositionFor(BuildContext anchorContext) {
+    final button = anchorContext.findRenderObject() as RenderBox;
+    final overlay =
+        Overlay.of(anchorContext).context.findRenderObject() as RenderBox;
+    final topLeft = button.localToGlobal(Offset.zero, ancestor: overlay);
+    final bottomRight = button.localToGlobal(
+      button.size.bottomRight(Offset.zero),
+      ancestor: overlay,
+    );
+    return RelativeRect.fromRect(
+      Rect.fromPoints(topLeft, bottomRight),
+      Offset.zero & overlay.size,
+    );
+  }
+
+  Future<String?> _showManualFillTypeMenu(BuildContext anchorContext) {
+    return showMenu<String>(
+      context: anchorContext,
+      position: _menuPositionFor(anchorContext),
+      items: GlobalConst.configTypeMap.keys.map((choice) {
+        return PopupMenuItem<String>(value: choice, child: Text(choice));
+      }).toList(),
+    );
+  }
+
+  Future<void> _handleImportFromClipboard(WidgetRef ref) async {
+    final clipboardData = await ref
+        .read(clipboardServiceProvider)
+        .pasteFromClipboard();
+
+    if (!mounted) return;
+
+    if (clipboardData != null && clipboardData.isNotEmpty) {
+      final result = await ref
+          .read(importUriUseCaseProvider)
+          .call(clipboardData);
+      if (!mounted) return;
+
+      if (result.isEmpty) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('没有可导入的配置')));
+      } else if (result.every((r) => r is Success)) {
+        final successCount = result.whereType<Success>().length;
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('导入成功，共 $successCount 条')));
+      } else {
+        final failureCount = result.whereType<Failure>().length;
+        final firstError = result.firstWhere((r) => r is Failure) as Failure;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('导入失败: ${firstError.toString()}，共 $failureCount 条错误'),
+          ),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('剪贴板为空')));
+    }
+  }
+
+  Future<void> _handleManualFill(WidgetRef ref, String choice) async {
+    final configType = GlobalConst.configTypeMap[choice] ?? EConfigType.unknown;
+    final profile = await ref.read(storeServiceProvider).generateNewProfile();
+    if (!mounted) return;
+
+    final intent = await Navigator.push<ProfileSettingResult>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProfileFactSettingWidget(
+          configType: configType,
+          profile: profile,
+          isNew: true,
+        ),
+      ),
+    );
+
+    switch (intent) {
+      case ProfileSettingUpsert(profile: final profile):
+        await ref.read(upsertProfileUseCaseProvider).call(profile);
+        break;
+      default:
+        break;
+    }
+  }
+
+  Future<void> _onAddMenuSelected(
+    BuildContext anchorContext,
+    WidgetRef ref,
+    String value,
+  ) async {
+    switch (value) {
+      case 'import':
+        await _handleImportFromClipboard(ref);
+        break;
+      case 'manual':
+        final choice = await _showManualFillTypeMenu(anchorContext);
+        if (choice == null) return;
+        if (!mounted) return;
+        await _handleManualFill(ref, choice);
+        break;
+    }
+  }
 
   @override
   void dispose() {
@@ -89,94 +196,27 @@ class _MyHomePageStateState extends ConsumerState<MyHomePageState> {
               },
             ),
           if (!_isSearching) ...[
-            PopupMenuButton<String>(
-              icon: const Icon(Icons.add),
-              itemBuilder: (context) => [
-                PopupMenuItem(value: "import", child: Text("从剪贴板导入")),
-                PopupMenuItem(
-                  child: PopupMenuButton(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [Text("手动填写"), Icon(Icons.arrow_right)],
+            Builder(
+              builder: (anchorContext) {
+                return PopupMenuButton<String>(
+                  icon: const Icon(Icons.add),
+                  itemBuilder: (context) => const [
+                    PopupMenuItem<String>(
+                      value: 'import',
+                      child: Text('从剪贴板导入'),
                     ),
-                    onSelected: (value) async {
-                      var configType =
-                          GlobalConst.configTypeMap[value] ??
-                          EConfigType.unknown;
-                      final profile = await ref
-                          .read(storeServiceProvider)
-                          .generateNewProfile();
-                      if (!context.mounted) return;
-                      final intent = await Navigator.push<ProfileSettingResult>(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ProfileFactSettingWidget(
-                            configType: configType,
-                            profile: profile,
-                            isNew: true,
-                          ),
-                        ),
-                      );
-                      switch (intent) {
-                        case ProfileSettingUpsert(profile: final profile):
-                          await ref
-                              .read(upsertProfileUseCaseProvider)
-                              .call(profile);
-                          break;
-                        default:
-                          break;
-                      }
-                    },
-                    itemBuilder: (BuildContext context) {
-                      return GlobalConst.configTypeMap.keys.map((
-                        String choice,
-                      ) {
-                        return PopupMenuItem<String>(
-                          value: choice,
-                          child: Text(choice),
-                        );
-                      }).toList();
-                    },
-                  ),
-                ),
-              ],
-              onSelected: (value) async {
-                if (value == 'import') {
-                  final clipboardData = await ref
-                      .read(clipboardServiceProvider)
-                      .pasteFromClipboard();
-                  if (clipboardData != null && clipboardData.isNotEmpty) {
-                    final result = await ref
-                        .read(importUriUseCaseProvider)
-                        .call(clipboardData);
-                    if (context.mounted) {
-                      if (result.isNotEmpty &&
-                          result.every((r) => r is Success)) {
-                        final successCount = result.whereType<Success>().length;
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('导入成功，共 $successCount 条')),
-                        );
-                      } else {
-                        final failureCount = result.whereType<Failure>().length;
-                        final firstError =
-                            result.firstWhere((r) => r is Failure) as Failure;
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              '导入失败: ${firstError.toString()}，共 $failureCount 条错误',
-                            ),
-                          ),
-                        );
-                      }
-                    }
-                  } else {
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(
-                        context,
-                      ).showSnackBar(const SnackBar(content: Text('剪贴板为空')));
-                    }
-                  }
-                }
+                    PopupMenuItem<String>(
+                      value: 'manual',
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [Text('手动填写'), Icon(Icons.arrow_right)],
+                      ),
+                    ),
+                  ],
+                  onSelected: (value) async {
+                    await _onAddMenuSelected(anchorContext, ref, value);
+                  },
+                );
               },
             ),
             PopupMenuButton<String>(
