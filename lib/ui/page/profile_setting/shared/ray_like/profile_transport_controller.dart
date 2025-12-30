@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:json_field_editor/json_field_editor.dart';
 import 'package:xray_flutter/data/db/app_database.dart';
 
 class ProfileTransportController {
@@ -6,7 +7,7 @@ class ProfileTransportController {
   final TextEditingController subTypeController;
   final TextEditingController hostController;
   final TextEditingController pathController;
-  final TextEditingController xhttpExtraController;
+  final JsonTextFieldController xhttpExtraController;
 
   ProfileTransportController({
     String transport = '',
@@ -18,14 +19,14 @@ class ProfileTransportController {
        subTypeController = TextEditingController(text: subType),
        hostController = TextEditingController(text: host),
        pathController = TextEditingController(text: path),
-       xhttpExtraController = TextEditingController(text: xhttpExtra);
+       xhttpExtraController = JsonTextFieldController()..text = xhttpExtra;
 
   ProfileTransportController.fromData(ProfileItemData data)
     : transportController = TextEditingController(text: data.network),
       subTypeController = TextEditingController(text: data.headerType),
       hostController = TextEditingController(text: data.requestHost),
       pathController = TextEditingController(text: data.path),
-      xhttpExtraController = TextEditingController(text: data.xhttpExtra);
+      xhttpExtraController = JsonTextFieldController()..text = data.xhttpExtra;
 
   void dispose() {
     transportController.dispose();

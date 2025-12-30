@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:json_field_editor/json_field_editor.dart';
 import 'package:xray_flutter/core/enum/transport.dart';
 import 'package:xray_flutter/core/global_const.dart';
 import 'package:xray_flutter/ui/page/profile_setting/shared/ray_like/profile_transport_controller.dart';
@@ -147,9 +148,11 @@ class _ProfileTransportViewState extends ConsumerState<ProfileTransportView> {
           ),
         ],
         if (widget.controller.transportController.text == ETransport.xhttp.name)
-          TextFormField(
+          JsonField(
             controller: widget.controller.xhttpExtraController,
             decoration: const InputDecoration(labelText: "XHTTP 额外配置"),
+            isFormatting: true,
+            showErrorMessage: false,
             keyboardType: TextInputType.multiline,
             maxLines: null,
             minLines: 3,
