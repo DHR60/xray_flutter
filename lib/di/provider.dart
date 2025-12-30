@@ -3,6 +3,7 @@ import 'package:xray_flutter/core/app_runtime.dart';
 import 'package:xray_flutter/data/db/app_database.dart';
 import 'package:xray_flutter/di/app_config_provider.dart';
 import 'package:xray_flutter/domain/infra/clipboard_service.dart';
+import 'package:xray_flutter/domain/logging/log_entry.dart';
 import 'package:xray_flutter/domain/repo/profile_repo.dart';
 import 'package:xray_flutter/domain/service/store/store_service.dart';
 import 'package:xray_flutter/infra/clipboard_service_impl.dart';
@@ -29,4 +30,9 @@ StoreService storeService(Ref ref) {
 @Riverpod(keepAlive: true)
 ClipboardService clipboardService(Ref ref) {
   return ClipboardServiceImpl();
+}
+
+@Riverpod(keepAlive: true)
+Stream<LogEntry> logStream(Ref ref) {
+  return AppRuntime.instance.logCenter.stream;
 }

@@ -8,6 +8,7 @@ import 'package:xray_flutter/di/profile_filter_provider.dart';
 import 'package:xray_flutter/di/provider.dart';
 import 'package:xray_flutter/di/use_case_provider.dart';
 import 'package:xray_flutter/domain/core/result.dart';
+import 'package:xray_flutter/ui/page/log/log_widget.dart';
 import 'package:xray_flutter/ui/page/profile_list/profile_list_view.dart';
 import 'package:xray_flutter/ui/page/profile_setting/profile_fact_setting_widget.dart';
 import 'package:xray_flutter/ui/page/profile_setting/profile_setting_result.dart';
@@ -290,12 +291,12 @@ class _MyHomePageStateState extends ConsumerState<MyHomePageState> {
                 color: Theme.of(context).colorScheme.inversePrimary,
               ),
               child: Center(
-                child: Text('Drawer Header', style: TextStyle(fontSize: 24)),
+                child: Text('XRay Flutter', style: TextStyle(fontSize: 24)),
               ),
             ),
             ListTile(
-              leading: Icon(Icons.route),
-              title: Text('Route Settings'),
+              leading: const Icon(Icons.route),
+              title: Text('路由设置'),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
@@ -307,8 +308,19 @@ class _MyHomePageStateState extends ConsumerState<MyHomePageState> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Settings'),
+              leading: const Icon(Icons.history),
+              title: Text('日志'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LogPage()),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: Text('设置'),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(

@@ -177,3 +177,37 @@ final class ClipboardServiceProvider
 }
 
 String _$clipboardServiceHash() => r'5b87e4a15028df4026a904cfb1509a8fa3456162';
+
+@ProviderFor(logStream)
+const logStreamProvider = LogStreamProvider._();
+
+final class LogStreamProvider
+    extends
+        $FunctionalProvider<AsyncValue<LogEntry>, LogEntry, Stream<LogEntry>>
+    with $FutureModifier<LogEntry>, $StreamProvider<LogEntry> {
+  const LogStreamProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'logStreamProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$logStreamHash();
+
+  @$internal
+  @override
+  $StreamProviderElement<LogEntry> $createElement($ProviderPointer pointer) =>
+      $StreamProviderElement(pointer);
+
+  @override
+  Stream<LogEntry> create(Ref ref) {
+    return logStream(ref);
+  }
+}
+
+String _$logStreamHash() => r'0596038be8fb26a83720104303e64a88ce8f5c20';
