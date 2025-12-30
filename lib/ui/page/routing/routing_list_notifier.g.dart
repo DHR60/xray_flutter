@@ -10,11 +10,11 @@ part of 'routing_list_notifier.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(RoutingListNotifier)
-const routingListProvider = RoutingListNotifierProvider._();
+final routingListProvider = RoutingListNotifierProvider._();
 
 final class RoutingListNotifierProvider
     extends $NotifierProvider<RoutingListNotifier, RoutingListState> {
-  const RoutingListNotifierProvider._()
+  RoutingListNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -49,7 +49,6 @@ abstract class _$RoutingListNotifier extends $Notifier<RoutingListState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<RoutingListState, RoutingListState>;
     final element =
         ref.element
@@ -59,6 +58,6 @@ abstract class _$RoutingListNotifier extends $Notifier<RoutingListState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

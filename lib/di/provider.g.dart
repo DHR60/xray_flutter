@@ -10,12 +10,12 @@ part of 'provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(appDatabase)
-const appDatabaseProvider = AppDatabaseProvider._();
+final appDatabaseProvider = AppDatabaseProvider._();
 
 final class AppDatabaseProvider
     extends $FunctionalProvider<AppDatabase, AppDatabase, AppDatabase>
     with $Provider<AppDatabase> {
-  const AppDatabaseProvider._()
+  AppDatabaseProvider._()
     : super(
         from: null,
         argument: null,
@@ -51,12 +51,12 @@ final class AppDatabaseProvider
 String _$appDatabaseHash() => r'edefc8d12d0cd187f886975f01ab8b28e1d52352';
 
 @ProviderFor(profileRepo)
-const profileRepoProvider = ProfileRepoProvider._();
+final profileRepoProvider = ProfileRepoProvider._();
 
 final class ProfileRepoProvider
     extends $FunctionalProvider<ProfileRepo, ProfileRepo, ProfileRepo>
     with $Provider<ProfileRepo> {
-  const ProfileRepoProvider._()
+  ProfileRepoProvider._()
     : super(
         from: null,
         argument: null,
@@ -92,12 +92,12 @@ final class ProfileRepoProvider
 String _$profileRepoHash() => r'c66ef90d83c145a127d2ff122f019870e3c907a9';
 
 @ProviderFor(storeService)
-const storeServiceProvider = StoreServiceProvider._();
+final storeServiceProvider = StoreServiceProvider._();
 
 final class StoreServiceProvider
     extends $FunctionalProvider<StoreService, StoreService, StoreService>
     with $Provider<StoreService> {
-  const StoreServiceProvider._()
+  StoreServiceProvider._()
     : super(
         from: null,
         argument: null,
@@ -133,7 +133,7 @@ final class StoreServiceProvider
 String _$storeServiceHash() => r'2179cb250c407b9c32b28e9f4d6157bc404b4beb';
 
 @ProviderFor(clipboardService)
-const clipboardServiceProvider = ClipboardServiceProvider._();
+final clipboardServiceProvider = ClipboardServiceProvider._();
 
 final class ClipboardServiceProvider
     extends
@@ -143,7 +143,7 @@ final class ClipboardServiceProvider
           ClipboardService
         >
     with $Provider<ClipboardService> {
-  const ClipboardServiceProvider._()
+  ClipboardServiceProvider._()
     : super(
         from: null,
         argument: null,
@@ -179,13 +179,13 @@ final class ClipboardServiceProvider
 String _$clipboardServiceHash() => r'5b87e4a15028df4026a904cfb1509a8fa3456162';
 
 @ProviderFor(logStream)
-const logStreamProvider = LogStreamProvider._();
+final logStreamProvider = LogStreamProvider._();
 
 final class LogStreamProvider
     extends
         $FunctionalProvider<AsyncValue<LogEntry>, LogEntry, Stream<LogEntry>>
     with $FutureModifier<LogEntry>, $StreamProvider<LogEntry> {
-  const LogStreamProvider._()
+  LogStreamProvider._()
     : super(
         from: null,
         argument: null,

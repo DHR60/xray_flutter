@@ -10,7 +10,7 @@ part of 'use_case_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(upsertProfileUseCase)
-const upsertProfileUseCaseProvider = UpsertProfileUseCaseProvider._();
+final upsertProfileUseCaseProvider = UpsertProfileUseCaseProvider._();
 
 final class UpsertProfileUseCaseProvider
     extends
@@ -20,7 +20,7 @@ final class UpsertProfileUseCaseProvider
           UpsertProfileUseCase
         >
     with $Provider<UpsertProfileUseCase> {
-  const UpsertProfileUseCaseProvider._()
+  UpsertProfileUseCaseProvider._()
     : super(
         from: null,
         argument: null,
@@ -58,7 +58,7 @@ String _$upsertProfileUseCaseHash() =>
     r'a6c0f099a429ae37e508bf110d41e354647d2e19';
 
 @ProviderFor(deleteProfileUseCase)
-const deleteProfileUseCaseProvider = DeleteProfileUseCaseProvider._();
+final deleteProfileUseCaseProvider = DeleteProfileUseCaseProvider._();
 
 final class DeleteProfileUseCaseProvider
     extends
@@ -68,7 +68,7 @@ final class DeleteProfileUseCaseProvider
           DeleteProfileUseCase
         >
     with $Provider<DeleteProfileUseCase> {
-  const DeleteProfileUseCaseProvider._()
+  DeleteProfileUseCaseProvider._()
     : super(
         from: null,
         argument: null,
@@ -106,7 +106,7 @@ String _$deleteProfileUseCaseHash() =>
     r'c15b547b1cea8c5f0b35b4693d3feb04bad62ffb';
 
 @ProviderFor(startCoreServiceUseCare)
-const startCoreServiceUseCareProvider = StartCoreServiceUseCareProvider._();
+final startCoreServiceUseCareProvider = StartCoreServiceUseCareProvider._();
 
 final class StartCoreServiceUseCareProvider
     extends
@@ -116,7 +116,7 @@ final class StartCoreServiceUseCareProvider
           StartCoreServiceUseCase
         >
     with $Provider<StartCoreServiceUseCase> {
-  const StartCoreServiceUseCareProvider._()
+  StartCoreServiceUseCareProvider._()
     : super(
         from: null,
         argument: null,
@@ -154,7 +154,7 @@ String _$startCoreServiceUseCareHash() =>
     r'43dfeb2ea7282393aa948b64cf5a4a6f153776f0';
 
 @ProviderFor(stopCoreServiceUseCase)
-const stopCoreServiceUseCaseProvider = StopCoreServiceUseCaseProvider._();
+final stopCoreServiceUseCaseProvider = StopCoreServiceUseCaseProvider._();
 
 final class StopCoreServiceUseCaseProvider
     extends
@@ -164,7 +164,7 @@ final class StopCoreServiceUseCaseProvider
           StopCoreServiceUseCase
         >
     with $Provider<StopCoreServiceUseCase> {
-  const StopCoreServiceUseCaseProvider._()
+  StopCoreServiceUseCaseProvider._()
     : super(
         from: null,
         argument: null,
@@ -202,7 +202,7 @@ String _$stopCoreServiceUseCaseHash() =>
     r'5de41fe50c2ade30e5059cc273f986f90260e761';
 
 @ProviderFor(getProfileConfigUseCase)
-const getProfileConfigUseCaseProvider = GetProfileConfigUseCaseProvider._();
+final getProfileConfigUseCaseProvider = GetProfileConfigUseCaseProvider._();
 
 final class GetProfileConfigUseCaseProvider
     extends
@@ -212,7 +212,7 @@ final class GetProfileConfigUseCaseProvider
           GetProfileConfigUseCase
         >
     with $Provider<GetProfileConfigUseCase> {
-  const GetProfileConfigUseCaseProvider._()
+  GetProfileConfigUseCaseProvider._()
     : super(
         from: null,
         argument: null,
@@ -250,7 +250,7 @@ String _$getProfileConfigUseCaseHash() =>
     r'bc09dce6e3353af5863adcb520d672dc6218946e';
 
 @ProviderFor(exportProfileConfigUseCase)
-const exportProfileConfigUseCaseProvider =
+final exportProfileConfigUseCaseProvider =
     ExportProfileConfigUseCaseProvider._();
 
 final class ExportProfileConfigUseCaseProvider
@@ -261,7 +261,7 @@ final class ExportProfileConfigUseCaseProvider
           ExportProfileConfigUseCase
         >
     with $Provider<ExportProfileConfigUseCase> {
-  const ExportProfileConfigUseCaseProvider._()
+  ExportProfileConfigUseCaseProvider._()
     : super(
         from: null,
         argument: null,
@@ -299,7 +299,7 @@ String _$exportProfileConfigUseCaseHash() =>
     r'eb48b90d9feae3f01ac420a06c68fd5d60a006f2';
 
 @ProviderFor(getProfileOutboundUseCase)
-const getProfileOutboundUseCaseProvider = GetProfileOutboundUseCaseProvider._();
+final getProfileOutboundUseCaseProvider = GetProfileOutboundUseCaseProvider._();
 
 final class GetProfileOutboundUseCaseProvider
     extends
@@ -309,7 +309,7 @@ final class GetProfileOutboundUseCaseProvider
           GetProfileOutboundUseCase
         >
     with $Provider<GetProfileOutboundUseCase> {
-  const GetProfileOutboundUseCaseProvider._()
+  GetProfileOutboundUseCaseProvider._()
     : super(
         from: null,
         argument: null,
@@ -347,7 +347,7 @@ String _$getProfileOutboundUseCaseHash() =>
     r'66340656a44be40ed7bb7c4bedcbfd0fd659fede';
 
 @ProviderFor(getUriByDataUseCase)
-const getUriByDataUseCaseProvider = GetUriByDataUseCaseProvider._();
+final getUriByDataUseCaseProvider = GetUriByDataUseCaseProvider._();
 
 final class GetUriByDataUseCaseProvider
     extends
@@ -357,7 +357,7 @@ final class GetUriByDataUseCaseProvider
           GetUriByDataUseCase
         >
     with $Provider<GetUriByDataUseCase> {
-  const GetUriByDataUseCaseProvider._()
+  GetUriByDataUseCaseProvider._()
     : super(
         from: null,
         argument: null,
@@ -395,12 +395,12 @@ String _$getUriByDataUseCaseHash() =>
     r'1e5819c99798e1c6395934efa3d2d2f7effb43f1';
 
 @ProviderFor(getUriUseCase)
-const getUriUseCaseProvider = GetUriUseCaseProvider._();
+final getUriUseCaseProvider = GetUriUseCaseProvider._();
 
 final class GetUriUseCaseProvider
     extends $FunctionalProvider<GetUriUseCase, GetUriUseCase, GetUriUseCase>
     with $Provider<GetUriUseCase> {
-  const GetUriUseCaseProvider._()
+  GetUriUseCaseProvider._()
     : super(
         from: null,
         argument: null,
@@ -436,7 +436,7 @@ final class GetUriUseCaseProvider
 String _$getUriUseCaseHash() => r'0c26cefff17111fcba7f133f873c735f04388724';
 
 @ProviderFor(exportUriUseCase)
-const exportUriUseCaseProvider = ExportUriUseCaseProvider._();
+final exportUriUseCaseProvider = ExportUriUseCaseProvider._();
 
 final class ExportUriUseCaseProvider
     extends
@@ -446,7 +446,7 @@ final class ExportUriUseCaseProvider
           ExportUriUseCase
         >
     with $Provider<ExportUriUseCase> {
-  const ExportUriUseCaseProvider._()
+  ExportUriUseCaseProvider._()
     : super(
         from: null,
         argument: null,
@@ -482,7 +482,7 @@ final class ExportUriUseCaseProvider
 String _$exportUriUseCaseHash() => r'b21f3cd4dc70f0815236976aac71a2fb3b98c1a0';
 
 @ProviderFor(importUriUseCase)
-const importUriUseCaseProvider = ImportUriUseCaseProvider._();
+final importUriUseCaseProvider = ImportUriUseCaseProvider._();
 
 final class ImportUriUseCaseProvider
     extends
@@ -492,7 +492,7 @@ final class ImportUriUseCaseProvider
           ImportUriUseCase
         >
     with $Provider<ImportUriUseCase> {
-  const ImportUriUseCaseProvider._()
+  ImportUriUseCaseProvider._()
     : super(
         from: null,
         argument: null,

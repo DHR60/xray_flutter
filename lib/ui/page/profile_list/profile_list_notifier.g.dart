@@ -11,13 +11,13 @@ part of 'profile_list_notifier.dart';
 /// Notifier for profile operations (delete, etc.)
 
 @ProviderFor(ProfileListNotifier)
-const profileListProvider = ProfileListNotifierProvider._();
+final profileListProvider = ProfileListNotifierProvider._();
 
 /// Notifier for profile operations (delete, etc.)
 final class ProfileListNotifierProvider
     extends $NotifierProvider<ProfileListNotifier, ProfileListState> {
   /// Notifier for profile operations (delete, etc.)
-  const ProfileListNotifierProvider._()
+  ProfileListNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -54,7 +54,6 @@ abstract class _$ProfileListNotifier extends $Notifier<ProfileListState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<ProfileListState, ProfileListState>;
     final element =
         ref.element
@@ -64,6 +63,6 @@ abstract class _$ProfileListNotifier extends $Notifier<ProfileListState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

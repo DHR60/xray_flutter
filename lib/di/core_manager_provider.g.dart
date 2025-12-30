@@ -10,7 +10,7 @@ part of 'core_manager_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(coreStatus)
-const coreStatusProvider = CoreStatusProvider._();
+final coreStatusProvider = CoreStatusProvider._();
 
 final class CoreStatusProvider
     extends
@@ -20,7 +20,7 @@ final class CoreStatusProvider
           Stream<CoreStatus>
         >
     with $FutureModifier<CoreStatus>, $StreamProvider<CoreStatus> {
-  const CoreStatusProvider._()
+  CoreStatusProvider._()
     : super(
         from: null,
         argument: null,
@@ -48,12 +48,12 @@ final class CoreStatusProvider
 String _$coreStatusHash() => r'7f0be532a8d2d7802301dc47ca2ff834090420a1';
 
 @ProviderFor(mainCoreLogOutErr)
-const mainCoreLogOutErrProvider = MainCoreLogOutErrProvider._();
+final mainCoreLogOutErrProvider = MainCoreLogOutErrProvider._();
 
 final class MainCoreLogOutErrProvider
     extends $FunctionalProvider<AsyncValue<String>, String, Stream<String>>
     with $FutureModifier<String>, $StreamProvider<String> {
-  const MainCoreLogOutErrProvider._()
+  MainCoreLogOutErrProvider._()
     : super(
         from: null,
         argument: null,

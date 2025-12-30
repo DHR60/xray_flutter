@@ -10,11 +10,11 @@ part of 'setting_notifier.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(SettingNotifier)
-const settingProvider = SettingNotifierProvider._();
+final settingProvider = SettingNotifierProvider._();
 
 final class SettingNotifierProvider
     extends $NotifierProvider<SettingNotifier, CoreItemDto> {
-  const SettingNotifierProvider._()
+  SettingNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -48,7 +48,6 @@ abstract class _$SettingNotifier extends $Notifier<CoreItemDto> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<CoreItemDto, CoreItemDto>;
     final element =
         ref.element
@@ -58,6 +57,6 @@ abstract class _$SettingNotifier extends $Notifier<CoreItemDto> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

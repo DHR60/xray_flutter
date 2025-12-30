@@ -10,11 +10,11 @@ part of 'app_config_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(AppConfigNotifier)
-const appConfigProvider = AppConfigNotifierProvider._();
+final appConfigProvider = AppConfigNotifierProvider._();
 
 final class AppConfigNotifierProvider
     extends $NotifierProvider<AppConfigNotifier, AppConfig> {
-  const AppConfigNotifierProvider._()
+  AppConfigNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -48,7 +48,6 @@ abstract class _$AppConfigNotifier extends $Notifier<AppConfig> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<AppConfig, AppConfig>;
     final element =
         ref.element
@@ -58,6 +57,6 @@ abstract class _$AppConfigNotifier extends $Notifier<AppConfig> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

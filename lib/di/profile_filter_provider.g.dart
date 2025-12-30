@@ -10,11 +10,11 @@ part of 'profile_filter_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(ProfileFilterNotifier)
-const profileFilterProvider = ProfileFilterNotifierProvider._();
+final profileFilterProvider = ProfileFilterNotifierProvider._();
 
 final class ProfileFilterNotifierProvider
     extends $NotifierProvider<ProfileFilterNotifier, ProfileFilter> {
-  const ProfileFilterNotifierProvider._()
+  ProfileFilterNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -49,7 +49,6 @@ abstract class _$ProfileFilterNotifier extends $Notifier<ProfileFilter> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<ProfileFilter, ProfileFilter>;
     final element =
         ref.element
@@ -59,6 +58,6 @@ abstract class _$ProfileFilterNotifier extends $Notifier<ProfileFilter> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

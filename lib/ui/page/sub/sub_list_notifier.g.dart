@@ -10,11 +10,11 @@ part of 'sub_list_notifier.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(SubListNotifier)
-const subListProvider = SubListNotifierProvider._();
+final subListProvider = SubListNotifierProvider._();
 
 final class SubListNotifierProvider
     extends $NotifierProvider<SubListNotifier, SubListState> {
-  const SubListNotifierProvider._()
+  SubListNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -48,7 +48,6 @@ abstract class _$SubListNotifier extends $Notifier<SubListState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<SubListState, SubListState>;
     final element =
         ref.element
@@ -58,6 +57,6 @@ abstract class _$SubListNotifier extends $Notifier<SubListState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
