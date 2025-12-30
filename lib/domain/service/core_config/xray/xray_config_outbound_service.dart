@@ -3,7 +3,7 @@ part of 'xray_config_service.dart';
 extension XrayConfigOutboundService on XrayConfigService {
   List<Outbound4Ray> _genOutbounds() {
     final outbounds = <Outbound4Ray>[];
-    outbounds.add(_genProxyOutbound());
+    outbounds.add(_genProxyOutbound().copyWith(tag: GlobalConst.proxyTag));
     outbounds.addAll(genDefaultOutbounds());
     return outbounds;
   }
@@ -167,8 +167,8 @@ extension XrayConfigOutboundService on XrayConfigService {
 
   List<Outbound4Ray> genDefaultOutbounds() {
     return [
-      Outbound4Ray(protocol: 'freedom'),
-      Outbound4Ray(protocol: 'blackhole'),
+      Outbound4Ray(protocol: 'freedom', tag: GlobalConst.directTag),
+      Outbound4Ray(protocol: 'blackhole', tag: GlobalConst.blockTag),
     ];
   }
 
