@@ -12,6 +12,7 @@ class _ProcessCore implements CoreProcess {
   final Process _process;
   final Stream<String> _out;
   final Stream<String> _err;
+  final Stream<int> _exitCode;
 
   _ProcessCore(this._process)
     : _out = _process.stdout
@@ -19,13 +20,17 @@ class _ProcessCore implements CoreProcess {
           .asBroadcastStream(),
       _err = _process.stderr
           .transform(SystemEncoding().decoder)
-          .asBroadcastStream();
+          .asBroadcastStream(),
+      _exitCode = _process.exitCode.asStream().asBroadcastStream();
 
   @override
   Stream<String> get out => _out;
 
   @override
   Stream<String> get err => _err;
+
+  @override
+  Stream<int> get exitCode => _exitCode;
 
   @override
   Future<void> stop() async {
@@ -39,6 +44,9 @@ class _AndroidCore implements CoreProcess {
 
   @override
   Stream<String> get err => const Stream.empty();
+
+  @override
+  Stream<int> get exitCode => const Stream.empty();
 
   @override
   Future<void> stop() async {

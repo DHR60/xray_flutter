@@ -43,6 +43,18 @@ class MyHomePageState extends ConsumerStatefulWidget {
 class _MyHomePageStateState extends ConsumerState<MyHomePageState> {
   bool _isSearching = false;
   final _searchController = TextEditingController();
+  bool _isFirstCoreStatusEvent = true;
+  CoreStatus? _lastNotifiedStatus;
+
+  void _showCoreStatusSnackBar(String message) {
+    if (!mounted) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
+    });
+  }
 
   RelativeRect _menuPositionFor(BuildContext anchorContext) {
     final button = anchorContext.findRenderObject() as RenderBox;
@@ -158,6 +170,39 @@ class _MyHomePageStateState extends ConsumerState<MyHomePageState> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen<CoreStatus?>(
+      coreStatusProvider.select((async) => async.asData?.value),
+      (previous, next) {
+        if (next == null) return;
+
+        // First non-null status: skip benign initial states (stopped/starting),
+        // but allow notifying for initial running/error.
+        if (_isFirstCoreStatusEvent) {
+          _isFirstCoreStatusEvent = false;
+          _lastNotifiedStatus = next;
+          if (next == CoreStatus.stopped || next == CoreStatus.starting) {
+            return;
+          }
+        } else {
+          if (_lastNotifiedStatus == next) return;
+          _lastNotifiedStatus = next;
+        }
+
+        switch (next) {
+          case CoreStatus.running:
+            _showCoreStatusSnackBar('服务已启动');
+            break;
+          case CoreStatus.stopped:
+            _showCoreStatusSnackBar('服务已停止');
+            break;
+          case CoreStatus.error:
+            _showCoreStatusSnackBar('服务异常退出');
+            break;
+          case CoreStatus.starting:
+            break;
+        }
+      },
+    );
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -406,23 +451,14 @@ class _MyHomePageStateState extends ConsumerState<MyHomePageState> {
                 : () async {
                     if (isRunning) {
                       await ref.read(stopCoreServiceUseCaseProvider).call();
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(
-                          context,
-                        ).showSnackBar(const SnackBar(content: Text('服务已停止')));
-                      }
                     } else {
                       final result = await ref
                           .read(startCoreServiceUseCareProvider)
                           .call();
                       if (context.mounted) {
-                        if (result is Success) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('启动服务成功')),
-                          );
-                        } else if (result is Failure) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('启动服务失败: ${result.error}')),
+                        if (result is Failure) {
+                          _showCoreStatusSnackBar(
+                            '启动服务失败: ${result.toString()}',
                           );
                         }
                       }
