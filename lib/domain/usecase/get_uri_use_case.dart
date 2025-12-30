@@ -1,12 +1,13 @@
 import 'package:xray_flutter/domain/core/domain_error.dart';
 import 'package:xray_flutter/domain/core/result.dart';
-import 'package:xray_flutter/domain/handler/fmt/fmt_fact.dart';
 import 'package:xray_flutter/domain/service/store/store_service.dart';
+import 'package:xray_flutter/domain/usecase/get_uri_by_data_use_case.dart';
 
 class GetUriUseCase {
   final StoreService _storeService;
+  final GetUriByDataUseCase _getUriByDataUseCase;
 
-  GetUriUseCase(this._storeService);
+  GetUriUseCase(this._storeService, this._getUriByDataUseCase);
 
   Future<Result<String>> call(String profileIndexId) async {
     final profile = await _storeService.profileRepo.getProfileById(
@@ -15,11 +16,6 @@ class GetUriUseCase {
     if (profile == null) {
       return Failure(ValidationError('指定的配置文件不存在'));
     }
-    final sharedUriResult = FmtFact.buildSharedUri(profile);
-    if (sharedUriResult is Failure) {
-      return Failure.from(sharedUriResult as Failure);
-    }
-    final sharedUri = (sharedUriResult as Success).data;
-    return Success(sharedUri);
+    return _getUriByDataUseCase.call(profile);
   }
 }

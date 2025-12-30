@@ -4,6 +4,9 @@ import 'package:xray_flutter/di/provider.dart';
 import 'package:xray_flutter/domain/usecase/delete_profile_use_case.dart';
 import 'package:xray_flutter/domain/usecase/export_profile_config_use_case.dart';
 import 'package:xray_flutter/domain/usecase/export_uri_use_case.dart';
+import 'package:xray_flutter/domain/usecase/get_profile_config_use_case.dart';
+import 'package:xray_flutter/domain/usecase/get_profile_outbound_use_case.dart';
+import 'package:xray_flutter/domain/usecase/get_uri_by_data_use_case.dart';
 import 'package:xray_flutter/domain/usecase/get_uri_use_case.dart';
 import 'package:xray_flutter/domain/usecase/import_uri_use_case.dart';
 import 'package:xray_flutter/domain/usecase/start_core_service_use_case.dart';
@@ -38,15 +41,32 @@ StopCoreServiceUseCase stopCoreServiceUseCase(Ref ref) {
 }
 
 @riverpod
-ExportProfileConfigUseCase exportProfileConfigUseCase(Ref ref) {
+GetProfileConfigUseCase getProfileConfigUseCase(Ref ref) {
   final store = ref.watch(storeServiceProvider);
-  return ExportProfileConfigUseCase(store);
+  return GetProfileConfigUseCase(store);
+}
+
+@riverpod
+ExportProfileConfigUseCase exportProfileConfigUseCase(Ref ref) {
+  final getProfileConfigUseCase = ref.watch(getProfileConfigUseCaseProvider);
+  return ExportProfileConfigUseCase(getProfileConfigUseCase);
+}
+
+@riverpod
+GetProfileOutboundUseCase getProfileOutboundUseCase(Ref ref) {
+  return GetProfileOutboundUseCase();
+}
+
+@riverpod
+GetUriByDataUseCase getUriByDataUseCase(Ref ref) {
+  return GetUriByDataUseCase();
 }
 
 @riverpod
 GetUriUseCase getUriUseCase(Ref ref) {
   final store = ref.watch(storeServiceProvider);
-  return GetUriUseCase(store);
+  final getUriByDataUseCase = ref.watch(getUriByDataUseCaseProvider);
+  return GetUriUseCase(store, getUriByDataUseCase);
 }
 
 @riverpod

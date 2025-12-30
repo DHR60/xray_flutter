@@ -82,6 +82,10 @@ class Utils {
     }
   }
 
+  static String toJsonArrayString(List<dynamic> jsonArray) {
+    return jsonEncode(jsonArray);
+  }
+
   static List<String> splitRules(String rulesString) {
     return rulesString
         .replaceAll('\r', '')

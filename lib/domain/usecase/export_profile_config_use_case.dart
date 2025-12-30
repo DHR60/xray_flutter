@@ -2,36 +2,24 @@ import 'package:xray_flutter/core/utils.dart';
 import 'package:xray_flutter/domain/core/domain_error.dart';
 import 'package:xray_flutter/domain/core/result.dart';
 import 'package:xray_flutter/domain/infra/clipboard_service.dart';
-import 'package:xray_flutter/domain/model/profile_context.dart';
-import 'package:xray_flutter/domain/service/core_config/xray/xray_config_service.dart';
-import 'package:xray_flutter/domain/service/store/store_service.dart';
+import 'package:xray_flutter/domain/usecase/get_profile_config_use_case.dart';
 import 'package:xray_flutter/infra/clipboard_service_impl.dart';
 
 class ExportProfileConfigUseCase {
-  final StoreService _storeService;
-  ExportProfileConfigUseCase(this._storeService);
+  final GetProfileConfigUseCase _getProfileConfigUseCase;
+  ExportProfileConfigUseCase(this._getProfileConfigUseCase);
 
   Future<Result<void>> call(String profileIndexId) async {
     try {
-      final routingItem = _storeService.getCurrentRoutingItem();
-      if (routingItem == null) {
-        return Failure(ValidationError('当前激活路由集不存在'));
+      final result = await _getProfileConfigUseCase(profileIndexId);
+      if (result is Failure<String>) {
+        return Failure.from(result);
       }
-      final profile = await _storeService.profileRepo.getProfileById(
-        profileIndexId,
-      );
-      if (profile == null) {
-        return Failure(ValidationError('指定的配置文件不存在'));
-      }
-      final profileContext = ProfileContext(
-        profile: profile,
-        routingItem: routingItem,
-        coreItem: _storeService.currentConfig.coreItem,
-      );
-      final xrayConfigService = XrayConfigService(profileContext);
-      final configString = xrayConfigService.genConfig();
+      final configString = result is Success<String> ? result.data : '';
       ClipboardService clipboardService = ClipboardServiceImpl();
-      await clipboardService.copyToClipboard(Utils.prettyJson(configString) ?? configString);
+      await clipboardService.copyToClipboard(
+        Utils.prettyJson(configString) ?? configString,
+      );
       return const Success(null);
     } catch (e) {
       return Failure(UnexpectedError(e));

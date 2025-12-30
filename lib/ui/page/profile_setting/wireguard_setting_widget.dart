@@ -4,7 +4,7 @@ import 'package:xray_flutter/data/db/app_database.dart';
 import 'package:xray_flutter/data/dto/profile_extra_item_dto.dart';
 import 'package:xray_flutter/ui/page/profile_setting/shared/profile_listen_controller.dart';
 import 'package:xray_flutter/ui/page/profile_setting/shared/profile_listen_view.dart';
-import 'package:xray_flutter/ui/page/profile_setting/shared/profile_setting_scaffold.dart';
+import 'package:xray_flutter/ui/page/profile_setting/shared/profile_setting_widget.dart';
 
 class WireguardSettingWidget extends ConsumerStatefulWidget {
   final ProfileItemData profile;
@@ -157,7 +157,7 @@ class _WireguardSettingWidgetState extends ConsumerState<WireguardSettingWidget>
 
   @override
   Widget build(BuildContext context) {
-    return ProfileSettingScaffold(
+    return ProfileSettingWidget(
       title: 'Wireguard Setting',
       profile: widget.profile,
       isNew: widget.isNew,
