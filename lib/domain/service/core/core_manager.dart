@@ -1,25 +1,25 @@
 import 'dart:async';
 
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:xray_flutter/core/app_runtime.dart';
 import 'package:xray_flutter/domain/core/core_process.dart';
 import 'package:xray_flutter/domain/infra/start_core_service.dart';
-
-part 'core_manager.g.dart';
-
-@Riverpod(keepAlive: true)
-Stream<CoreStatus> coreStatus(Ref ref) {
-  final manager = AppRuntime.instance.coreManager;
-  return manager.statusStream;
-}
 
 enum CoreStatus { stopped, starting, running, error }
 
 class CoreManager {
   final StartCoreService _startCoreService;
+
   final StreamController<CoreStatus> _statusController =
       StreamController<CoreStatus>.broadcast();
   StreamSubscription<int>? _mainExitSubscription;
+
+  // Stable log buses (do NOT change across restarts)
+  final StreamController<String> _stdoutController =
+      StreamController<String>.broadcast();
+  final StreamController<String> _stderrController =
+      StreamController<String>.broadcast();
+
+  StreamSubscription<String>? _stdoutSub;
+  StreamSubscription<String>? _stderrSub;
 
   CoreStatus _currentStatus = CoreStatus.stopped;
   CoreStatus get status => _currentStatus;
@@ -28,7 +28,6 @@ class CoreManager {
   /// Emits the current status immediately to each new subscriber, then
   /// forwards subsequent status change events.
   Stream<CoreStatus> get statusStream => Stream<CoreStatus>.multi((multi) {
-    // Push current snapshot first to avoid missing fast transitions.
     multi.add(_currentStatus);
 
     final sub = _statusController.stream.listen(
@@ -45,10 +44,9 @@ class CoreManager {
 
   CoreManager(this._startCoreService);
 
-  Stream<String> get mainLogOut =>
-      _activeProcesses[_mainCoreId]?.out ?? const Stream.empty();
-  Stream<String> get mainLogErr =>
-      _activeProcesses[_mainCoreId]?.err ?? const Stream.empty();
+  // Expose stable streams instead of snapshot streams
+  Stream<String> get mainLogOut => _stdoutController.stream;
+  Stream<String> get mainLogErr => _stderrController.stream;
 
   Future<void> start(String config, int port) async {
     if (_currentStatus == CoreStatus.running) {
@@ -63,20 +61,36 @@ class CoreManager {
       });
       _activeProcesses[_mainCoreId] = process;
 
+      // (Re)bind stdout/stderr piping for the new process
+      await _stdoutSub?.cancel();
+      await _stderrSub?.cancel();
+      _stdoutSub = process.out.listen(
+        _stdoutController.add,
+        onError: _stdoutController.addError,
+      );
+      _stderrSub = process.err.listen(
+        _stderrController.add,
+        onError: _stderrController.addError,
+      );
+
       // Link process exit -> status updates.
       await _mainExitSubscription?.cancel();
       _mainExitSubscription = process.exitCode.listen((code) {
-        // Ignore if this is no longer the active main process.
         if (!identical(_activeProcesses[_mainCoreId], process)) {
           return;
         }
 
-        // If it exits while we still consider it active, update status.
+        _activeProcesses.remove(_mainCoreId);
+
+        // stop piping when process exits
+        _stdoutSub?.cancel();
+        _stderrSub?.cancel();
+        _stdoutSub = null;
+        _stderrSub = null;
+
         if (code == 0) {
-          _activeProcesses.remove(_mainCoreId);
           _updateStatus(CoreStatus.stopped);
         } else {
-          _activeProcesses.remove(_mainCoreId);
           _updateStatus(CoreStatus.error);
         }
       });
@@ -93,15 +107,16 @@ class CoreManager {
     await _mainExitSubscription?.cancel();
     _mainExitSubscription = null;
 
+    // stop piping first to avoid writing to logs after stop()
+    await _stdoutSub?.cancel();
+    await _stderrSub?.cancel();
+    _stdoutSub = null;
+    _stderrSub = null;
+
     await _startCoreService.stopCore();
 
-    // Also stop the tracked process if it exists
     final mainProcess = _activeProcesses.remove(_mainCoreId);
-    // Note: _startCoreService.stopCore() might have already killed it,
-    // but we ensure cleanup here.
     if (mainProcess != null) {
-      // We don't await here strictly if the process is already dead,
-      // but it's safe to call stop() on our wrapper.
       try {
         await mainProcess.stop();
       } catch (_) {}
@@ -116,5 +131,12 @@ class CoreManager {
     _currentStatus = status;
     if (_statusController.isClosed) return;
     _statusController.add(status);
+  }
+
+  Future<void> dispose() async {
+    await stop();
+    await _statusController.close();
+    await _stdoutController.close();
+    await _stderrController.close();
   }
 }

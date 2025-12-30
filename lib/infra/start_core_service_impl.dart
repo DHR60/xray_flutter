@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as p;
 import 'package:xray_flutter/core/utils.dart';
 import 'package:xray_flutter/domain/core/core_process.dart';
@@ -84,14 +83,6 @@ class StartCoreServiceImpl implements StartCoreService {
     ], mode: ProcessStartMode.normal);
 
     final core = _ProcessCore(_xrayProcess!);
-
-    // Keep logging to debug console for now as well
-    core.out.listen((data) {
-      debugPrint('OUT: $data');
-    });
-    core.err.listen((data) {
-      debugPrint('ERR: $data');
-    });
 
     return core;
   }

@@ -1,4 +1,4 @@
-import 'package:xray_flutter/domain/service/core_manager.dart';
+import 'package:xray_flutter/domain/service/core/core_manager.dart';
 
 class StopCoreServiceUseCase {
   final CoreManager _coreManager;

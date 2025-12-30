@@ -1,7 +1,7 @@
 import 'package:xray_flutter/domain/core/domain_error.dart';
 import 'package:xray_flutter/domain/core/result.dart';
 import 'package:xray_flutter/domain/model/profile_context.dart';
-import 'package:xray_flutter/domain/service/core_manager.dart';
+import 'package:xray_flutter/domain/service/core/core_manager.dart';
 import 'package:xray_flutter/domain/service/core_config/xray/xray_config_service.dart';
 import 'package:xray_flutter/domain/service/store/store_service.dart';
 

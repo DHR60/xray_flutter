@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:xray_flutter/core/enum/config_type.dart';
 import 'package:xray_flutter/core/global_const.dart';
 import 'package:xray_flutter/di/app_config_provider.dart';
+import 'package:xray_flutter/di/core_manager_provider.dart';
 import 'package:xray_flutter/di/profile_filter_provider.dart';
 import 'package:xray_flutter/di/provider.dart';
 import 'package:xray_flutter/di/use_case_provider.dart';
@@ -15,7 +16,7 @@ import 'package:xray_flutter/ui/page/sub/sub_list_view.dart';
 import 'package:xray_flutter/ui/page/routing/routing_list_widget.dart';
 import 'package:xray_flutter/ui/page/sub/sub_setting_result.dart';
 import 'package:xray_flutter/ui/page/sub/sub_setting_widget.dart';
-import 'package:xray_flutter/domain/service/core_manager.dart';
+import 'package:xray_flutter/domain/service/core/core_manager.dart';
 
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});
