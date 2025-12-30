@@ -46,7 +46,7 @@ dependencies:
   x_config_gen:
     git:
       url: https://github.com/DHR60/x_config_gen
-      ref: 'v0.0.7'
+      ref: 'v0.0.8'
   punycoder: ^0.2.2
   pretty_qr_code: ^3.5.0
   json_field_editor: ^1.2.1

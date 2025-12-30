@@ -964,11 +964,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v0.0.7"
-      resolved-ref: eca71280c52bd200d6140ac10cbe662186d61191
+      ref: "v0.0.8"
+      resolved-ref: "7878acab1a6f655b36fbd71ebc29e374fd401bab"
       url: "https://github.com/DHR60/x_config_gen"
     source: git
-    version: "0.0.7"
+    version: "0.0.8"
   xdg_directories:
     dependency: transitive
     description:
