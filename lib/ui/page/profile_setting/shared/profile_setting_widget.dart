@@ -83,6 +83,32 @@ class _ProfileSettingWidgetState extends ConsumerState<ProfileSettingWidget> {
             icon: const Icon(Icons.save),
             onPressed: () => _saveProfile(context),
           ),
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              if (value == 'preview') {
+                final updatedProfile =
+                    widget.controller.saveAndGetProfile() ?? widget.profile;
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => Scaffold(
+                      appBar: AppBar(title: const Text('配置预览')),
+                      body: SafeArea(
+                        child: SingleChildScrollView(
+                          child: ProfilePreviewView(
+                            initialProfile: updatedProfile,
+                            profileStream: _profileStreamController.stream,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }
+            },
+            itemBuilder: (context) => const [
+              PopupMenuItem<String>(value: 'preview', child: Text('预览')),
+            ],
+          ),
         ],
       ),
       body: SafeArea(
@@ -95,35 +121,9 @@ class _ProfileSettingWidgetState extends ConsumerState<ProfileSettingWidget> {
               return SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      Form(
-                        key: widget.controller.formKey,
-                        child: widget.controller.buildFormContent(context),
-                      ),
-                      const SizedBox(height: 24),
-                      OutlinedButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => Scaffold(
-                                appBar: AppBar(title: const Text('配置预览')),
-                                body: SafeArea(
-                                  child: SingleChildScrollView(
-                                    child: ProfilePreviewView(
-                                      initialProfile: widget.profile,
-                                      profileStream:
-                                          _profileStreamController.stream,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                        child: const Text('显示预览'),
-                      ),
-                    ],
+                  child: Form(
+                    key: widget.controller.formKey,
+                    child: widget.controller.buildFormContent(context),
                   ),
                 ),
               );
