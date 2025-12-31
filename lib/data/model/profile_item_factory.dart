@@ -34,6 +34,8 @@ class ProfileItemFactory {
       streamSecurity: '',
       subid: '',
       xhttpExtra: '',
+      customConfig: '',
+      customOutbound: '',
       coreType: ECoreType.xray,
       preSocksProxy: null,
     );

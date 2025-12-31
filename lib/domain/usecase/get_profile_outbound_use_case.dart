@@ -18,7 +18,13 @@ class GetProfileOutboundUseCase {
       coreItem: CoreItemDto(),
     );
     final xrayConfigService = XrayConfigService(profileContext);
-    final xrayConfigMap = Utils.fromJsonString(xrayConfigService.genConfig());
+    final configStringResult = xrayConfigService.genConfig();
+    if (configStringResult is Failure<String>) {
+      return Failure.from(configStringResult);
+    }
+    final xrayConfigMap = Utils.fromJsonString(
+      (configStringResult as Success<String>).data,
+    );
     if (xrayConfigMap == null) {
       return Failure(UnexpectedError('生成配置失败'));
     }

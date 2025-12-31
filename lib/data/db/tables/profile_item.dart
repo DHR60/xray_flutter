@@ -33,6 +33,8 @@ class ProfileItem extends Table {
   late final displayLog = boolean().clientDefault(() => true)();
   late final xhttpExtra = text().clientDefault(() => '')();
   late final cert = text().clientDefault(() => '')();
+  late final customConfig = text().clientDefault(() => '')();
+  late final customOutbound = text().clientDefault(() => '')();
   late final jsonData = text().clientDefault(() => '')();
   
   @override

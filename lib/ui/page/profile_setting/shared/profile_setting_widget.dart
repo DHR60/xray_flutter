@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:xray_flutter/data/db/app_database.dart';
 import 'package:xray_flutter/ui/page/profile_setting/profile_setting_result.dart';
 import 'package:xray_flutter/ui/page/profile_setting/shared/profile_preview_view.dart';
+import 'package:xray_flutter/ui/page/shared/json_edit_widget.dart';
 
 abstract class ProfileEditorController {
   GlobalKey<FormState> get formKey;
@@ -35,12 +36,16 @@ class ProfileSettingWidget extends ConsumerStatefulWidget {
 
 class _ProfileSettingWidgetState extends ConsumerState<ProfileSettingWidget> {
   late final StreamController<ProfileItemData> _profileStreamController;
+  late String _customOutboundJson;
+  late String _customConfigJson;
 
   @override
   void initState() {
     super.initState();
     _profileStreamController = StreamController<ProfileItemData>.broadcast();
     _profileStreamController.add(widget.profile);
+    _customOutboundJson = widget.profile.customOutbound;
+    _customConfigJson = widget.profile.customConfig;
   }
 
   @override
@@ -60,12 +65,19 @@ class _ProfileSettingWidgetState extends ConsumerState<ProfileSettingWidget> {
   void _saveProfile(BuildContext context) {
     final savedProfile = widget.controller.saveAndGetProfile();
     if (savedProfile != null) {
-      Navigator.of(context).pop(ProfileSettingUpsert(savedProfile));
+      Navigator.of(context).pop(ProfileSettingUpsert(_currentProfile));
     }
   }
 
   void _deleteProfile(BuildContext context) {
     Navigator.of(context).pop(ProfileSettingDelete(widget.profile));
+  }
+
+  ProfileItemData get _currentProfile {
+    return (widget.controller.saveAndGetProfile() ?? widget.profile).copyWith(
+      customOutbound: _customOutboundJson,
+      customConfig: _customConfigJson,
+    );
   }
 
   @override
@@ -84,10 +96,9 @@ class _ProfileSettingWidgetState extends ConsumerState<ProfileSettingWidget> {
             onPressed: () => _saveProfile(context),
           ),
           PopupMenuButton<String>(
-            onSelected: (value) {
+            onSelected: (value) async {
               if (value == 'preview') {
-                final updatedProfile =
-                    widget.controller.saveAndGetProfile() ?? widget.profile;
+                final updatedProfile = _currentProfile;
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => Scaffold(
@@ -103,10 +114,60 @@ class _ProfileSettingWidgetState extends ConsumerState<ProfileSettingWidget> {
                     ),
                   ),
                 );
+              } else if (value == 'custom_outbound') {
+                final result = await Navigator.of(context).push<String>(
+                  MaterialPageRoute(
+                    builder: (context) => JsonEditWidget(
+                      title: '自定义出站 JSON 配置',
+                      initialJson: _customOutboundJson,
+                    ),
+                  ),
+                );
+                if (result != null) {
+                  setState(() {
+                    _customOutboundJson = result;
+                  });
+                }
+              } else if (value == 'custom_config') {
+                final result = await Navigator.of(context).push<String>(
+                  MaterialPageRoute(
+                    builder: (context) => JsonEditWidget(
+                      title: '自定义完整 JSON 配置',
+                      initialJson: _customConfigJson,
+                    ),
+                  ),
+                );
+                if (result != null) {
+                  setState(() {
+                    _customConfigJson = result;
+                  });
+                }
               }
             },
             itemBuilder: (context) => const [
-              PopupMenuItem<String>(value: 'preview', child: Text('预览')),
+              PopupMenuItem<String>(value: 'preview', child: Text('预览当前配置效果')),
+              PopupMenuDivider(),
+              PopupMenuItem(
+                enabled: false,
+                height: 40,
+                child: Center(
+                  child: Text(
+                    '自定义配置',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ),
+              ),
+              PopupMenuItem<String>(
+                value: 'custom_outbound',
+                child: Text('自定义出站'),
+              ),
+              PopupMenuItem<String>(
+                value: 'custom_config',
+                child: Text('自定义完整配置'),
+              ),
             ],
           ),
         ],
@@ -151,10 +212,7 @@ class _ProfileSettingWidgetState extends ConsumerState<ProfileSettingWidget> {
                         children: [
                           OutlinedButton(
                             onPressed: () {
-                              final updatedProfile =
-                                  widget.controller.saveAndGetProfile() ??
-                                  widget.profile;
-                              _profileStreamController.add(updatedProfile);
+                              _profileStreamController.add(_currentProfile);
                             },
                             child: const Text('更新预览'),
                           ),

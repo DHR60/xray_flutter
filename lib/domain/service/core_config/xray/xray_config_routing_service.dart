@@ -5,8 +5,8 @@ extension XrayConfigRoutingService on XrayConfigService {
     // if ip and domain are both non-empty, split into two rules
     final rules = <RoutingRule4Ray>[];
 
-    if (_profileContext.routingItem?.rules != null) {
-      for (var ruleItem in _profileContext.routingItem!.rules) {
+    if (profileContext.routingItem?.rules != null) {
+      for (var ruleItem in profileContext.routingItem!.rules) {
         if (!ruleItem.enabled) continue;
 
         final ip = Utils.normalizeRulesToList(ruleItem.ip);
@@ -22,7 +22,7 @@ extension XrayConfigRoutingService on XrayConfigService {
     }
 
     return Routing4Ray(
-      domainStrategy: _profileContext.routingItem?.strategy ?? 'AsIs',
+      domainStrategy: profileContext.routingItem?.strategy ?? 'AsIs',
       rules: rules,
     );
   }

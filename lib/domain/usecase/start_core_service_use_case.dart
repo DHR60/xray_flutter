@@ -26,7 +26,11 @@ class StartCoreServiceUseCase {
         coreItem: _storeService.currentConfig.coreItem,
       );
       final xrayConfigService = XrayConfigService(profileContext);
-      final configString = xrayConfigService.genConfig();
+      final configStringResult = xrayConfigService.genConfig();
+      if (configStringResult is Failure<String>) {
+        return Failure.from(configStringResult);
+      }
+      final configString = (configStringResult as Success<String>).data;
 
       final socksPort =
           int.tryParse(_storeService.currentConfig.coreItem.inboundPort) ??

@@ -3,13 +3,17 @@ part of 'xray_config_service.dart';
 extension XrayConfigOutboundService on XrayConfigService {
   List<Outbound4Ray> _genOutbounds() {
     final outbounds = <Outbound4Ray>[];
-    outbounds.add(_genProxyOutbound().copyWith(tag: GlobalConst.proxyTag));
+    outbounds.add(
+      _genProxyOutbound().copyWith(
+        tag: indexIdToOutboundTag[profileContext.profile.id],
+      ),
+    );
     outbounds.addAll(genDefaultOutbounds());
     return outbounds;
   }
 
   Outbound4Ray _genProxyOutbound() {
-    switch (_profileContext.profile.configType) {
+    switch (profileContext.profile.configType) {
       case EConfigType.vless:
         return _genVlessOutbound();
       case EConfigType.vmess:
@@ -26,22 +30,22 @@ extension XrayConfigOutboundService on XrayConfigService {
         return _genHttpOutbound();
       default:
         throw UnimplementedError(
-          'Outbound generation for protocol ${_profileContext.profile.configType} is not implemented.',
+          'Outbound generation for protocol ${profileContext.profile.configType} is not implemented.',
         );
     }
   }
 
   Outbound4Ray _genVlessOutbound() {
     final extra = ProfileExtraItemDto.fromString(
-      _profileContext.profile.jsonData,
+      profileContext.profile.jsonData,
     );
     return Outbound4Ray(
       protocol: 'vless',
       settings: OutboundSettings4Ray.vless(
         settings: VlessOutboundSettings4Ray(
-          address: _profileContext.profile.address,
-          port: _profileContext.profile.port,
-          id: _profileContext.profile.id,
+          address: profileContext.profile.address,
+          port: profileContext.profile.port,
+          id: profileContext.profile.id,
           flow: extra.flow,
           encryption: extra.vlessEncryption ?? 'none',
           level: 8,
@@ -59,10 +63,10 @@ extension XrayConfigOutboundService on XrayConfigService {
       protocol: 'vmess',
       settings: OutboundSettings4Ray.vmess(
         settings: VmessOutboundSettings4Ray(
-          address: _profileContext.profile.address,
-          port: _profileContext.profile.port,
-          id: _profileContext.profile.id,
-          security: _profileContext.profile.security,
+          address: profileContext.profile.address,
+          port: profileContext.profile.port,
+          id: profileContext.profile.id,
+          security: profileContext.profile.security,
           level: 8,
         ),
       ),
@@ -75,9 +79,9 @@ extension XrayConfigOutboundService on XrayConfigService {
       protocol: 'trojan',
       settings: OutboundSettings4Ray.trojan(
         settings: TrojanOutboundSettings4Ray(
-          address: _profileContext.profile.address,
-          port: _profileContext.profile.port,
-          password: _profileContext.profile.id,
+          address: profileContext.profile.address,
+          port: profileContext.profile.port,
+          password: profileContext.profile.id,
           level: 8,
         ),
       ),
@@ -90,10 +94,10 @@ extension XrayConfigOutboundService on XrayConfigService {
       protocol: 'shadowsocks',
       settings: OutboundSettings4Ray.shadowsocks(
         settings: ShadowsocksOutboundSettings4Ray(
-          address: _profileContext.profile.address,
-          port: _profileContext.profile.port,
-          method: _profileContext.profile.security,
-          password: _profileContext.profile.id,
+          address: profileContext.profile.address,
+          port: profileContext.profile.port,
+          method: profileContext.profile.security,
+          password: profileContext.profile.id,
           level: 8,
         ),
       ),
@@ -103,9 +107,9 @@ extension XrayConfigOutboundService on XrayConfigService {
 
   Outbound4Ray _genWireguardOutbound() {
     final extra = ProfileExtraItemDto.fromString(
-      _profileContext.profile.jsonData,
+      profileContext.profile.jsonData,
     );
-    var address = _profileContext.profile.address;
+    var address = profileContext.profile.address;
     if (Utils.isIPv6(address)) {
       address = '[$address]';
     }
@@ -113,7 +117,7 @@ extension XrayConfigOutboundService on XrayConfigService {
       protocol: 'wireguard',
       settings: OutboundSettings4Ray.wireguard(
         settings: WireguardOutboundSettings4Ray(
-          secretKey: _profileContext.profile.id,
+          secretKey: profileContext.profile.id,
           address: extra.wireguardLocalAddress?.split(','),
           mtu: extra.wireguardMtu,
           reserved: extra.wireguardReserved
@@ -124,7 +128,7 @@ extension XrayConfigOutboundService on XrayConfigService {
             WireguardOutboundPeer4Ray(
               publicKey: extra.wireguardPublicKey ?? '',
               preSharedKey: extra.wireguardPreSharedKey,
-              endpoint: '$address:${_profileContext.profile.port}',
+              endpoint: '$address:${profileContext.profile.port}',
             ),
           ],
         ),
@@ -138,10 +142,10 @@ extension XrayConfigOutboundService on XrayConfigService {
       protocol: 'socks',
       settings: OutboundSettings4Ray.socks(
         settings: SocksOutboundSettings4Ray(
-          address: _profileContext.profile.address,
-          port: _profileContext.profile.port,
-          user: _profileContext.profile.security,
-          pass: _profileContext.profile.id,
+          address: profileContext.profile.address,
+          port: profileContext.profile.port,
+          user: profileContext.profile.security,
+          pass: profileContext.profile.id,
           level: 8,
         ),
       ),
@@ -154,10 +158,10 @@ extension XrayConfigOutboundService on XrayConfigService {
       protocol: 'http',
       settings: OutboundSettings4Ray.http(
         settings: HttpOutboundSettings4Ray(
-          address: _profileContext.profile.address,
-          port: _profileContext.profile.port,
-          user: _profileContext.profile.security,
-          pass: _profileContext.profile.id,
+          address: profileContext.profile.address,
+          port: profileContext.profile.port,
+          user: profileContext.profile.security,
+          pass: profileContext.profile.id,
           level: 8,
         ),
       ),
@@ -176,25 +180,25 @@ extension XrayConfigOutboundService on XrayConfigService {
     var streamSettings = StreamSettings4Ray();
 
     var transportType =
-        GlobalConst.transportMap[_profileContext.profile.network] ??
+        GlobalConst.transportMap[profileContext.profile.network] ??
         ETransport.raw;
-    var streamSecurity = _profileContext.profile.streamSecurity;
+    var streamSecurity = profileContext.profile.streamSecurity;
 
     if (streamSecurity == GlobalConst.transportSecurityTls) {
-      final alpnList = _profileContext.profile.alpn
+      final alpnList = profileContext.profile.alpn
           .split(',')
           .where((e) => e.isNotEmpty)
           .toList();
       streamSettings = streamSettings.copyWith(
         security: 'tls',
         tlsSettings: Tls4Ray(
-          serverName: _profileContext.profile.sni.isNotEmpty
-              ? _profileContext.profile.sni
+          serverName: profileContext.profile.sni.isNotEmpty
+              ? profileContext.profile.sni
               : null,
-          allowInsecure: _profileContext.profile.allowInsecure == 'true',
+          allowInsecure: profileContext.profile.allowInsecure == 'true',
           alpn: alpnList.isNotEmpty ? alpnList : null,
-          fingerprint: _profileContext.profile.fingerprint.isNotEmpty
-              ? _profileContext.profile.fingerprint
+          fingerprint: profileContext.profile.fingerprint.isNotEmpty
+              ? profileContext.profile.fingerprint
               : null,
         ),
       );
@@ -202,14 +206,14 @@ extension XrayConfigOutboundService on XrayConfigService {
       streamSettings = streamSettings.copyWith(
         security: 'reality',
         realitySettings: Reality4Ray(
-          serverName: _profileContext.profile.sni,
-          password: _profileContext.profile.publicKey,
-          shortId: _profileContext.profile.shortId,
-          fingerprint: _profileContext.profile.fingerprint.isNotEmpty
-              ? _profileContext.profile.fingerprint
+          serverName: profileContext.profile.sni,
+          password: profileContext.profile.publicKey,
+          shortId: profileContext.profile.shortId,
+          fingerprint: profileContext.profile.fingerprint.isNotEmpty
+              ? profileContext.profile.fingerprint
               : null,
-          spiderX: _profileContext.profile.spiderX,
-          mldsa65Verify: _profileContext.profile.mldsa65Verify,
+          spiderX: profileContext.profile.spiderX,
+          mldsa65Verify: profileContext.profile.mldsa65Verify,
         ),
       );
     }
@@ -225,11 +229,11 @@ extension XrayConfigOutboundService on XrayConfigService {
         streamSettings = streamSettings.copyWith(
           network: 'xhttp',
           xhttpSettings: XHttpTransport4Ray(
-            host: _profileContext.profile.requestHost,
-            path: _profileContext.profile.path,
-            mode: _profileContext.profile.headerType,
+            host: profileContext.profile.requestHost,
+            path: profileContext.profile.path,
+            mode: profileContext.profile.headerType,
             extra: XHttpExtra4Ray.fromJson(
-              Utils.fromJsonString(_profileContext.profile.xhttpExtra) ?? {},
+              Utils.fromJsonString(profileContext.profile.xhttpExtra) ?? {},
             ),
           ),
         );
@@ -238,9 +242,9 @@ extension XrayConfigOutboundService on XrayConfigService {
         streamSettings = streamSettings.copyWith(
           network: 'grpc',
           grpcSettings: GrpcTransport4Ray(
-            authority: _profileContext.profile.requestHost,
-            serviceName: _profileContext.profile.path,
-            multiMode: _profileContext.profile.headerType == 'multi',
+            authority: profileContext.profile.requestHost,
+            serviceName: profileContext.profile.path,
+            multiMode: profileContext.profile.headerType == 'multi',
           ),
         );
         break;
@@ -248,8 +252,8 @@ extension XrayConfigOutboundService on XrayConfigService {
         streamSettings = streamSettings.copyWith(
           network: 'ws',
           wsSettings: WebSocketTransport4Ray(
-            host: _profileContext.profile.requestHost,
-            path: _profileContext.profile.path,
+            host: profileContext.profile.requestHost,
+            path: profileContext.profile.path,
           ),
         );
         break;
@@ -257,8 +261,8 @@ extension XrayConfigOutboundService on XrayConfigService {
         streamSettings = streamSettings.copyWith(
           network: 'httpupgrade',
           httpupgradeSettings: HttpUpgradeTransport4Ray(
-            host: _profileContext.profile.requestHost,
-            path: _profileContext.profile.path,
+            host: profileContext.profile.requestHost,
+            path: profileContext.profile.path,
           ),
         );
         break;
@@ -267,10 +271,10 @@ extension XrayConfigOutboundService on XrayConfigService {
           network: 'kcp',
           kcpSettings: KcpTransport4Ray(
             header: KcpHeader4Ray(
-              type: _profileContext.profile.headerType,
-              domain: _profileContext.profile.requestHost,
+              type: profileContext.profile.headerType,
+              domain: profileContext.profile.requestHost,
             ),
-            seed: _profileContext.profile.path,
+            seed: profileContext.profile.path,
           ),
         );
         break;

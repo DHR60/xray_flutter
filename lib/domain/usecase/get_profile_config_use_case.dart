@@ -26,8 +26,8 @@ class GetProfileConfigUseCase {
         coreItem: _storeService.currentConfig.coreItem,
       );
       final xrayConfigService = XrayConfigService(profileContext);
-      final configString = xrayConfigService.genConfig();
-      return Success(configString);
+      final configStringResult = xrayConfigService.genConfig();
+      return configStringResult;
     } catch (e) {
       return Failure(UnexpectedError(e));
     }

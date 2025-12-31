@@ -82,10 +82,12 @@ class _ProfilePreviewViewState extends ConsumerState<ProfilePreviewView> {
                     '共享链接:',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
+                  const SizedBox(height: 8.0),
                   AspectRatio(
                     aspectRatio: 1,
                     child: PrettyQrView.data(data: _sharedUri),
                   ),
+                  const SizedBox(height: 8.0),
                   SelectableText(
                     _sharedUri,
                     style: Theme.of(context).textTheme.bodyMedium,

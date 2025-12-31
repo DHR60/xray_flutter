@@ -5,6 +5,8 @@ import 'package:xray_flutter/core/utils.dart';
 import 'package:xray_flutter/data/config/rule_item_dto.dart';
 import 'package:xray_flutter/data/dto/profile_extra_item_dto.dart';
 import 'package:xray_flutter/core/enum/config_type.dart';
+import 'package:xray_flutter/domain/core/domain_error.dart';
+import 'package:xray_flutter/domain/core/result.dart';
 import 'package:xray_flutter/domain/model/profile_context.dart';
 
 part 'xray_config_dns_service.dart';
@@ -14,12 +16,31 @@ part 'xray_config_routing_service.dart';
 part 'xray_config_misc_service.dart';
 
 class XrayConfigService {
-  final ProfileContext _profileContext;
-  XrayConfigService(this._profileContext);
+  final ProfileContext profileContext;
+  XrayConfigService(this.profileContext);
 
-  ProfileContext get profileContext => _profileContext;
+  // mapping profile dto indexId to outbound tags for lookup
+  // the purpose is to replace outbound with custom outbound, etc.
+  // in the future, we can replace, and keep chain proxy related settings
+  late final Map<String, String> indexIdToOutboundTag = {};
 
-  String genConfig() {
+  Result<String> genConfig() {
+    indexIdToOutboundTag.clear();
+    indexIdToOutboundTag[profileContext.profile.id] = GlobalConst.proxyTag;
+    if (profileContext.profile.customConfig.isNotEmpty) {
+      // check json format
+      final customConfigMap = Utils.fromJsonString(
+        profileContext.profile.customConfig,
+      );
+      if (customConfigMap == null) {
+        return Failure(UnexpectedError('自定义配置 JSON 格式错误'));
+      }
+      // simple check empty, here we just check inbounds key existence
+      if (!customConfigMap.containsKey('inbounds')) {
+        return Failure(UnexpectedError('自定义配置不正确'));
+      }
+      return Success(profileContext.profile.customConfig);
+    }
     final config = XrayConfig(
       log: _genLog(),
       dns: _genDns(),
@@ -29,6 +50,27 @@ class XrayConfigService {
       policy: _genPolicy(),
       stats: _genStats(),
     );
-    return Utils.toJsonString(config.toJson());
+    final configMap = config.toJson();
+    if (profileContext.profile.customOutbound.isNotEmpty) {
+      final customOutbound = Utils.fromJsonString(
+        profileContext.profile.customOutbound,
+      );
+      if (customOutbound == null) {
+        return Failure(UnexpectedError('自定义出站 JSON 格式错误'));
+      }
+      final outbounds = configMap['outbounds'];
+      if (outbounds is List && outbounds.isNotEmpty) {
+        outbounds.removeWhere((outbound) {
+          if (outbound is Map<String, dynamic>) {
+            final tag = outbound['tag'];
+            return tag == indexIdToOutboundTag[profileContext.profile.id];
+          }
+          return false;
+        });
+        customOutbound['tag'] = indexIdToOutboundTag[profileContext.profile.id];
+        outbounds.add(customOutbound);
+      }
+    }
+    return Success(Utils.toJsonString(configMap));
   }
 }

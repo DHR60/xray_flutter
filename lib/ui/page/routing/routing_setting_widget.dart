@@ -82,16 +82,16 @@ class _RoutingSettingWidgetState extends ConsumerState<RoutingSettingWidget> {
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: const Text('是否丢弃更改?'),
-              content: const Text('您有未保存的更改。您想要丢弃它们吗？'),
+              title: const Text('未保存的更改'),
+              content: const Text('你有未保存的更改，确定要放弃吗？'),
               actions: [
                 TextButton(
-                  onPressed: () => Navigator.pop(context, false),
+                  onPressed: () => Navigator.of(context).pop(false),
                   child: const Text('取消'),
                 ),
                 TextButton(
-                  onPressed: () => Navigator.pop(context, true),
-                  child: const Text('丢弃'),
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: const Text('放弃'),
                 ),
               ],
             );

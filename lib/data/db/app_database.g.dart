@@ -350,6 +350,30 @@ class $ProfileItemTable extends ProfileItem
     requiredDuringInsert: false,
     clientDefault: () => '',
   );
+  static const VerificationMeta _customConfigMeta = const VerificationMeta(
+    'customConfig',
+  );
+  @override
+  late final GeneratedColumn<String> customConfig = GeneratedColumn<String>(
+    'custom_config',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    clientDefault: () => '',
+  );
+  static const VerificationMeta _customOutboundMeta = const VerificationMeta(
+    'customOutbound',
+  );
+  @override
+  late final GeneratedColumn<String> customOutbound = GeneratedColumn<String>(
+    'custom_outbound',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    clientDefault: () => '',
+  );
   static const VerificationMeta _jsonDataMeta = const VerificationMeta(
     'jsonData',
   );
@@ -394,6 +418,8 @@ class $ProfileItemTable extends ProfileItem
     displayLog,
     xhttpExtra,
     cert,
+    customConfig,
+    customOutbound,
     jsonData,
   ];
   @override
@@ -596,6 +622,24 @@ class $ProfileItemTable extends ProfileItem
         cert.isAcceptableOrUnknown(data['cert']!, _certMeta),
       );
     }
+    if (data.containsKey('custom_config')) {
+      context.handle(
+        _customConfigMeta,
+        customConfig.isAcceptableOrUnknown(
+          data['custom_config']!,
+          _customConfigMeta,
+        ),
+      );
+    }
+    if (data.containsKey('custom_outbound')) {
+      context.handle(
+        _customOutboundMeta,
+        customOutbound.isAcceptableOrUnknown(
+          data['custom_outbound']!,
+          _customOutboundMeta,
+        ),
+      );
+    }
     if (data.containsKey('json_data')) {
       context.handle(
         _jsonDataMeta,
@@ -735,6 +779,14 @@ class $ProfileItemTable extends ProfileItem
         DriftSqlType.string,
         data['${effectivePrefix}cert'],
       )!,
+      customConfig: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}custom_config'],
+      )!,
+      customOutbound: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}custom_outbound'],
+      )!,
       jsonData: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}json_data'],
@@ -786,6 +838,8 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
   final bool displayLog;
   final String xhttpExtra;
   final String cert;
+  final String customConfig;
+  final String customOutbound;
   final String jsonData;
   const ProfileItemData({
     required this.indexId,
@@ -818,6 +872,8 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
     required this.displayLog,
     required this.xhttpExtra,
     required this.cert,
+    required this.customConfig,
+    required this.customOutbound,
     required this.jsonData,
   });
   @override
@@ -863,6 +919,8 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
     map['display_log'] = Variable<bool>(displayLog);
     map['xhttp_extra'] = Variable<String>(xhttpExtra);
     map['cert'] = Variable<String>(cert);
+    map['custom_config'] = Variable<String>(customConfig);
+    map['custom_outbound'] = Variable<String>(customOutbound);
     map['json_data'] = Variable<String>(jsonData);
     return map;
   }
@@ -903,6 +961,8 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
       displayLog: Value(displayLog),
       xhttpExtra: Value(xhttpExtra),
       cert: Value(cert),
+      customConfig: Value(customConfig),
+      customOutbound: Value(customOutbound),
       jsonData: Value(jsonData),
     );
   }
@@ -947,6 +1007,8 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
       displayLog: serializer.fromJson<bool>(json['displayLog']),
       xhttpExtra: serializer.fromJson<String>(json['xhttpExtra']),
       cert: serializer.fromJson<String>(json['cert']),
+      customConfig: serializer.fromJson<String>(json['customConfig']),
+      customOutbound: serializer.fromJson<String>(json['customOutbound']),
       jsonData: serializer.fromJson<String>(json['jsonData']),
     );
   }
@@ -988,6 +1050,8 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
       'displayLog': serializer.toJson<bool>(displayLog),
       'xhttpExtra': serializer.toJson<String>(xhttpExtra),
       'cert': serializer.toJson<String>(cert),
+      'customConfig': serializer.toJson<String>(customConfig),
+      'customOutbound': serializer.toJson<String>(customOutbound),
       'jsonData': serializer.toJson<String>(jsonData),
     };
   }
@@ -1023,6 +1087,8 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
     bool? displayLog,
     String? xhttpExtra,
     String? cert,
+    String? customConfig,
+    String? customOutbound,
     String? jsonData,
   }) => ProfileItemData(
     indexId: indexId ?? this.indexId,
@@ -1057,6 +1123,8 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
     displayLog: displayLog ?? this.displayLog,
     xhttpExtra: xhttpExtra ?? this.xhttpExtra,
     cert: cert ?? this.cert,
+    customConfig: customConfig ?? this.customConfig,
+    customOutbound: customOutbound ?? this.customOutbound,
     jsonData: jsonData ?? this.jsonData,
   );
   ProfileItemData copyWithCompanion(ProfileItemCompanion data) {
@@ -1115,6 +1183,12 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
           ? data.xhttpExtra.value
           : this.xhttpExtra,
       cert: data.cert.present ? data.cert.value : this.cert,
+      customConfig: data.customConfig.present
+          ? data.customConfig.value
+          : this.customConfig,
+      customOutbound: data.customOutbound.present
+          ? data.customOutbound.value
+          : this.customOutbound,
       jsonData: data.jsonData.present ? data.jsonData.value : this.jsonData,
     );
   }
@@ -1152,6 +1226,8 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
           ..write('displayLog: $displayLog, ')
           ..write('xhttpExtra: $xhttpExtra, ')
           ..write('cert: $cert, ')
+          ..write('customConfig: $customConfig, ')
+          ..write('customOutbound: $customOutbound, ')
           ..write('jsonData: $jsonData')
           ..write(')'))
         .toString();
@@ -1189,6 +1265,8 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
     displayLog,
     xhttpExtra,
     cert,
+    customConfig,
+    customOutbound,
     jsonData,
   ]);
   @override
@@ -1225,6 +1303,8 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
           other.displayLog == this.displayLog &&
           other.xhttpExtra == this.xhttpExtra &&
           other.cert == this.cert &&
+          other.customConfig == this.customConfig &&
+          other.customOutbound == this.customOutbound &&
           other.jsonData == this.jsonData);
 }
 
@@ -1259,6 +1339,8 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
   final Value<bool> displayLog;
   final Value<String> xhttpExtra;
   final Value<String> cert;
+  final Value<String> customConfig;
+  final Value<String> customOutbound;
   final Value<String> jsonData;
   final Value<int> rowid;
   const ProfileItemCompanion({
@@ -1292,6 +1374,8 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
     this.displayLog = const Value.absent(),
     this.xhttpExtra = const Value.absent(),
     this.cert = const Value.absent(),
+    this.customConfig = const Value.absent(),
+    this.customOutbound = const Value.absent(),
     this.jsonData = const Value.absent(),
     this.rowid = const Value.absent(),
   });
@@ -1326,6 +1410,8 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
     this.displayLog = const Value.absent(),
     this.xhttpExtra = const Value.absent(),
     this.cert = const Value.absent(),
+    this.customConfig = const Value.absent(),
+    this.customOutbound = const Value.absent(),
     this.jsonData = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : indexId = Value(indexId);
@@ -1360,6 +1446,8 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
     Expression<bool>? displayLog,
     Expression<String>? xhttpExtra,
     Expression<String>? cert,
+    Expression<String>? customConfig,
+    Expression<String>? customOutbound,
     Expression<String>? jsonData,
     Expression<int>? rowid,
   }) {
@@ -1394,6 +1482,8 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
       if (displayLog != null) 'display_log': displayLog,
       if (xhttpExtra != null) 'xhttp_extra': xhttpExtra,
       if (cert != null) 'cert': cert,
+      if (customConfig != null) 'custom_config': customConfig,
+      if (customOutbound != null) 'custom_outbound': customOutbound,
       if (jsonData != null) 'json_data': jsonData,
       if (rowid != null) 'rowid': rowid,
     });
@@ -1430,6 +1520,8 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
     Value<bool>? displayLog,
     Value<String>? xhttpExtra,
     Value<String>? cert,
+    Value<String>? customConfig,
+    Value<String>? customOutbound,
     Value<String>? jsonData,
     Value<int>? rowid,
   }) {
@@ -1464,6 +1556,8 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
       displayLog: displayLog ?? this.displayLog,
       xhttpExtra: xhttpExtra ?? this.xhttpExtra,
       cert: cert ?? this.cert,
+      customConfig: customConfig ?? this.customConfig,
+      customOutbound: customOutbound ?? this.customOutbound,
       jsonData: jsonData ?? this.jsonData,
       rowid: rowid ?? this.rowid,
     );
@@ -1566,6 +1660,12 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
     if (cert.present) {
       map['cert'] = Variable<String>(cert.value);
     }
+    if (customConfig.present) {
+      map['custom_config'] = Variable<String>(customConfig.value);
+    }
+    if (customOutbound.present) {
+      map['custom_outbound'] = Variable<String>(customOutbound.value);
+    }
     if (jsonData.present) {
       map['json_data'] = Variable<String>(jsonData.value);
     }
@@ -1608,6 +1708,8 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
           ..write('displayLog: $displayLog, ')
           ..write('xhttpExtra: $xhttpExtra, ')
           ..write('cert: $cert, ')
+          ..write('customConfig: $customConfig, ')
+          ..write('customOutbound: $customOutbound, ')
           ..write('jsonData: $jsonData, ')
           ..write('rowid: $rowid')
           ..write(')'))
@@ -2437,6 +2539,8 @@ typedef $$ProfileItemTableCreateCompanionBuilder =
       Value<bool> displayLog,
       Value<String> xhttpExtra,
       Value<String> cert,
+      Value<String> customConfig,
+      Value<String> customOutbound,
       Value<String> jsonData,
       Value<int> rowid,
     });
@@ -2472,6 +2576,8 @@ typedef $$ProfileItemTableUpdateCompanionBuilder =
       Value<bool> displayLog,
       Value<String> xhttpExtra,
       Value<String> cert,
+      Value<String> customConfig,
+      Value<String> customOutbound,
       Value<String> jsonData,
       Value<int> rowid,
     });
@@ -2634,6 +2740,16 @@ class $$ProfileItemTableFilterComposer
 
   ColumnFilters<String> get cert => $composableBuilder(
     column: $table.cert,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get customConfig => $composableBuilder(
+    column: $table.customConfig,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get customOutbound => $composableBuilder(
+    column: $table.customOutbound,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -2802,6 +2918,16 @@ class $$ProfileItemTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get customConfig => $composableBuilder(
+    column: $table.customConfig,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get customOutbound => $composableBuilder(
+    column: $table.customOutbound,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get jsonData => $composableBuilder(
     column: $table.jsonData,
     builder: (column) => ColumnOrderings(column),
@@ -2932,6 +3058,16 @@ class $$ProfileItemTableAnnotationComposer
   GeneratedColumn<String> get cert =>
       $composableBuilder(column: $table.cert, builder: (column) => column);
 
+  GeneratedColumn<String> get customConfig => $composableBuilder(
+    column: $table.customConfig,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get customOutbound => $composableBuilder(
+    column: $table.customOutbound,
+    builder: (column) => column,
+  );
+
   GeneratedColumn<String> get jsonData =>
       $composableBuilder(column: $table.jsonData, builder: (column) => column);
 }
@@ -2997,6 +3133,8 @@ class $$ProfileItemTableTableManager
                 Value<bool> displayLog = const Value.absent(),
                 Value<String> xhttpExtra = const Value.absent(),
                 Value<String> cert = const Value.absent(),
+                Value<String> customConfig = const Value.absent(),
+                Value<String> customOutbound = const Value.absent(),
                 Value<String> jsonData = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ProfileItemCompanion(
@@ -3030,6 +3168,8 @@ class $$ProfileItemTableTableManager
                 displayLog: displayLog,
                 xhttpExtra: xhttpExtra,
                 cert: cert,
+                customConfig: customConfig,
+                customOutbound: customOutbound,
                 jsonData: jsonData,
                 rowid: rowid,
               ),
@@ -3065,6 +3205,8 @@ class $$ProfileItemTableTableManager
                 Value<bool> displayLog = const Value.absent(),
                 Value<String> xhttpExtra = const Value.absent(),
                 Value<String> cert = const Value.absent(),
+                Value<String> customConfig = const Value.absent(),
+                Value<String> customOutbound = const Value.absent(),
                 Value<String> jsonData = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ProfileItemCompanion.insert(
@@ -3098,6 +3240,8 @@ class $$ProfileItemTableTableManager
                 displayLog: displayLog,
                 xhttpExtra: xhttpExtra,
                 cert: cert,
+                customConfig: customConfig,
+                customOutbound: customOutbound,
                 jsonData: jsonData,
                 rowid: rowid,
               ),

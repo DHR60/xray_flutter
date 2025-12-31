@@ -54,6 +54,9 @@ class _MyHomePageStateState extends ConsumerState<MyHomePageState> {
       if (!mounted) return;
       ScaffoldMessenger.of(
         context,
+      ).hideCurrentSnackBar();
+      ScaffoldMessenger.of(
+        context,
       ).showSnackBar(SnackBar(content: Text(message)));
     });
   }
