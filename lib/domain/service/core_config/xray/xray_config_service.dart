@@ -60,15 +60,23 @@ class XrayConfigService {
       }
       final outbounds = configMap['outbounds'];
       if (outbounds is List && outbounds.isNotEmpty) {
-        outbounds.removeWhere((outbound) {
-          if (outbound is Map<String, dynamic>) {
-            final tag = outbound['tag'];
-            return tag == indexIdToOutboundTag[profileContext.profile.id];
+        final tagToReplace = indexIdToOutboundTag[profileContext.profile.id];
+        // ensure custom outbound carries the tag
+        customOutbound['tag'] = tagToReplace;
+
+        var replaced = false;
+        for (var i = 0; i < outbounds.length; i++) {
+          final outbound = outbounds[i];
+          if (outbound is Map<String, dynamic> &&
+              outbound['tag'] == tagToReplace) {
+            outbounds[i] = customOutbound;
+            replaced = true;
+            break;
           }
-          return false;
-        });
-        customOutbound['tag'] = indexIdToOutboundTag[profileContext.profile.id];
-        outbounds.add(customOutbound);
+        }
+        if (!replaced) {
+          outbounds.add(customOutbound);
+        }
       }
     }
     return Success(Utils.toJsonString(configMap));

@@ -233,9 +233,37 @@ class _JsonEditWidgetState extends ConsumerState<JsonEditWidget> {
                                     ),
                                     TextButton.icon(
                                       onPressed: () {
-                                        _jsonController.formatJson(
-                                          sortJson: false,
-                                        );
+                                        final txt = _jsonController.text;
+                                        final sel = _jsonController.selection;
+
+                                        if (!sel.isValid) {
+                                          _jsonController.selection =
+                                              TextSelection.collapsed(
+                                                offset: txt.length,
+                                              );
+                                        } else {
+                                          int start = sel.start;
+                                          int end = sel.end;
+                                          if (start < 0) start = 0;
+                                          if (end < 0) end = 0;
+                                          if (start > txt.length) {
+                                            start = txt.length;
+                                          }
+                                          if (end > txt.length) {
+                                            end = txt.length;
+                                          }
+                                          _jsonController.selection =
+                                              TextSelection(
+                                                baseOffset: start,
+                                                extentOffset: end,
+                                              );
+                                        }
+
+                                        try {
+                                          _jsonController.formatJson(
+                                            sortJson: false,
+                                          );
+                                        } catch (_) {}
                                       },
                                       icon: const Icon(Icons.code),
                                       label: const Text('格式化'),

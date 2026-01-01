@@ -103,6 +103,19 @@ class GlobalConst {
     "Proxy Chain": EConfigType.proxyChain,
   };
 
+  static const Map<EConfigType, String> configTypeNameMap = {
+    EConfigType.vless: "VLESS",
+    EConfigType.vmess: "VMess",
+    EConfigType.shadowsocks: "Shadowsocks",
+    EConfigType.trojan: "Trojan",
+    EConfigType.wireguard: "WireGuard",
+    EConfigType.socks: "SOCKS",
+    EConfigType.http: "HTTP",
+    EConfigType.custom: "Custom",
+    EConfigType.policyGroup: "Policy Group",
+    EConfigType.proxyChain: "Proxy Chain",
+  };
+
   static const String vlessVisionFlow = "xtls-rprx-vision";
   static const String vlessVisionAllowQuicFlow = "xtls-rprx-vision-udp443";
   static const List<String> vlessFlowList = [

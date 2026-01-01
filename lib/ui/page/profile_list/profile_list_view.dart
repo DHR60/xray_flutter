@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
+import 'package:xray_flutter/core/global_const.dart';
 import 'package:xray_flutter/data/db/app_database.dart';
 import 'package:xray_flutter/di/provider.dart';
 import 'package:xray_flutter/di/profile_filter_provider.dart';
@@ -55,7 +56,10 @@ class ProfileListView extends ConsumerWidget {
                         : null,
                   ),
                 ),
-                subtitle: Text(profile.configType.name),
+                subtitle: Text(
+                  GlobalConst.configTypeNameMap[profile.configType] ??
+                      '未知类型 (${profile.configType.name})',
+                ),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
