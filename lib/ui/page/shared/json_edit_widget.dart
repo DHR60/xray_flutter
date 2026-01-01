@@ -23,16 +23,33 @@ class _JsonEditWidgetState extends ConsumerState<JsonEditWidget> {
   late final ScrollController _toolbarScrollController;
   bool _canScrollLeft = false;
   bool _canScrollRight = false;
+  bool _allowPop = false;
+  bool _setStateScheduled = false;
 
   @override
   void initState() {
     super.initState();
     _jsonController = JsonTextFieldController()..text = widget.initialJson;
+    _jsonController.addListener(_onJsonChanged);
     _undoHistoryController = UndoHistoryController();
     _toolbarScrollController = ScrollController();
     _toolbarScrollController.addListener(_updateScrollIndicators);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _updateScrollIndicators();
+    });
+  }
+
+  void _onJsonChanged() {
+    _requestRebuild();
+  }
+
+  void _requestRebuild() {
+    if (!mounted) return;
+    if (_setStateScheduled) return;
+    _setStateScheduled = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _setStateScheduled = false;
+      if (mounted) setState(() {});
     });
   }
 
@@ -48,6 +65,7 @@ class _JsonEditWidgetState extends ConsumerState<JsonEditWidget> {
   @override
   void dispose() {
     _toolbarScrollController.dispose();
+    _jsonController.removeListener(_onJsonChanged);
     _jsonController.dispose();
     super.dispose();
   }
@@ -134,12 +152,19 @@ class _JsonEditWidgetState extends ConsumerState<JsonEditWidget> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: false,
+      canPop: _allowPop || !_hasUnsavedChanges,
       onPopInvokedWithResult: (didPop, result) async {
         if (didPop) return;
         final shouldPop = await _onWillPop();
         if (shouldPop && context.mounted) {
-          Navigator.of(context).pop();
+          setState(() {
+            _allowPop = true;
+          });
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (context.mounted) {
+              Navigator.of(context).pop();
+            }
+          });
         }
       },
       child: Scaffold(

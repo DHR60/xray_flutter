@@ -7,6 +7,7 @@ enum EConfigType {
   wireguard,
   socks,
   http,
+  custom,
   policyGroup,
   proxyChain,
 }

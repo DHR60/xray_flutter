@@ -1,5 +1,5 @@
 import 'package:xray_flutter/core/utils.dart';
-import 'package:xray_flutter/data/config/core_item_dto.dart';
+import 'package:xray_flutter/data/config/core/core_item_dto.dart';
 import 'package:xray_flutter/data/config/routing_item_dto.dart';
 import 'package:xray_flutter/data/db/app_database.dart';
 import 'package:xray_flutter/domain/core/domain_error.dart';

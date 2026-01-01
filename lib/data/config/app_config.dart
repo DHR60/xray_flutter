@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:xray_flutter/data/config/core_item_dto.dart';
+import 'package:xray_flutter/data/config/core/core_item_dto.dart';
 import 'package:xray_flutter/data/config/routing_item_dto.dart';
 import 'package:xray_flutter/data/config/state_item_dto.dart';
 import 'package:xray_flutter/data/config/sub_item_dto.dart';

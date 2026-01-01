@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:xray_flutter/data/config/core_item_dto.dart';
+import 'package:xray_flutter/data/config/core/core_item_dto.dart';
 import 'package:xray_flutter/di/app_config_provider.dart';
 
 part 'setting_notifier.g.dart';
