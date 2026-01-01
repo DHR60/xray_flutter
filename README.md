@@ -2,6 +2,8 @@
 
 Xray 界面客户端，基于 Flutter 开发。
 
+[roadmap](roadmap.md)
+
 ## 参考与感谢
 
 - [Xray-core](https://github.com/XTLS/Xray-core)
