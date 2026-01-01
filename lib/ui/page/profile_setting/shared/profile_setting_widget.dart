@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:xray_flutter/core/enum/config_type.dart';
 import 'package:xray_flutter/data/db/app_database.dart';
 import 'package:xray_flutter/ui/page/profile_setting/profile_setting_result.dart';
 import 'package:xray_flutter/ui/page/profile_setting/shared/profile_preview_view.dart';
@@ -74,7 +75,12 @@ class _ProfileSettingWidgetState extends ConsumerState<ProfileSettingWidget> {
   }
 
   ProfileItemData get _currentProfile {
-    return (widget.controller.saveAndGetProfile() ?? widget.profile).copyWith(
+    final ProfileItemData profileFromForm =
+        widget.controller.saveAndGetProfile() ?? widget.profile;
+    if (profileFromForm.configType == EConfigType.custom) {
+      return profileFromForm;
+    }
+    return profileFromForm.copyWith(
       customOutbound: _customOutboundJson,
       customConfig: _customConfigJson,
     );
@@ -144,30 +150,35 @@ class _ProfileSettingWidgetState extends ConsumerState<ProfileSettingWidget> {
                 }
               }
             },
-            itemBuilder: (context) => const [
-              PopupMenuItem<String>(value: 'preview', child: Text('预览当前配置效果')),
-              PopupMenuDivider(),
-              PopupMenuItem(
-                enabled: false,
-                height: 40,
-                child: Center(
-                  child: Text(
-                    '自定义配置',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey,
+            itemBuilder: (context) => [
+              const PopupMenuItem<String>(
+                value: 'preview',
+                child: Text('预览当前配置效果'),
+              ),
+              if (widget.profile.configType != EConfigType.custom) ...[
+                const PopupMenuDivider(),
+                const PopupMenuItem(
+                  enabled: false,
+                  height: 40,
+                  child: Center(
+                    child: Text(
+                      '自定义配置',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              PopupMenuItem<String>(
-                value: 'custom_outbound',
-                child: Text('自定义出站'),
-              ),
-              PopupMenuItem<String>(
-                value: 'custom_config',
-                child: Text('自定义完整配置'),
-              ),
+                const PopupMenuItem<String>(
+                  value: 'custom_outbound',
+                  child: Text('自定义出站'),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'custom_config',
+                  child: Text('自定义完整配置'),
+                ),
+              ],
             ],
           ),
         ],

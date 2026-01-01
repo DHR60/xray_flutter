@@ -29,9 +29,7 @@ extension XrayConfigOutboundService on XrayConfigService {
       case EConfigType.http:
         return _genHttpOutbound();
       default:
-        throw UnimplementedError(
-          'Outbound generation for protocol ${profileContext.profile.configType} is not implemented.',
-        );
+        return Outbound4Ray();
     }
   }
 

@@ -24,10 +24,7 @@ class GlobalConst {
     "kcp": ETransport.kcp,
   };
 
-  static const List<String> rawTypes = [
-    "none",
-    "http",
-  ];
+  static const List<String> rawTypes = ["none", "http"];
 
   static const List<String> xhttpTypes = [
     "auto",
@@ -36,14 +33,9 @@ class GlobalConst {
     "stream-one",
   ];
 
-  static const List<String> grpcTypes = [
-    "gun",
-    "mutli",
-  ];
+  static const List<String> grpcTypes = ["gun", "mutli"];
 
-  static const List<String> noneTypes = [
-    "none",
-  ];
+  static const List<String> noneTypes = ["none"];
 
   static const List<String> kcpTypes = [
     "none",
@@ -82,11 +74,7 @@ class GlobalConst {
     "h3,h2,http/1.1",
   ];
 
-  static const List<String> allowInsecureList = [
-    "",
-    "false",
-    "true",
-  ];
+  static const List<String> allowInsecureList = ["", "false", "true"];
 
   static const List<String> utlsFingerprintList = [
     "",
@@ -101,7 +89,7 @@ class GlobalConst {
     "random",
     "randomized",
   ];
-  
+
   static const Map<String, EConfigType> configTypeMap = {
     "VLESS": EConfigType.vless,
     "VMess": EConfigType.vmess,
@@ -110,6 +98,9 @@ class GlobalConst {
     "WireGuard": EConfigType.wireguard,
     "SOCKS": EConfigType.socks,
     "HTTP": EConfigType.http,
+    "Custom": EConfigType.custom,
+    "Policy Group": EConfigType.policyGroup,
+    "Proxy Chain": EConfigType.proxyChain,
   };
 
   static const String vlessVisionFlow = "xtls-rprx-vision";

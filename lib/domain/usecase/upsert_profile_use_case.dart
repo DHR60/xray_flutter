@@ -9,13 +9,6 @@ class UpsertProfileUseCase {
   UpsertProfileUseCase(this._store);
 
   Future<Result<void>> call(ProfileItemData profile) async {
-    if (profile.address.isEmpty) {
-      return Failure(ValidationError('地址不能为空'));
-    }
-    if (profile.port <= 0 || profile.port > 65535) {
-      return Failure(ValidationError('端口号无效'));
-    }
-
     try {
       await _store.upsertProfile(profile);
     } catch (e) {
