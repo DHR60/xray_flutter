@@ -1,3 +1,8 @@
+## 0.0.4
+
+- feat: add core settings.
+- fix: some bugs.
+
 ## 0.0.3
 
 - feat: the basic functions are completed.
