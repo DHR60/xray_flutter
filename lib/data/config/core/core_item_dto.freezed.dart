@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CoreItemDto {
 
- String get inboundPort;
+ InboundItemDto get inbound;
 /// Create a copy of CoreItemDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $CoreItemDtoCopyWith<CoreItemDto> get copyWith => _$CoreItemDtoCopyWithImpl<Core
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CoreItemDto&&(identical(other.inboundPort, inboundPort) || other.inboundPort == inboundPort));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CoreItemDto&&(identical(other.inbound, inbound) || other.inbound == inbound));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,inboundPort);
+int get hashCode => Object.hash(runtimeType,inbound);
 
 @override
 String toString() {
-  return 'CoreItemDto(inboundPort: $inboundPort)';
+  return 'CoreItemDto(inbound: $inbound)';
 }
 
 
@@ -48,11 +48,11 @@ abstract mixin class $CoreItemDtoCopyWith<$Res>  {
   factory $CoreItemDtoCopyWith(CoreItemDto value, $Res Function(CoreItemDto) _then) = _$CoreItemDtoCopyWithImpl;
 @useResult
 $Res call({
- String inboundPort
+ InboundItemDto inbound
 });
 
 
-
+$InboundItemDtoCopyWith<$Res> get inbound;
 
 }
 /// @nodoc
@@ -65,13 +65,22 @@ class _$CoreItemDtoCopyWithImpl<$Res>
 
 /// Create a copy of CoreItemDto
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? inboundPort = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? inbound = null,}) {
   return _then(_self.copyWith(
-inboundPort: null == inboundPort ? _self.inboundPort : inboundPort // ignore: cast_nullable_to_non_nullable
-as String,
+inbound: null == inbound ? _self.inbound : inbound // ignore: cast_nullable_to_non_nullable
+as InboundItemDto,
   ));
 }
-
+/// Create a copy of CoreItemDto
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$InboundItemDtoCopyWith<$Res> get inbound {
+  
+  return $InboundItemDtoCopyWith<$Res>(_self.inbound, (value) {
+    return _then(_self.copyWith(inbound: value));
+  });
+}
 }
 
 
@@ -153,10 +162,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String inboundPort)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( InboundItemDto inbound)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CoreItemDto() when $default != null:
-return $default(_that.inboundPort);case _:
+return $default(_that.inbound);case _:
   return orElse();
 
 }
@@ -174,10 +183,10 @@ return $default(_that.inboundPort);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String inboundPort)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( InboundItemDto inbound)  $default,) {final _that = this;
 switch (_that) {
 case _CoreItemDto():
-return $default(_that.inboundPort);case _:
+return $default(_that.inbound);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -194,10 +203,10 @@ return $default(_that.inboundPort);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String inboundPort)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( InboundItemDto inbound)?  $default,) {final _that = this;
 switch (_that) {
 case _CoreItemDto() when $default != null:
-return $default(_that.inboundPort);case _:
+return $default(_that.inbound);case _:
   return null;
 
 }
@@ -209,10 +218,10 @@ return $default(_that.inboundPort);case _:
 @JsonSerializable()
 
 class _CoreItemDto implements CoreItemDto {
-  const _CoreItemDto({this.inboundPort = '10808'});
+  const _CoreItemDto({this.inbound = const InboundItemDto()});
   factory _CoreItemDto.fromJson(Map<String, dynamic> json) => _$CoreItemDtoFromJson(json);
 
-@override@JsonKey() final  String inboundPort;
+@override@JsonKey() final  InboundItemDto inbound;
 
 /// Create a copy of CoreItemDto
 /// with the given fields replaced by the non-null parameter values.
@@ -227,16 +236,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CoreItemDto&&(identical(other.inboundPort, inboundPort) || other.inboundPort == inboundPort));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CoreItemDto&&(identical(other.inbound, inbound) || other.inbound == inbound));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,inboundPort);
+int get hashCode => Object.hash(runtimeType,inbound);
 
 @override
 String toString() {
-  return 'CoreItemDto(inboundPort: $inboundPort)';
+  return 'CoreItemDto(inbound: $inbound)';
 }
 
 
@@ -247,11 +256,11 @@ abstract mixin class _$CoreItemDtoCopyWith<$Res> implements $CoreItemDtoCopyWith
   factory _$CoreItemDtoCopyWith(_CoreItemDto value, $Res Function(_CoreItemDto) _then) = __$CoreItemDtoCopyWithImpl;
 @override @useResult
 $Res call({
- String inboundPort
+ InboundItemDto inbound
 });
 
 
-
+@override $InboundItemDtoCopyWith<$Res> get inbound;
 
 }
 /// @nodoc
@@ -264,14 +273,23 @@ class __$CoreItemDtoCopyWithImpl<$Res>
 
 /// Create a copy of CoreItemDto
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? inboundPort = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? inbound = null,}) {
   return _then(_CoreItemDto(
-inboundPort: null == inboundPort ? _self.inboundPort : inboundPort // ignore: cast_nullable_to_non_nullable
-as String,
+inbound: null == inbound ? _self.inbound : inbound // ignore: cast_nullable_to_non_nullable
+as InboundItemDto,
   ));
 }
 
-
+/// Create a copy of CoreItemDto
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$InboundItemDtoCopyWith<$Res> get inbound {
+  
+  return $InboundItemDtoCopyWith<$Res>(_self.inbound, (value) {
+    return _then(_self.copyWith(inbound: value));
+  });
+}
 }
 
 // dart format on

@@ -6,15 +6,28 @@ extension XrayConfigInboundService on XrayConfigService {
     // This is a placeholder implementation
     return [
       Inbound4Ray(
-        listen: GlobalConst.loopbackAddress,
-        port: MultiValueMixed.single(int.parse(profileContext.coreItem?.inboundPort ?? '${GlobalConst.defaultPort}')),
+        listen: profileContext.coreItem?.inbound.publicListen == true
+            ? GlobalConst.publicAddress
+            : GlobalConst.loopbackAddress,
+        port: MultiValueMixed.single(
+          int.parse(
+            profileContext.coreItem?.inbound.port ??
+                '${GlobalConst.defaultPort}',
+          ),
+        ),
         protocol: 'socks',
         settings: InboundSettings4Ray.socks(
           settings: SocksInboundSettings4Ray(
             auth: 'noauth',
             udp: true,
-            userLevel: 8
+            userLevel: 8,
           ),
+        ),
+        sniffing: Sniff4Ray(
+          enabled: profileContext.coreItem?.inbound.sniff ?? true,
+          routeOnly:
+              !(profileContext.coreItem?.inbound.overrideTarget ?? false),
+          destOverride: ['http', 'tls'],
         ),
       ),
     ];

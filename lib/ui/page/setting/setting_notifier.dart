@@ -16,6 +16,10 @@ class SettingNotifier extends _$SettingNotifier {
   }
 
   Future updateCoreItem(CoreItemDto newCoreItem) async {
+    final currentCoreItem = ref.read(appConfigProvider);
+    if (currentCoreItem.coreItem == newCoreItem) {
+      return;
+    }
     final appConfigNotifier = ref.read(appConfigProvider.notifier);
     await appConfigNotifier.update(
       appConfigNotifier.state.copyWith(coreItem: newCoreItem),

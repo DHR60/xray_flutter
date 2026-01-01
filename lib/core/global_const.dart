@@ -6,6 +6,7 @@ class GlobalConst {
   static const String customAppFontFamily = "MI_Sans_Regular";
 
   static const String loopbackAddress = "127.0.0.1";
+  static const String publicAddress = "0.0.0.0";
   static const int defaultPort = 10808;
   static const String proxyTag = "proxy";
   static const String directTag = "direct";

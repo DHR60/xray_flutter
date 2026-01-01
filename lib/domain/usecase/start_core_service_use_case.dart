@@ -33,7 +33,7 @@ class StartCoreServiceUseCase {
       final configString = (configStringResult as Success<String>).data;
 
       final socksPort =
-          int.tryParse(_storeService.currentConfig.coreItem.inboundPort) ??
+          int.tryParse(_storeService.currentConfig.coreItem.inbound.port) ??
           10808;
 
       await _coreManager.start(configString, socksPort);
