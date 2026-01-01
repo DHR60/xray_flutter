@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CoreItemDto {
 
- InboundItemDto get inbound;
+ InboundItemDto get inbound; DnsItemDto get dns;
 /// Create a copy of CoreItemDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $CoreItemDtoCopyWith<CoreItemDto> get copyWith => _$CoreItemDtoCopyWithImpl<Core
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CoreItemDto&&(identical(other.inbound, inbound) || other.inbound == inbound));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CoreItemDto&&(identical(other.inbound, inbound) || other.inbound == inbound)&&(identical(other.dns, dns) || other.dns == dns));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,inbound);
+int get hashCode => Object.hash(runtimeType,inbound,dns);
 
 @override
 String toString() {
-  return 'CoreItemDto(inbound: $inbound)';
+  return 'CoreItemDto(inbound: $inbound, dns: $dns)';
 }
 
 
@@ -48,11 +48,11 @@ abstract mixin class $CoreItemDtoCopyWith<$Res>  {
   factory $CoreItemDtoCopyWith(CoreItemDto value, $Res Function(CoreItemDto) _then) = _$CoreItemDtoCopyWithImpl;
 @useResult
 $Res call({
- InboundItemDto inbound
+ InboundItemDto inbound, DnsItemDto dns
 });
 
 
-$InboundItemDtoCopyWith<$Res> get inbound;
+$InboundItemDtoCopyWith<$Res> get inbound;$DnsItemDtoCopyWith<$Res> get dns;
 
 }
 /// @nodoc
@@ -65,10 +65,11 @@ class _$CoreItemDtoCopyWithImpl<$Res>
 
 /// Create a copy of CoreItemDto
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? inbound = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? inbound = null,Object? dns = null,}) {
   return _then(_self.copyWith(
 inbound: null == inbound ? _self.inbound : inbound // ignore: cast_nullable_to_non_nullable
-as InboundItemDto,
+as InboundItemDto,dns: null == dns ? _self.dns : dns // ignore: cast_nullable_to_non_nullable
+as DnsItemDto,
   ));
 }
 /// Create a copy of CoreItemDto
@@ -79,6 +80,15 @@ $InboundItemDtoCopyWith<$Res> get inbound {
   
   return $InboundItemDtoCopyWith<$Res>(_self.inbound, (value) {
     return _then(_self.copyWith(inbound: value));
+  });
+}/// Create a copy of CoreItemDto
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$DnsItemDtoCopyWith<$Res> get dns {
+  
+  return $DnsItemDtoCopyWith<$Res>(_self.dns, (value) {
+    return _then(_self.copyWith(dns: value));
   });
 }
 }
@@ -162,10 +172,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( InboundItemDto inbound)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( InboundItemDto inbound,  DnsItemDto dns)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CoreItemDto() when $default != null:
-return $default(_that.inbound);case _:
+return $default(_that.inbound,_that.dns);case _:
   return orElse();
 
 }
@@ -183,10 +193,10 @@ return $default(_that.inbound);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( InboundItemDto inbound)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( InboundItemDto inbound,  DnsItemDto dns)  $default,) {final _that = this;
 switch (_that) {
 case _CoreItemDto():
-return $default(_that.inbound);case _:
+return $default(_that.inbound,_that.dns);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -203,10 +213,10 @@ return $default(_that.inbound);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( InboundItemDto inbound)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( InboundItemDto inbound,  DnsItemDto dns)?  $default,) {final _that = this;
 switch (_that) {
 case _CoreItemDto() when $default != null:
-return $default(_that.inbound);case _:
+return $default(_that.inbound,_that.dns);case _:
   return null;
 
 }
@@ -218,10 +228,11 @@ return $default(_that.inbound);case _:
 @JsonSerializable()
 
 class _CoreItemDto implements CoreItemDto {
-  const _CoreItemDto({this.inbound = const InboundItemDto()});
+  const _CoreItemDto({this.inbound = const InboundItemDto(), this.dns = const DnsItemDto()});
   factory _CoreItemDto.fromJson(Map<String, dynamic> json) => _$CoreItemDtoFromJson(json);
 
 @override@JsonKey() final  InboundItemDto inbound;
+@override@JsonKey() final  DnsItemDto dns;
 
 /// Create a copy of CoreItemDto
 /// with the given fields replaced by the non-null parameter values.
@@ -236,16 +247,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CoreItemDto&&(identical(other.inbound, inbound) || other.inbound == inbound));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CoreItemDto&&(identical(other.inbound, inbound) || other.inbound == inbound)&&(identical(other.dns, dns) || other.dns == dns));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,inbound);
+int get hashCode => Object.hash(runtimeType,inbound,dns);
 
 @override
 String toString() {
-  return 'CoreItemDto(inbound: $inbound)';
+  return 'CoreItemDto(inbound: $inbound, dns: $dns)';
 }
 
 
@@ -256,11 +267,11 @@ abstract mixin class _$CoreItemDtoCopyWith<$Res> implements $CoreItemDtoCopyWith
   factory _$CoreItemDtoCopyWith(_CoreItemDto value, $Res Function(_CoreItemDto) _then) = __$CoreItemDtoCopyWithImpl;
 @override @useResult
 $Res call({
- InboundItemDto inbound
+ InboundItemDto inbound, DnsItemDto dns
 });
 
 
-@override $InboundItemDtoCopyWith<$Res> get inbound;
+@override $InboundItemDtoCopyWith<$Res> get inbound;@override $DnsItemDtoCopyWith<$Res> get dns;
 
 }
 /// @nodoc
@@ -273,10 +284,11 @@ class __$CoreItemDtoCopyWithImpl<$Res>
 
 /// Create a copy of CoreItemDto
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? inbound = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? inbound = null,Object? dns = null,}) {
   return _then(_CoreItemDto(
 inbound: null == inbound ? _self.inbound : inbound // ignore: cast_nullable_to_non_nullable
-as InboundItemDto,
+as InboundItemDto,dns: null == dns ? _self.dns : dns // ignore: cast_nullable_to_non_nullable
+as DnsItemDto,
   ));
 }
 
@@ -288,6 +300,15 @@ $InboundItemDtoCopyWith<$Res> get inbound {
   
   return $InboundItemDtoCopyWith<$Res>(_self.inbound, (value) {
     return _then(_self.copyWith(inbound: value));
+  });
+}/// Create a copy of CoreItemDto
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$DnsItemDtoCopyWith<$Res> get dns {
+  
+  return $DnsItemDtoCopyWith<$Res>(_self.dns, (value) {
+    return _then(_self.copyWith(dns: value));
   });
 }
 }

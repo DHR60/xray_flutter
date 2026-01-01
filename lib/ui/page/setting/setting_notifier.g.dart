@@ -41,7 +41,7 @@ final class SettingNotifierProvider
   }
 }
 
-String _$settingNotifierHash() => r'3d29e2235971a9b10d89be43de23b892b3edecc7';
+String _$settingNotifierHash() => r'a24027c6e564e3e65e9acdb6eec61f516b7c64ab';
 
 abstract class _$SettingNotifier extends $Notifier<CoreItemDto> {
   CoreItemDto build();

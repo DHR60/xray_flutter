@@ -44,6 +44,7 @@ class XrayConfigService {
     final config = XrayConfig(
       log: _genLog(),
       dns: _genDns(),
+      fakeDns: _genFakeDns(),
       inbounds: _genInbounds(),
       outbounds: _genOutbounds(),
       routing: _genRouting(),

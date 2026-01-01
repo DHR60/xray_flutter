@@ -10,7 +10,10 @@ _CoreItemDto _$CoreItemDtoFromJson(Map<String, dynamic> json) => _CoreItemDto(
   inbound: json['inbound'] == null
       ? const InboundItemDto()
       : InboundItemDto.fromJson(json['inbound'] as Map<String, dynamic>),
+  dns: json['dns'] == null
+      ? const DnsItemDto()
+      : DnsItemDto.fromJson(json['dns'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$CoreItemDtoToJson(_CoreItemDto instance) =>
-    <String, dynamic>{'inbound': instance.inbound};
+    <String, dynamic>{'inbound': instance.inbound, 'dns': instance.dns};

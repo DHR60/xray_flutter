@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class DialogUtils {
   static Future<String?> showModernInputDialog(
@@ -6,6 +7,8 @@ class DialogUtils {
     String title = "请输入",
     String? hint = "在这里输入...",
     String? initialValue,
+    TextInputType keyboardType = TextInputType.text,
+    List<TextInputFormatter>? inputFormatters,
   }) {
     final controller = TextEditingController(text: initialValue ?? "");
 
@@ -33,7 +36,7 @@ class DialogUtils {
                     controller: controller,
                     autofocus: true,
                     minLines: 1,
-                    maxLines: 5, // 可变成多行输入
+                    maxLines: 5,
                     decoration: InputDecoration(
                       hintText: hint,
                       border: OutlineInputBorder(
@@ -44,6 +47,8 @@ class DialogUtils {
                         vertical: 12,
                       ),
                     ),
+                    keyboardType: keyboardType,
+                    inputFormatters: inputFormatters,
                   ),
                   const SizedBox(height: 24),
                   Row(

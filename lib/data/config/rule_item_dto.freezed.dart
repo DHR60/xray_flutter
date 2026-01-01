@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$RuleItemDto {
 
- String get id; int get orderIndex; String get outboundTag; String get inboundTag; String get ip; String get domain; String get port; String get network; String get protocol; String get remark; bool get enabled;
+ String get id; int get orderIndex; String get ruleType; String get outboundTag; String get inboundTag; String get ip; String get domain; String get port; String get network; String get protocol; String get remark; bool get enabled;
 /// Create a copy of RuleItemDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $RuleItemDtoCopyWith<RuleItemDto> get copyWith => _$RuleItemDtoCopyWithImpl<Rule
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RuleItemDto&&(identical(other.id, id) || other.id == id)&&(identical(other.orderIndex, orderIndex) || other.orderIndex == orderIndex)&&(identical(other.outboundTag, outboundTag) || other.outboundTag == outboundTag)&&(identical(other.inboundTag, inboundTag) || other.inboundTag == inboundTag)&&(identical(other.ip, ip) || other.ip == ip)&&(identical(other.domain, domain) || other.domain == domain)&&(identical(other.port, port) || other.port == port)&&(identical(other.network, network) || other.network == network)&&(identical(other.protocol, protocol) || other.protocol == protocol)&&(identical(other.remark, remark) || other.remark == remark)&&(identical(other.enabled, enabled) || other.enabled == enabled));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RuleItemDto&&(identical(other.id, id) || other.id == id)&&(identical(other.orderIndex, orderIndex) || other.orderIndex == orderIndex)&&(identical(other.ruleType, ruleType) || other.ruleType == ruleType)&&(identical(other.outboundTag, outboundTag) || other.outboundTag == outboundTag)&&(identical(other.inboundTag, inboundTag) || other.inboundTag == inboundTag)&&(identical(other.ip, ip) || other.ip == ip)&&(identical(other.domain, domain) || other.domain == domain)&&(identical(other.port, port) || other.port == port)&&(identical(other.network, network) || other.network == network)&&(identical(other.protocol, protocol) || other.protocol == protocol)&&(identical(other.remark, remark) || other.remark == remark)&&(identical(other.enabled, enabled) || other.enabled == enabled));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,orderIndex,outboundTag,inboundTag,ip,domain,port,network,protocol,remark,enabled);
+int get hashCode => Object.hash(runtimeType,id,orderIndex,ruleType,outboundTag,inboundTag,ip,domain,port,network,protocol,remark,enabled);
 
 @override
 String toString() {
-  return 'RuleItemDto(id: $id, orderIndex: $orderIndex, outboundTag: $outboundTag, inboundTag: $inboundTag, ip: $ip, domain: $domain, port: $port, network: $network, protocol: $protocol, remark: $remark, enabled: $enabled)';
+  return 'RuleItemDto(id: $id, orderIndex: $orderIndex, ruleType: $ruleType, outboundTag: $outboundTag, inboundTag: $inboundTag, ip: $ip, domain: $domain, port: $port, network: $network, protocol: $protocol, remark: $remark, enabled: $enabled)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $RuleItemDtoCopyWith<$Res>  {
   factory $RuleItemDtoCopyWith(RuleItemDto value, $Res Function(RuleItemDto) _then) = _$RuleItemDtoCopyWithImpl;
 @useResult
 $Res call({
- String id, int orderIndex, String outboundTag, String inboundTag, String ip, String domain, String port, String network, String protocol, String remark, bool enabled
+ String id, int orderIndex, String ruleType, String outboundTag, String inboundTag, String ip, String domain, String port, String network, String protocol, String remark, bool enabled
 });
 
 
@@ -65,11 +65,12 @@ class _$RuleItemDtoCopyWithImpl<$Res>
 
 /// Create a copy of RuleItemDto
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? orderIndex = null,Object? outboundTag = null,Object? inboundTag = null,Object? ip = null,Object? domain = null,Object? port = null,Object? network = null,Object? protocol = null,Object? remark = null,Object? enabled = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? orderIndex = null,Object? ruleType = null,Object? outboundTag = null,Object? inboundTag = null,Object? ip = null,Object? domain = null,Object? port = null,Object? network = null,Object? protocol = null,Object? remark = null,Object? enabled = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,orderIndex: null == orderIndex ? _self.orderIndex : orderIndex // ignore: cast_nullable_to_non_nullable
-as int,outboundTag: null == outboundTag ? _self.outboundTag : outboundTag // ignore: cast_nullable_to_non_nullable
+as int,ruleType: null == ruleType ? _self.ruleType : ruleType // ignore: cast_nullable_to_non_nullable
+as String,outboundTag: null == outboundTag ? _self.outboundTag : outboundTag // ignore: cast_nullable_to_non_nullable
 as String,inboundTag: null == inboundTag ? _self.inboundTag : inboundTag // ignore: cast_nullable_to_non_nullable
 as String,ip: null == ip ? _self.ip : ip // ignore: cast_nullable_to_non_nullable
 as String,domain: null == domain ? _self.domain : domain // ignore: cast_nullable_to_non_nullable
@@ -163,10 +164,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  int orderIndex,  String outboundTag,  String inboundTag,  String ip,  String domain,  String port,  String network,  String protocol,  String remark,  bool enabled)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  int orderIndex,  String ruleType,  String outboundTag,  String inboundTag,  String ip,  String domain,  String port,  String network,  String protocol,  String remark,  bool enabled)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _RuleItemDto() when $default != null:
-return $default(_that.id,_that.orderIndex,_that.outboundTag,_that.inboundTag,_that.ip,_that.domain,_that.port,_that.network,_that.protocol,_that.remark,_that.enabled);case _:
+return $default(_that.id,_that.orderIndex,_that.ruleType,_that.outboundTag,_that.inboundTag,_that.ip,_that.domain,_that.port,_that.network,_that.protocol,_that.remark,_that.enabled);case _:
   return orElse();
 
 }
@@ -184,10 +185,10 @@ return $default(_that.id,_that.orderIndex,_that.outboundTag,_that.inboundTag,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  int orderIndex,  String outboundTag,  String inboundTag,  String ip,  String domain,  String port,  String network,  String protocol,  String remark,  bool enabled)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  int orderIndex,  String ruleType,  String outboundTag,  String inboundTag,  String ip,  String domain,  String port,  String network,  String protocol,  String remark,  bool enabled)  $default,) {final _that = this;
 switch (_that) {
 case _RuleItemDto():
-return $default(_that.id,_that.orderIndex,_that.outboundTag,_that.inboundTag,_that.ip,_that.domain,_that.port,_that.network,_that.protocol,_that.remark,_that.enabled);case _:
+return $default(_that.id,_that.orderIndex,_that.ruleType,_that.outboundTag,_that.inboundTag,_that.ip,_that.domain,_that.port,_that.network,_that.protocol,_that.remark,_that.enabled);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -204,10 +205,10 @@ return $default(_that.id,_that.orderIndex,_that.outboundTag,_that.inboundTag,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  int orderIndex,  String outboundTag,  String inboundTag,  String ip,  String domain,  String port,  String network,  String protocol,  String remark,  bool enabled)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  int orderIndex,  String ruleType,  String outboundTag,  String inboundTag,  String ip,  String domain,  String port,  String network,  String protocol,  String remark,  bool enabled)?  $default,) {final _that = this;
 switch (_that) {
 case _RuleItemDto() when $default != null:
-return $default(_that.id,_that.orderIndex,_that.outboundTag,_that.inboundTag,_that.ip,_that.domain,_that.port,_that.network,_that.protocol,_that.remark,_that.enabled);case _:
+return $default(_that.id,_that.orderIndex,_that.ruleType,_that.outboundTag,_that.inboundTag,_that.ip,_that.domain,_that.port,_that.network,_that.protocol,_that.remark,_that.enabled);case _:
   return null;
 
 }
@@ -219,11 +220,12 @@ return $default(_that.id,_that.orderIndex,_that.outboundTag,_that.inboundTag,_th
 @JsonSerializable()
 
 class _RuleItemDto implements RuleItemDto {
-  const _RuleItemDto({required this.id, this.orderIndex = 0, this.outboundTag = '', this.inboundTag = '', this.ip = '', this.domain = '', this.port = '', this.network = '', this.protocol = '', this.remark = '', this.enabled = true});
+  const _RuleItemDto({required this.id, this.orderIndex = 0, this.ruleType = 'all', this.outboundTag = '', this.inboundTag = '', this.ip = '', this.domain = '', this.port = '', this.network = '', this.protocol = '', this.remark = '', this.enabled = true});
   factory _RuleItemDto.fromJson(Map<String, dynamic> json) => _$RuleItemDtoFromJson(json);
 
 @override final  String id;
 @override@JsonKey() final  int orderIndex;
+@override@JsonKey() final  String ruleType;
 @override@JsonKey() final  String outboundTag;
 @override@JsonKey() final  String inboundTag;
 @override@JsonKey() final  String ip;
@@ -247,16 +249,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RuleItemDto&&(identical(other.id, id) || other.id == id)&&(identical(other.orderIndex, orderIndex) || other.orderIndex == orderIndex)&&(identical(other.outboundTag, outboundTag) || other.outboundTag == outboundTag)&&(identical(other.inboundTag, inboundTag) || other.inboundTag == inboundTag)&&(identical(other.ip, ip) || other.ip == ip)&&(identical(other.domain, domain) || other.domain == domain)&&(identical(other.port, port) || other.port == port)&&(identical(other.network, network) || other.network == network)&&(identical(other.protocol, protocol) || other.protocol == protocol)&&(identical(other.remark, remark) || other.remark == remark)&&(identical(other.enabled, enabled) || other.enabled == enabled));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RuleItemDto&&(identical(other.id, id) || other.id == id)&&(identical(other.orderIndex, orderIndex) || other.orderIndex == orderIndex)&&(identical(other.ruleType, ruleType) || other.ruleType == ruleType)&&(identical(other.outboundTag, outboundTag) || other.outboundTag == outboundTag)&&(identical(other.inboundTag, inboundTag) || other.inboundTag == inboundTag)&&(identical(other.ip, ip) || other.ip == ip)&&(identical(other.domain, domain) || other.domain == domain)&&(identical(other.port, port) || other.port == port)&&(identical(other.network, network) || other.network == network)&&(identical(other.protocol, protocol) || other.protocol == protocol)&&(identical(other.remark, remark) || other.remark == remark)&&(identical(other.enabled, enabled) || other.enabled == enabled));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,orderIndex,outboundTag,inboundTag,ip,domain,port,network,protocol,remark,enabled);
+int get hashCode => Object.hash(runtimeType,id,orderIndex,ruleType,outboundTag,inboundTag,ip,domain,port,network,protocol,remark,enabled);
 
 @override
 String toString() {
-  return 'RuleItemDto(id: $id, orderIndex: $orderIndex, outboundTag: $outboundTag, inboundTag: $inboundTag, ip: $ip, domain: $domain, port: $port, network: $network, protocol: $protocol, remark: $remark, enabled: $enabled)';
+  return 'RuleItemDto(id: $id, orderIndex: $orderIndex, ruleType: $ruleType, outboundTag: $outboundTag, inboundTag: $inboundTag, ip: $ip, domain: $domain, port: $port, network: $network, protocol: $protocol, remark: $remark, enabled: $enabled)';
 }
 
 
@@ -267,7 +269,7 @@ abstract mixin class _$RuleItemDtoCopyWith<$Res> implements $RuleItemDtoCopyWith
   factory _$RuleItemDtoCopyWith(_RuleItemDto value, $Res Function(_RuleItemDto) _then) = __$RuleItemDtoCopyWithImpl;
 @override @useResult
 $Res call({
- String id, int orderIndex, String outboundTag, String inboundTag, String ip, String domain, String port, String network, String protocol, String remark, bool enabled
+ String id, int orderIndex, String ruleType, String outboundTag, String inboundTag, String ip, String domain, String port, String network, String protocol, String remark, bool enabled
 });
 
 
@@ -284,11 +286,12 @@ class __$RuleItemDtoCopyWithImpl<$Res>
 
 /// Create a copy of RuleItemDto
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? orderIndex = null,Object? outboundTag = null,Object? inboundTag = null,Object? ip = null,Object? domain = null,Object? port = null,Object? network = null,Object? protocol = null,Object? remark = null,Object? enabled = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? orderIndex = null,Object? ruleType = null,Object? outboundTag = null,Object? inboundTag = null,Object? ip = null,Object? domain = null,Object? port = null,Object? network = null,Object? protocol = null,Object? remark = null,Object? enabled = null,}) {
   return _then(_RuleItemDto(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,orderIndex: null == orderIndex ? _self.orderIndex : orderIndex // ignore: cast_nullable_to_non_nullable
-as int,outboundTag: null == outboundTag ? _self.outboundTag : outboundTag // ignore: cast_nullable_to_non_nullable
+as int,ruleType: null == ruleType ? _self.ruleType : ruleType // ignore: cast_nullable_to_non_nullable
+as String,outboundTag: null == outboundTag ? _self.outboundTag : outboundTag // ignore: cast_nullable_to_non_nullable
 as String,inboundTag: null == inboundTag ? _self.inboundTag : inboundTag // ignore: cast_nullable_to_non_nullable
 as String,ip: null == ip ? _self.ip : ip // ignore: cast_nullable_to_non_nullable
 as String,domain: null == domain ? _self.domain : domain // ignore: cast_nullable_to_non_nullable

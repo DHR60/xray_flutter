@@ -8,6 +8,7 @@ abstract class RuleItemDto with _$RuleItemDto {
   const factory RuleItemDto({
     required String id,
     @Default(0) int orderIndex,
+    @Default('all') String ruleType,
     @Default('') String outboundTag,
     @Default('') String inboundTag,
     @Default('') String ip,
@@ -18,7 +19,7 @@ abstract class RuleItemDto with _$RuleItemDto {
     @Default('') String remark,
     @Default(true) bool enabled,
   }) = _RuleItemDto;
-  
+
   factory RuleItemDto.fromJson(Map<String, dynamic> json) =>
       _$RuleItemDtoFromJson(json);
 }

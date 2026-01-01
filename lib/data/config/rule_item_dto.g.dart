@@ -9,6 +9,7 @@ part of 'rule_item_dto.dart';
 _RuleItemDto _$RuleItemDtoFromJson(Map<String, dynamic> json) => _RuleItemDto(
   id: json['id'] as String,
   orderIndex: (json['orderIndex'] as num?)?.toInt() ?? 0,
+  ruleType: json['ruleType'] as String? ?? 'all',
   outboundTag: json['outboundTag'] as String? ?? '',
   inboundTag: json['inboundTag'] as String? ?? '',
   ip: json['ip'] as String? ?? '',
@@ -24,6 +25,7 @@ Map<String, dynamic> _$RuleItemDtoToJson(_RuleItemDto instance) =>
     <String, dynamic>{
       'id': instance.id,
       'orderIndex': instance.orderIndex,
+      'ruleType': instance.ruleType,
       'outboundTag': instance.outboundTag,
       'inboundTag': instance.inboundTag,
       'ip': instance.ip,
