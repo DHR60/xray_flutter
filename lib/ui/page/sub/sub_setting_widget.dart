@@ -59,12 +59,14 @@ class _SubSettingWidgetState extends ConsumerState<SubSettingWidget> {
               onPressed: () {
                 Navigator.pop(context, SubSettingDelete(_updateSubItem()));
               },
+              tooltip: '删除订阅',
             ),
           IconButton(
             onPressed: () {
               Navigator.pop(context, SubSettingUpsert(_updateSubItem()));
             },
             icon: const Icon(Icons.save),
+            tooltip: '保存订阅',
           ),
         ],
       ),

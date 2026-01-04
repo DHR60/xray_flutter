@@ -158,16 +158,18 @@ class _RuleSettingWidgetState extends ConsumerState<RuleSettingWidget> {
           actions: [
             if (!widget.isNew)
               IconButton(
-                icon: const Icon(Icons.delete),
                 onPressed: () {
                   Navigator.pop(context, RuleSettingDelete(_updateRuleItem()));
                 },
+                icon: const Icon(Icons.delete),
+                tooltip: '删除规则',
               ),
             IconButton(
               onPressed: () {
                 Navigator.pop(context, RuleSettingUpsert(_updateRuleItem()));
               },
               icon: const Icon(Icons.save),
+              tooltip: '保存规则',
             ),
           ],
         ),

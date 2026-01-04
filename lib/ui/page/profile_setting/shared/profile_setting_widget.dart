@@ -96,10 +96,12 @@ class _ProfileSettingWidgetState extends ConsumerState<ProfileSettingWidget> {
             IconButton(
               icon: const Icon(Icons.delete),
               onPressed: () => _deleteProfile(context),
+              tooltip: '删除配置',
             ),
           IconButton(
             icon: const Icon(Icons.save),
             onPressed: () => _saveProfile(context),
+            tooltip: '保存配置',
           ),
           PopupMenuButton<String>(
             onSelected: (value) async {

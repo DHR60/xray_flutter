@@ -96,12 +96,14 @@ class ProfileListView extends ConsumerWidget {
                         }
                       },
                       icon: const Icon(Icons.edit),
+                      tooltip: '编辑配置',
                     ),
                     IconButton(
                       icon: const Icon(Icons.more_vert),
                       onPressed: () {
                         _showProfileOptions(context, ref, profile);
                       },
+                      tooltip: '更多选项',
                     ),
                     IconButton(
                       icon: const Icon(Icons.delete),
@@ -117,6 +119,7 @@ class ProfileListView extends ConsumerWidget {
                           );
                         }
                       },
+                      tooltip: '删除配置',
                     ),
                   ],
                 ),

@@ -174,6 +174,7 @@ class _JsonEditWidgetState extends ConsumerState<JsonEditWidget> {
             IconButton(
               icon: const Icon(Icons.save),
               onPressed: () => _saveJson(context),
+              tooltip: '保存 JSON',
             ),
           ],
         ),

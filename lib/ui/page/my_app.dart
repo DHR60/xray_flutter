@@ -234,6 +234,7 @@ class _MyHomePageStateState extends ConsumerState<MyHomePageState> {
                   ref.read(profileFilterProvider.notifier).updateKeyword('');
                 });
               },
+              tooltip: '关闭搜索',
             )
           else
             IconButton(
@@ -243,6 +244,7 @@ class _MyHomePageStateState extends ConsumerState<MyHomePageState> {
                   _isSearching = true;
                 });
               },
+              tooltip: '搜索',
             ),
           if (!_isSearching) ...[
             IconButton(
@@ -254,7 +256,8 @@ class _MyHomePageStateState extends ConsumerState<MyHomePageState> {
                   ),
                 );
               },
-              icon: const Icon(Icons.select_all),
+              icon: const Icon(Icons.playlist_add_check),
+              tooltip: '选择配置',
             ),
             Builder(
               builder: (anchorContext) {

@@ -49,6 +49,7 @@ class _ProfilePickerWidgetState extends ConsumerState<ProfilePickerWidget> {
               }
             },
             icon: Icon(Icons.share),
+            tooltip: '导出选中配置分享链接',
           ),
         ],
       ),

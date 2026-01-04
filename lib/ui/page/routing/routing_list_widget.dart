@@ -33,6 +33,7 @@ class RoutingListWidget extends ConsumerWidget {
                   .read(routingListProvider.notifier)
                   .handleRoutingSettingResult(result);
             },
+            tooltip: '添加路由',
           ),
         ],
       ),
@@ -82,6 +83,7 @@ class RoutingListWidget extends ConsumerWidget {
                                 .read(routingListProvider.notifier)
                                 .handleRoutingSettingResult(result);
                           },
+                          tooltip: '编辑路由',
                         ),
                         IconButton(
                           icon: Icon(Icons.delete),
@@ -90,6 +92,7 @@ class RoutingListWidget extends ConsumerWidget {
                                 .read(routingListProvider.notifier)
                                 .deleteRouting(routingItem.id);
                           },
+                          tooltip: '删除路由',
                         ),
                       ],
                     ),

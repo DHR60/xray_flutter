@@ -124,6 +124,7 @@ class _RoutingSettingWidgetState extends ConsumerState<RoutingSettingWidget> {
                     RoutingSettingDelete(widget.routingItem),
                   );
                 },
+                tooltip: '删除路由',
               ),
             IconButton(
               icon: const Icon(Icons.save),
@@ -131,6 +132,7 @@ class _RoutingSettingWidgetState extends ConsumerState<RoutingSettingWidget> {
                 if (!_formKey.currentState!.validate()) return;
                 Navigator.pop(context, RoutingSettingUpsert(routingSetting));
               },
+              tooltip: '保存路由',
             ),
           ],
         ),
@@ -187,6 +189,7 @@ class _RoutingSettingWidgetState extends ConsumerState<RoutingSettingWidget> {
                     );
                     routingSettingNotifier.handleRuleSettingResult(intent);
                   },
+                  tooltip: '添加规则',
                 ),
               ],
             ),
@@ -261,6 +264,7 @@ class _RoutingSettingWidgetState extends ConsumerState<RoutingSettingWidget> {
                                       routingSettingNotifier
                                           .handleRuleSettingResult(intent);
                                     },
+                                    tooltip: '编辑规则',
                                   ),
                                   IconButton(
                                     icon: const Icon(Icons.delete),
@@ -269,6 +273,7 @@ class _RoutingSettingWidgetState extends ConsumerState<RoutingSettingWidget> {
                                         rule.id,
                                       );
                                     },
+                                    tooltip: '删除规则',
                                   ),
                                 ],
                               ),

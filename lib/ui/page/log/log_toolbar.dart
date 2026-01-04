@@ -17,6 +17,7 @@ class LogToolbar extends StatelessWidget {
         IconButton(
           icon: Icon(paused ? Icons.play_arrow : Icons.pause),
           onPressed: onTogglePause,
+          tooltip: paused ? '继续' : '暂停',
         ),
       ],
     );
