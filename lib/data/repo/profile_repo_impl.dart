@@ -37,6 +37,28 @@ class ProfileRepoImpl implements ProfileRepo {
   }
 
   @override
+  Future<List<ProfileItemData>> getProfiles({
+    String? keyword,
+    String? subId,
+  }) {
+    return (_database.select(_database.profileItem)
+          ..orderBy([(tbl) => OrderingTerm(expression: tbl.orderIndex)])
+          ..where((tbl) {
+            final List<Expression<bool>> expressions = [];
+            if (subId != null && subId.isNotEmpty) {
+              expressions.add(tbl.subid.equals(subId));
+            }
+            if (keyword != null && keyword.isNotEmpty) {
+              expressions.add(tbl.remarks.like('%$keyword%'));
+            }
+
+            if (expressions.isEmpty) return const Constant(true);
+            return expressions.reduce((a, b) => a & b);
+          }))
+        .get();
+  }
+
+  @override
   Future<List<ProfileItemData>> getAllProfiles() {
     return _database.select(_database.profileItem).get();
   }

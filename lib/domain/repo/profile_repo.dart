@@ -3,6 +3,7 @@ import 'package:xray_flutter/data/db/app_database.dart';
 abstract class ProfileRepo {
   Stream<List<ProfileItemData>> watchAllProfiles();
   Stream<List<ProfileItemData>> watchProfiles({String? keyword, String? subId});
+  Future<List<ProfileItemData>> getProfiles({String? keyword, String? subId});
   Future<List<ProfileItemData>> getAllProfiles();
   Future<ProfileItemData?> getProfileById(String indexId);
   Future<int> insertProfile(ProfileItemData data);
