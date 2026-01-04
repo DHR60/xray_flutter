@@ -574,3 +574,92 @@ final class ImportUriUseCaseProvider
 }
 
 String _$importUriUseCaseHash() => r'34fd6e5a44ef8043c7a2785f2be1eb23195a9918';
+
+@ProviderFor(getIpUseCase)
+final getIpUseCaseProvider = GetIpUseCaseProvider._();
+
+final class GetIpUseCaseProvider
+    extends $FunctionalProvider<GetIpUseCase, GetIpUseCase, GetIpUseCase>
+    with $Provider<GetIpUseCase> {
+  GetIpUseCaseProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'getIpUseCaseProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$getIpUseCaseHash();
+
+  @$internal
+  @override
+  $ProviderElement<GetIpUseCase> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  GetIpUseCase create(Ref ref) {
+    return getIpUseCase(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(GetIpUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<GetIpUseCase>(value),
+    );
+  }
+}
+
+String _$getIpUseCaseHash() => r'bff88fd9a4fd71e70027006cd8a911f566045ed3';
+
+@ProviderFor(getRealMuxDelayUseCase)
+final getRealMuxDelayUseCaseProvider = GetRealMuxDelayUseCaseProvider._();
+
+final class GetRealMuxDelayUseCaseProvider
+    extends
+        $FunctionalProvider<
+          GetRealMuxDelayUseCase,
+          GetRealMuxDelayUseCase,
+          GetRealMuxDelayUseCase
+        >
+    with $Provider<GetRealMuxDelayUseCase> {
+  GetRealMuxDelayUseCaseProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'getRealMuxDelayUseCaseProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$getRealMuxDelayUseCaseHash();
+
+  @$internal
+  @override
+  $ProviderElement<GetRealMuxDelayUseCase> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  GetRealMuxDelayUseCase create(Ref ref) {
+    return getRealMuxDelayUseCase(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(GetRealMuxDelayUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<GetRealMuxDelayUseCase>(value),
+    );
+  }
+}
+
+String _$getRealMuxDelayUseCaseHash() =>
+    r'd0752e1b1bee00c122127943fb1309fde59f2158';

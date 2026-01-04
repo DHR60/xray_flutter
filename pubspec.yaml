@@ -50,6 +50,7 @@ dependencies:
   punycoder: ^0.2.2
   pretty_qr_code: ^3.5.0
   json_field_editor: ^1.2.1
+  dio: ^5.9.0
 
 dev_dependencies:
   flutter_test:

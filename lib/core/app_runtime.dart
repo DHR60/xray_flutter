@@ -6,6 +6,7 @@ import 'package:xray_flutter/domain/infra/start_core_service.dart';
 import 'package:xray_flutter/domain/logging/log_center.dart';
 import 'package:xray_flutter/domain/repo/profile_repo.dart';
 import 'package:xray_flutter/domain/service/core/core_manager.dart';
+import 'package:xray_flutter/domain/service/network/network_manager.dart';
 import 'package:xray_flutter/infra/start_core_service_impl.dart';
 
 class AppRuntime {
@@ -15,6 +16,7 @@ class AppRuntime {
   final StartCoreService startCoreService;
   final CoreManager coreManager;
   final LogCenter logCenter;
+  final NetworkManager networkManager;
 
   static late final AppRuntime _instance;
   static AppRuntime get instance => _instance;
@@ -26,6 +28,7 @@ class AppRuntime {
     required this.startCoreService,
     required this.coreManager,
     required this.logCenter,
+    required this.networkManager,
   });
 
   static Future<void> init() async {
@@ -45,6 +48,12 @@ class AppRuntime {
       stderr: coreManager.mainLogErr,
     );
 
+    final networkManager = NetworkManager(
+      proxyPortProvider: () =>
+          int.tryParse(appConfigManager.config.coreItem.inbound.port) ?? 0,
+      isProxyEnabledProvider: () => coreManager.status == CoreStatus.running,
+    );
+
     _instance = AppRuntime._(
       appConfigManager: appConfigManager,
       profileRepo: profileRepo,
@@ -52,6 +61,7 @@ class AppRuntime {
       startCoreService: startCoreService,
       coreManager: coreManager,
       logCenter: logCenter,
+      networkManager: networkManager,
     );
   }
 }

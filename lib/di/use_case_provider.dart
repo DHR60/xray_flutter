@@ -5,8 +5,10 @@ import 'package:xray_flutter/domain/usecase/delete_profile_use_case.dart';
 import 'package:xray_flutter/domain/usecase/export_multi_uris_use_case.dart';
 import 'package:xray_flutter/domain/usecase/export_profile_config_use_case.dart';
 import 'package:xray_flutter/domain/usecase/export_uri_use_case.dart';
+import 'package:xray_flutter/domain/usecase/get_ip_use_case.dart';
 import 'package:xray_flutter/domain/usecase/get_profile_config_use_case.dart';
 import 'package:xray_flutter/domain/usecase/get_profile_outbound_use_case.dart';
+import 'package:xray_flutter/domain/usecase/get_real_mux_delay_use_case.dart';
 import 'package:xray_flutter/domain/usecase/get_uri_by_data_use_case.dart';
 import 'package:xray_flutter/domain/usecase/get_uri_use_case.dart';
 import 'package:xray_flutter/domain/usecase/import_uri_use_case.dart';
@@ -86,4 +88,16 @@ ExportMultiUrisUseCase exportMultiUrisUseCase(Ref ref) {
 ImportUriUseCase importUriUseCase(Ref ref) {
   final store = ref.watch(storeServiceProvider);
   return ImportUriUseCase(store);
+}
+
+@riverpod
+GetIpUseCase getIpUseCase(Ref ref) {
+  final networkManager = AppRuntime.instance.networkManager;
+  return GetIpUseCase(networkManager);
+}
+
+@riverpod
+GetRealMuxDelayUseCase getRealMuxDelayUseCase(Ref ref) {
+  final networkManager = AppRuntime.instance.networkManager;
+  return GetRealMuxDelayUseCase(networkManager);
 }

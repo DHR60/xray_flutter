@@ -283,17 +283,46 @@ class _MyHomePageStateState extends ConsumerState<MyHomePageState> {
               },
             ),
             PopupMenuButton<String>(
-              onSelected: (value) {
-                // Handle menu item selection
+              onSelected: (value) async {
+                if (value == 'get_ip') {
+                  final result = await ref.read(getIpUseCaseProvider).call();
+                  if (!context.mounted) return;
+                  if (result is Success<String>) {
+                    final ip = result.data;
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text('当前IP: $ip')));
+                  } else if (result is Failure) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('获取IP失败: ${result.toString()}')),
+                    );
+                  }
+                } else if (value == 'get_delay') {
+                  final result = await ref
+                      .read(getRealMuxDelayUseCaseProvider)
+                      .call();
+                  if (!context.mounted) return;
+                  if (result is Success<int>) {
+                    final delay = result.data;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('真连接延迟: ${delay}ms')),
+                    );
+                  } else if (result is Failure) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('获取真连接延迟失败: ${result.toString()}'),
+                      ),
+                    );
+                  }
+                }
               },
-              itemBuilder: (BuildContext context) {
-                return {'Help', 'About'}.map((String choice) {
-                  return PopupMenuItem<String>(
-                    value: choice,
-                    child: Text(choice),
-                  );
-                }).toList();
-              },
+              itemBuilder: (context) => const [
+                PopupMenuItem<String>(value: 'get_ip', child: Text('获取当前IP')),
+                PopupMenuItem<String>(
+                  value: 'get_delay',
+                  child: Text('获取真连接延迟'),
+                ),
+              ],
             ),
           ],
         ],
