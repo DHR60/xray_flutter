@@ -1,16 +1,16 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:xray_flutter/data/config/app_config_manager.dart';
 import 'package:xray_flutter/data/config/routing_item_dto.dart';
 import 'package:xray_flutter/data/config/rule_item_dto.dart';
 import 'package:xray_flutter/ui/page/routing/rule_setting_widget.dart';
 
-class RoutingSettingNotifier extends Notifier<RoutingItemDto> {
-  final RoutingItemDto _routingItemDto;
-  RoutingSettingNotifier(this._routingItemDto);
+part 'routing_setting_notifier.g.dart';
 
+@riverpod
+class RoutingSettingNotifier extends _$RoutingSettingNotifier {
   @override
-  RoutingItemDto build() {
-    return _routingItemDto;
+  RoutingItemDto build(RoutingItemDto routingItemDto) {
+    return routingItemDto;
   }
 
   void updateRemark(String remark) {
@@ -79,8 +79,3 @@ class RoutingSettingNotifier extends Notifier<RoutingItemDto> {
     state = state.copyWith(rules: newRules);
   }
 }
-
-final routingSettingProvider = NotifierProvider.family
-    .autoDispose<RoutingSettingNotifier, RoutingItemDto, RoutingItemDto>(
-      RoutingSettingNotifier.new,
-    );
