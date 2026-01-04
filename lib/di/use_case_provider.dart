@@ -2,6 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:xray_flutter/core/app_runtime.dart';
 import 'package:xray_flutter/di/provider.dart';
 import 'package:xray_flutter/domain/usecase/delete_profile_use_case.dart';
+import 'package:xray_flutter/domain/usecase/export_multi_uris_use_case.dart';
 import 'package:xray_flutter/domain/usecase/export_profile_config_use_case.dart';
 import 'package:xray_flutter/domain/usecase/export_uri_use_case.dart';
 import 'package:xray_flutter/domain/usecase/get_profile_config_use_case.dart';
@@ -73,6 +74,12 @@ GetUriUseCase getUriUseCase(Ref ref) {
 ExportUriUseCase exportUriUseCase(Ref ref) {
   final getUriUseCase = ref.watch(getUriUseCaseProvider);
   return ExportUriUseCase(getUriUseCase);
+}
+
+@riverpod
+ExportMultiUrisUseCase exportMultiUrisUseCase(Ref ref) {
+  final getUriUseCase = ref.watch(getUriUseCaseProvider);
+  return ExportMultiUrisUseCase(getUriUseCase);
 }
 
 @riverpod

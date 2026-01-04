@@ -18,6 +18,7 @@ import 'package:xray_flutter/ui/page/routing/routing_list_widget.dart';
 import 'package:xray_flutter/ui/page/sub/sub_setting_result.dart';
 import 'package:xray_flutter/ui/page/sub/sub_setting_widget.dart';
 import 'package:xray_flutter/domain/service/core/core_manager.dart';
+import 'package:xray_flutter/ui/page/widget/profile_picker_widget.dart';
 
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});
@@ -52,9 +53,7 @@ class _MyHomePageStateState extends ConsumerState<MyHomePageState> {
     if (!mounted) return;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).hideCurrentSnackBar();
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(message)));
@@ -246,6 +245,17 @@ class _MyHomePageStateState extends ConsumerState<MyHomePageState> {
               },
             ),
           if (!_isSearching) ...[
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ProfilePickerWidget(),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.select_all),
+            ),
             Builder(
               builder: (anchorContext) {
                 return PopupMenuButton<String>(

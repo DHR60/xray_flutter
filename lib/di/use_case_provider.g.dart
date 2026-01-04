@@ -481,6 +481,54 @@ final class ExportUriUseCaseProvider
 
 String _$exportUriUseCaseHash() => r'b21f3cd4dc70f0815236976aac71a2fb3b98c1a0';
 
+@ProviderFor(exportMultiUrisUseCase)
+final exportMultiUrisUseCaseProvider = ExportMultiUrisUseCaseProvider._();
+
+final class ExportMultiUrisUseCaseProvider
+    extends
+        $FunctionalProvider<
+          ExportMultiUrisUseCase,
+          ExportMultiUrisUseCase,
+          ExportMultiUrisUseCase
+        >
+    with $Provider<ExportMultiUrisUseCase> {
+  ExportMultiUrisUseCaseProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'exportMultiUrisUseCaseProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$exportMultiUrisUseCaseHash();
+
+  @$internal
+  @override
+  $ProviderElement<ExportMultiUrisUseCase> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  ExportMultiUrisUseCase create(Ref ref) {
+    return exportMultiUrisUseCase(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ExportMultiUrisUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ExportMultiUrisUseCase>(value),
+    );
+  }
+}
+
+String _$exportMultiUrisUseCaseHash() =>
+    r'4a1a8d47e4a7f300f1956c7396a107ed3b60c68e';
+
 @ProviderFor(importUriUseCase)
 final importUriUseCaseProvider = ImportUriUseCaseProvider._();
 
