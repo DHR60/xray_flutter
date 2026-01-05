@@ -56,7 +56,7 @@ class StoreService {
   }
 
   Future<ProfileItemData> generateNewProfile() async {
-    var orderIndex = await _profileRepo.getMaxOrderIndex();
+    var orderIndex = await _profileRepo.getMaxOrderIndex() + 1;
     final newProfile = ProfileItemFactory.createDefault(
       Utils.generateUUID(),
       orderIndex,
