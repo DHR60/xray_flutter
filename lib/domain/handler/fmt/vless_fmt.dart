@@ -14,7 +14,7 @@ class VlessFmt implements Fmtable {
     var data = base.copyWith(
       address: FmtUtils.tryIDNEncode(uri.host) ?? uri.host,
       port: uri.port,
-      remarks: uri.fragment,
+      remarks: FmtUtils.urlDecode(uri.fragment),
       id: FmtUtils.urlDecode(uri.userInfo),
     );
 
