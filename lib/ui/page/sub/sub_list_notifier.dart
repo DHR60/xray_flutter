@@ -3,7 +3,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:xray_flutter/di/app_config_provider.dart';
 import 'package:xray_flutter/data/config/sub_item_dto.dart';
-import 'package:xray_flutter/di/profile_filter_provider.dart';
 import 'package:xray_flutter/di/provider.dart';
 
 part 'sub_list_notifier.freezed.dart';
@@ -35,8 +34,6 @@ class SubListNotifier extends _$SubListNotifier {
 
     if (config.subItems.isNotEmpty && newActiveSubId != config.stateItem.subId) {
       await ref.read(storeServiceProvider).updateActiveSub(newActiveSubId);
-
-      ref.read(profileFilterProvider.notifier).updateSubId(newActiveSubId);
     }
     state = state.copyWith(activeSubId: newActiveSubId);
   }

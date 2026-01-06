@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:xray_flutter/di/app_config_provider.dart';
 import 'package:xray_flutter/ui/model/profile_filter.dart';
@@ -8,7 +9,10 @@ part 'profile_filter_provider.g.dart';
 class ProfileFilterNotifier extends _$ProfileFilterNotifier {
   @override
   ProfileFilter build() {
-    return ProfileFilter(keyword: '', subId: ref.read(appConfigProvider).stateItem.subId);
+    final subId = ref.watch(
+      appConfigProvider.select((value) => value.stateItem.subId),
+    );
+    return ProfileFilter(keyword: '', subId: subId);
   }
 
   void updateFilter(ProfileFilter newFilter) {
@@ -21,9 +25,5 @@ class ProfileFilterNotifier extends _$ProfileFilterNotifier {
 
   void updateSubId(String subId) {
     state = state.copyWith(subId: subId);
-  }
-
-  void reset() {
-    state = ProfileFilter(keyword: '', subId: ref.read(appConfigProvider).stateItem.subId);
   }
 }
