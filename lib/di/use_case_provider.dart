@@ -5,6 +5,7 @@ import 'package:xray_flutter/domain/usecase/delete_profile_use_case.dart';
 import 'package:xray_flutter/domain/usecase/export_multi_uris_use_case.dart';
 import 'package:xray_flutter/domain/usecase/export_profile_config_use_case.dart';
 import 'package:xray_flutter/domain/usecase/export_uri_use_case.dart';
+import 'package:xray_flutter/domain/usecase/fetch_sub_use_case.dart';
 import 'package:xray_flutter/domain/usecase/get_ip_use_case.dart';
 import 'package:xray_flutter/domain/usecase/get_profile_config_use_case.dart';
 import 'package:xray_flutter/domain/usecase/get_profile_outbound_use_case.dart';
@@ -87,7 +88,15 @@ ExportMultiUrisUseCase exportMultiUrisUseCase(Ref ref) {
 @riverpod
 ImportUriUseCase importUriUseCase(Ref ref) {
   final store = ref.watch(storeServiceProvider);
-  return ImportUriUseCase(store);
+  final upsertProfileUseCase = ref.watch(upsertProfileUseCaseProvider);
+  return ImportUriUseCase(store, upsertProfileUseCase);
+}
+
+@riverpod
+FetchSubUseCase fetchSubUseCase(Ref ref) {
+  final networkManager = AppRuntime.instance.networkManager;
+  final store = ref.watch(storeServiceProvider);
+  return FetchSubUseCase(networkManager, store);
 }
 
 @riverpod

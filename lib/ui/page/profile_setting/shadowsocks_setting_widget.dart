@@ -55,10 +55,10 @@ class _ShadowsocksSettingWidgetState
     _listenController = ProfileListenController.fromData(widget.profile);
     _methodController = TextEditingController(text: widget.profile.security);
     _passwordController = TextEditingController(text: widget.profile.id);
-    _v2rayMode = _extraDto.shadowsocksV2rayMode ?? true;
-    _obfsController = TextEditingController(text: _extraDto.obfs ?? '');
+    _v2rayMode = !(_extraDto.ssPluginEnabled ?? false);
+    _obfsController = TextEditingController(text: _extraDto.ssPlugin ?? '');
     _obfsParamController = TextEditingController(
-      text: _extraDto.obfsParam ?? '',
+      text: _extraDto.ssPluginParam ?? '',
     );
     _transportController = ProfileTransportController.fromData(widget.profile);
     _securityController = ProfileSecurityController.fromData(widget.profile);
@@ -86,9 +86,9 @@ class _ShadowsocksSettingWidgetState
   @override
   ProfileItemData buildProfile() {
     _extraDto = _extraDto.copyWith(
-      shadowsocksV2rayMode: _v2rayMode,
-      obfs: _obfsController.text,
-      obfsParam: _obfsParamController.text,
+      ssPluginEnabled: !_v2rayMode,
+      ssPlugin: _obfsController.text,
+      ssPluginParam: _obfsParamController.text,
     );
 
     return widget.profile.copyWith(

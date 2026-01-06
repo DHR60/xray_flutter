@@ -573,7 +573,49 @@ final class ImportUriUseCaseProvider
   }
 }
 
-String _$importUriUseCaseHash() => r'34fd6e5a44ef8043c7a2785f2be1eb23195a9918';
+String _$importUriUseCaseHash() => r'91270945419e26189dc4e009d247fd1e4cae5c9d';
+
+@ProviderFor(fetchSubUseCase)
+final fetchSubUseCaseProvider = FetchSubUseCaseProvider._();
+
+final class FetchSubUseCaseProvider
+    extends
+        $FunctionalProvider<FetchSubUseCase, FetchSubUseCase, FetchSubUseCase>
+    with $Provider<FetchSubUseCase> {
+  FetchSubUseCaseProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'fetchSubUseCaseProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$fetchSubUseCaseHash();
+
+  @$internal
+  @override
+  $ProviderElement<FetchSubUseCase> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  FetchSubUseCase create(Ref ref) {
+    return fetchSubUseCase(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(FetchSubUseCase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<FetchSubUseCase>(value),
+    );
+  }
+}
+
+String _$fetchSubUseCaseHash() => r'922814d8f440c2268b39de66c416bb92bec76edc';
 
 @ProviderFor(getIpUseCase)
 final getIpUseCaseProvider = GetIpUseCaseProvider._();

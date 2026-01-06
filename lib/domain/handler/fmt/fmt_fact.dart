@@ -1,6 +1,8 @@
 import 'package:xray_flutter/core/enum/config_type.dart';
 import 'package:xray_flutter/core/global_const.dart';
+import 'package:xray_flutter/core/utils.dart';
 import 'package:xray_flutter/data/db/app_database.dart';
+import 'package:xray_flutter/data/model/profile_item_factory.dart';
 import 'package:xray_flutter/domain/core/domain_error.dart';
 import 'package:xray_flutter/domain/core/result.dart';
 import 'package:xray_flutter/domain/handler/fmt/shadowsocks_fmt.dart';
@@ -9,7 +11,7 @@ import 'package:xray_flutter/domain/handler/fmt/vless_fmt.dart';
 import 'package:xray_flutter/domain/handler/fmt/vmess_fmt.dart';
 
 class FmtFact {
-  // ProfileItemData is nessesary to provide id and order
+  /// Note: ProfileItemData is nessesary to provide id and order
   static Result<ProfileItemData> resolveSharedUri(
     String uri,
     ProfileItemData base,
@@ -53,5 +55,53 @@ class FmtFact {
     return GlobalConst.protocolShares[type]!.any(
       (prefix) => uri.startsWith(prefix),
     );
+  }
+
+  /// Note: ProfileItemData returned not have id and order set
+  /// Support import multiple uri separated by new line, base64 encoded data, or
+  /// raw config text
+  /// shadowsocks SIP008 temporarily not supported
+  static Result<List<ProfileItemData>> resolveImportData(String importData) {
+    var dataList = <ProfileItemData>[];
+    bool tryParseLines(String s) {
+      final lines = s
+          .split(RegExp(r'[\r\n]+'))
+          .map((e) => e.trim())
+          .where((e) => e.isNotEmpty)
+          .toList();
+      var added = false;
+      for (final line in lines) {
+        final result = resolveSharedUri(
+          line,
+          ProfileItemFactory.createDefault('', 0),
+        );
+        if (result is Success<ProfileItemData>) {
+          dataList.add(result.data);
+          added = true;
+        }
+      }
+      return added;
+    }
+
+    // first try uri lines
+    if (tryParseLines(importData)) {
+      return Success(dataList);
+    }
+    // then try base64 decode
+    final decoded = Utils.base64Decode(importData);
+    if (decoded != null && tryParseLines(decoded)) {
+      return Success(dataList);
+    }
+    // finally try raw config text
+    // json object
+    final jsonData = Utils.fromJsonString(importData);
+    if (jsonData is Map<String, dynamic>) {
+      final profile = ProfileItemFactory.createDefault(
+        '',
+        0,
+      ).copyWith(configType: EConfigType.custom, customConfig: importData);
+      return Success([profile]);
+    }
+    return Failure(ValidationError('Unsupported import data format'));
   }
 }

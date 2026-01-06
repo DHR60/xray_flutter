@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:xray_flutter/data/db/app_database.dart';
+import 'package:xray_flutter/data/model/profile_item_factory.dart';
 import 'package:xray_flutter/domain/repo/profile_repo.dart';
 
 class ProfileRepoImpl implements ProfileRepo {
@@ -37,10 +38,7 @@ class ProfileRepoImpl implements ProfileRepo {
   }
 
   @override
-  Future<List<ProfileItemData>> getProfiles({
-    String? keyword,
-    String? subId,
-  }) {
+  Future<List<ProfileItemData>> getProfiles({String? keyword, String? subId}) {
     return (_database.select(_database.profileItem)
           ..orderBy([(tbl) => OrderingTerm(expression: tbl.orderIndex)])
           ..where((tbl) {
@@ -219,6 +217,59 @@ class ProfileRepoImpl implements ProfileRepo {
       });
 
       return updates.length;
+    });
+  }
+
+  @override
+  Future<List<ProfileItemData>> updateProfilesFromSubscription(
+    List<ProfileItemData> newProfiles,
+    String subId,
+  ) async {
+    return _database.transaction(() async {
+      final existingProfiles =
+          await (_database.select(_database.profileItem)
+                ..where(
+                  (tbl) => tbl.isSub.equals(true) & tbl.subid.equals(subId),
+                )
+                ..orderBy([(tbl) => OrderingTerm(expression: tbl.orderIndex)]))
+              .get();
+
+      final updatedProfiles = <ProfileItemData>[];
+      for (final newProfile in newProfiles) {
+        final match = existingProfiles.firstWhere(
+          (e) => ProfileItemFactory.isRemoteEqual(e, newProfile),
+          orElse: () => ProfileItemFactory.createDefault('', 0),
+        );
+
+        if (match.indexId.isNotEmpty) {
+          updatedProfiles.add(newProfile.copyWith(indexId: match.indexId));
+        } else {
+          updatedProfiles.add(newProfile);
+        }
+      }
+
+      await (_database.delete(
+        _database.profileItem,
+      )..where((tbl) => tbl.isSub.equals(true) & tbl.subid.equals(subId))).go();
+
+      var orderIndex = await getMaxOrderIndex() + 1;
+      await _database.batch((batch) {
+        for (final profile in updatedProfiles) {
+          final toInsert = profile.copyWith(
+            isSub: true,
+            subid: subId,
+            orderIndex: orderIndex++,
+          );
+          batch.insert(_database.profileItem, toInsert);
+        }
+      });
+
+      final inserted = await (_database.select(_database.profileItem)
+            ..where((tbl) => tbl.isSub.equals(true) & tbl.subid.equals(subId))
+            ..orderBy([(tbl) => OrderingTerm(expression: tbl.orderIndex)]))
+          .get();
+
+      return inserted;
     });
   }
 }

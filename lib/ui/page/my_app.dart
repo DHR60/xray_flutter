@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:xray_flutter/core/enum/config_type.dart';
 import 'package:xray_flutter/core/global_const.dart';
+import 'package:xray_flutter/data/db/app_database.dart';
 import 'package:xray_flutter/di/app_config_provider.dart';
 import 'package:xray_flutter/di/core_manager_provider.dart';
 import 'package:xray_flutter/di/profile_filter_provider.dart';
@@ -98,23 +99,15 @@ class _MyHomePageStateState extends ConsumerState<MyHomePageState> {
           .call(clipboardData);
       if (!mounted) return;
 
-      if (result.isEmpty) {
+      if (result is Failure) {
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(const SnackBar(content: Text('没有可导入的配置')));
-      } else if (result.every((r) => r is Success)) {
-        final successCount = result.whereType<Success>().length;
+      } else if (result is Success<List<ProfileItemData>>) {
+        final successCount = result.data.length;
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text('导入成功，共 $successCount 条')));
-      } else {
-        final failureCount = result.whereType<Failure>().length;
-        final firstError = result.firstWhere((r) => r is Failure) as Failure;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('导入失败: ${firstError.toString()}，共 $failureCount 条错误'),
-          ),
-        );
+        ).showSnackBar(SnackBar(content: Text('导入成功: $successCount 条配置')));
       }
     } else {
       ScaffoldMessenger.of(
@@ -444,6 +437,30 @@ class _MyHomePageStateState extends ConsumerState<MyHomePageState> {
                           ),
                         );
                         break;
+                      case 'Update':
+                        final currentSubItem = ref
+                            .read(storeServiceProvider)
+                            .getCurrentSubItem();
+                        if (currentSubItem != null) {
+                          final result = await ref
+                              .read(fetchSubUseCaseProvider)
+                              .call(currentSubItem.subId);
+                          if (!context.mounted) return;
+                          if (result is Success<List<ProfileItemData>>) {
+                            final successCount = result.data.length;
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('更新成功: $successCount 条配置'),
+                              ),
+                            );
+                          } else if (result is Failure) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('更新失败: ${result.toString()}'),
+                              ),
+                            );
+                          }
+                        }
                     }
                     switch (intent) {
                       case SubSettingUpsert(item: final item):
@@ -462,28 +479,70 @@ class _MyHomePageStateState extends ConsumerState<MyHomePageState> {
                     }
                   },
                   itemBuilder: (BuildContext context) {
-                    return {'Add', 'Edit', 'Delete'}.map((String choice) {
-                      if (choice == 'Edit' || choice == 'Delete') {
-                        final currentSubItem = ref
-                            .read(storeServiceProvider)
-                            .getCurrentSubItem();
-                        if (currentSubItem == null ||
-                            currentSubItem.subId.isEmpty) {
-                          return PopupMenuItem<String>(
-                            value: choice,
-                            enabled: false,
-                            child: Text(
-                              choice,
-                              style: const TextStyle(color: Colors.grey),
-                            ),
-                          );
-                        }
-                      }
-                      return PopupMenuItem<String>(
-                        value: choice,
-                        child: Text(choice),
-                      );
-                    }).toList();
+                    final currentSubItem = ref
+                        .read(storeServiceProvider)
+                        .getCurrentSubItem();
+                    final isModifiable =
+                        currentSubItem != null &&
+                        currentSubItem.subId.isNotEmpty;
+
+                    final entries = <PopupMenuEntry<String>>[];
+
+                    entries.add(
+                      const PopupMenuItem<String>(
+                        value: 'Add',
+                        child: Text('新建订阅'),
+                      ),
+                    );
+
+                    entries.add(
+                      PopupMenuItem<String>(
+                        value: 'Edit',
+                        enabled: isModifiable,
+                        child: Text(
+                          '编辑订阅',
+                          style:
+                              (currentSubItem == null ||
+                                  currentSubItem.subId.isEmpty)
+                              ? const TextStyle(color: Colors.grey)
+                              : null,
+                        ),
+                      ),
+                    );
+
+                    entries.add(
+                      PopupMenuItem<String>(
+                        value: 'Delete',
+                        enabled: isModifiable,
+                        child: Text(
+                          '删除订阅',
+                          style:
+                              (currentSubItem == null ||
+                                  currentSubItem.subId.isEmpty)
+                              ? const TextStyle(color: Colors.grey)
+                              : null,
+                        ),
+                      ),
+                    );
+
+                    entries.add(const PopupMenuDivider());
+
+                    entries.add(
+                      PopupMenuItem<String>(
+                        value: 'Update',
+                        enabled: isModifiable,
+                        child: Text(
+                          '更新订阅',
+                          style:
+                              (currentSubItem == null ||
+                                  currentSubItem.subId.isEmpty)
+                              ? const TextStyle(color: Colors.grey)
+                              : null,
+                        ),
+                      ),
+                    );
+
+                    return entries;
                   },
                 ),
               ],

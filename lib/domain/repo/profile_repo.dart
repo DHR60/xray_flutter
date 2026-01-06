@@ -20,4 +20,16 @@ abstract class ProfileRepo {
     String? keyword,
     String? subId,
   });
+
+  /// Update subscription profiles. Provide the new profile list [newProfiles] and the subscription ID [subId].
+  ///
+  /// Returns the updated list of profiles.
+  ///
+  /// Compares old and new profiles and preserves the indexId of unchanged profiles.
+  /// Then deletes all profiles where `isSub` is true and `subId` equals [subId].
+  /// Finally inserts the new profiles; `orderIndex` is regenerated according to the provided order.
+  Future<List<ProfileItemData>> updateProfilesFromSubscription(
+    List<ProfileItemData> newProfiles,
+    String subId,
+  );
 }

@@ -30,6 +30,14 @@ class NotFoundError extends DomainError {}
 
 class ConflictError extends DomainError {}
 
+class NetworkError extends DomainError {
+  final String message;
+  const NetworkError(this.message);
+
+  @override
+  String toString() => 'NetworkError(message: $message)';
+}
+
 class UnexpectedError extends DomainError
 {
     final Object cause;
