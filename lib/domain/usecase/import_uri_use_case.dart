@@ -30,6 +30,9 @@ class ImportUriUseCase {
           indexId: Utils.generateUUID(),
           isSub: false,
           subid: subId ?? _store.currentConfig.stateItem.subId,
+          remarks: dataList[i].remarks.isNotEmpty
+              ? dataList[i].remarks
+              : 'Profile ${i + 1}',
         );
       }
       var results = <Result<void>>[];

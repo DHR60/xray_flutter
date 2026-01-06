@@ -61,6 +61,9 @@ class FetchSubUseCase {
           indexId: Utils.generateUUID(),
           isSub: true,
           subid: subIndexId,
+          remarks: dataList[i].remarks.isNotEmpty
+              ? dataList[i].remarks
+              : 'Profile ${i + 1}',
         );
       }
       final list = await _store.profileRepo.updateProfilesFromSubscription(

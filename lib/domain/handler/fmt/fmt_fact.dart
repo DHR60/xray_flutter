@@ -96,10 +96,12 @@ class FmtFact {
     // json object
     final jsonData = Utils.fromJsonString(importData);
     if (jsonData is Map<String, dynamic>) {
-      final profile = ProfileItemFactory.createDefault(
-        '',
-        0,
-      ).copyWith(configType: EConfigType.custom, customConfig: importData);
+      final remark = jsonData['remarks']?.toString() ?? '';
+      final profile = ProfileItemFactory.createDefault('', 0).copyWith(
+        configType: EConfigType.custom,
+        customConfig: importData,
+        remarks: remark,
+      );
       return Success([profile]);
     }
     return Failure(ValidationError('Unsupported import data format'));
