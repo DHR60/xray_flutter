@@ -1,4 +1,1 @@
-enum ECoreType {
-  unknown,
-  xray,
-}
+enum ECoreType { unknown, xray }

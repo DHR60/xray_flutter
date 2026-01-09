@@ -264,9 +264,7 @@ class FmtUtils {
     Map<String, String> queryParams,
     ProfileItemData base,
   ) {
-    var data = base.copyWith(
-      network: getQueryValue(queryParams, 'type'),
-    );
+    var data = base.copyWith(network: getQueryValue(queryParams, 'type'));
     final transportType = GlobalConst.transportMap[data.network];
     if (transportType == null) {
       return data.copyWith(network: 'raw');

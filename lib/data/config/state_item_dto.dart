@@ -10,7 +10,7 @@ abstract class StateItemDto with _$StateItemDto {
     @Default('') String profileId,
     @Default('') String routingId,
   }) = _StateItemDto;
-  
+
   factory StateItemDto.fromJson(Map<String, dynamic> json) =>
       _$StateItemDtoFromJson(json);
 }

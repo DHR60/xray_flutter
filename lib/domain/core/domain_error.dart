@@ -38,13 +38,12 @@ class NetworkError extends DomainError {
   String toString() => 'NetworkError(message: $message)';
 }
 
-class UnexpectedError extends DomainError
-{
-    final Object cause;
-    const UnexpectedError(this.cause);
+class UnexpectedError extends DomainError {
+  final Object cause;
+  const UnexpectedError(this.cause);
 
-    @override
-    String toString() => 'UnexpectedError(cause: $cause)';
+  @override
+  String toString() => 'UnexpectedError(cause: $cause)';
 }
 
 class UnknownError extends DomainError {}

@@ -4,7 +4,9 @@ import 'package:xray_flutter/core/enum/core_type.dart';
 
 class ProfileItem extends Table {
   late final indexId = text()();
-  late final configType = textEnum<EConfigType>().clientDefault(() => 'unknown')();
+  late final configType = textEnum<EConfigType>().clientDefault(
+    () => 'unknown',
+  )();
   late final configVersion = integer().clientDefault(() => 0)();
   late final remarks = text().clientDefault(() => '')();
   late final orderIndex = integer().clientDefault(() => 0)();
@@ -36,7 +38,7 @@ class ProfileItem extends Table {
   late final customConfig = text().clientDefault(() => '')();
   late final customOutbound = text().clientDefault(() => '')();
   late final jsonData = text().clientDefault(() => '')();
-  
+
   @override
   Set<Column<Object>> get primaryKey => {indexId};
 }

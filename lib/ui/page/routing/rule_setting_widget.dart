@@ -49,7 +49,7 @@ class _RuleSettingWidgetState extends ConsumerState<RuleSettingWidget> {
     _portController = TextEditingController(text: _ruleItem.port);
     _networkController = TextEditingController(text: _ruleItem.network);
     _protocolController = TextEditingController(text: _ruleItem.protocol);
-    
+
     _remarkController.addListener(_onControllerChanged);
     _outboundTagController.addListener(_onControllerChanged);
     _inboundTagController.addListener(_onControllerChanged);
@@ -59,7 +59,7 @@ class _RuleSettingWidgetState extends ConsumerState<RuleSettingWidget> {
     _networkController.addListener(_onControllerChanged);
     _protocolController.addListener(_onControllerChanged);
   }
-  
+
   void _onControllerChanged() {
     _requestRebuild();
   }
@@ -84,7 +84,7 @@ class _RuleSettingWidgetState extends ConsumerState<RuleSettingWidget> {
     _portController.removeListener(_onControllerChanged);
     _networkController.removeListener(_onControllerChanged);
     _protocolController.removeListener(_onControllerChanged);
-    
+
     _remarkController.dispose();
     _outboundTagController.dispose();
     _inboundTagController.dispose();

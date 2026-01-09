@@ -15,7 +15,7 @@ abstract class RoutingItemDto with _$RoutingItemDto {
     @Default('') String strategy,
     @Default('') String url,
   }) = _RoutingItemDto;
-  
+
   factory RoutingItemDto.fromJson(Map<String, dynamic> json) =>
       _$RoutingItemDtoFromJson(json);
 }

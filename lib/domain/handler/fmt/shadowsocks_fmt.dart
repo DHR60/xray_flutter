@@ -18,8 +18,14 @@ class ShadowsocksFmt implements Fmtable {
 
   @override
   String build(ProfileItemData data) {
-    final userInfo = Utils.base64EncodeUrlSafe('${data.security}:${data.id}').replaceAll('=', '');
-    final authority = FmtUtils.buildAuthority(userInfo, data.address, data.port);
+    final userInfo = Utils.base64EncodeUrlSafe(
+      '${data.security}:${data.id}',
+    ).replaceAll('=', '');
+    final authority = FmtUtils.buildAuthority(
+      userInfo,
+      data.address,
+      data.port,
+    );
 
     // 构建插件参数
     final pluginParts = <String>[];
@@ -76,10 +82,9 @@ class ShadowsocksFmt implements Fmtable {
 
     // The last '/' should be appended if plugin is present
     // like: ss://YmYtY2ZiOnRlc3Q@192.168.100.1:8888/?plugin=
-    final baseUri =
-        pluginParts.isNotEmpty
-            ? 'ss://$authority/${queryString.isNotEmpty ? '?$queryString' : ''}'
-            : 'ss://$authority${queryString.isNotEmpty ? '?$queryString' : ''}';
+    final baseUri = pluginParts.isNotEmpty
+        ? 'ss://$authority/${queryString.isNotEmpty ? '?$queryString' : ''}'
+        : 'ss://$authority${queryString.isNotEmpty ? '?$queryString' : ''}';
 
     if (data.remarks.isNotEmpty) {
       return '$baseUri#${FmtUtils.urlEncode(data.remarks)}';

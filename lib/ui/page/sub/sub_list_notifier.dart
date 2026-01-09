@@ -20,11 +20,11 @@ abstract class SubListState with _$SubListState {
 class SubListNotifier extends _$SubListNotifier {
   @override
   SubListState build() {
-    final subs = ref.watch(appConfigProvider.select(
-        (value) => value.subItems));
+    final subs = ref.watch(appConfigProvider.select((value) => value.subItems));
 
-    final activeSubId = ref.watch(appConfigProvider.select(
-        (value) => value.stateItem.subId));
+    final activeSubId = ref.watch(
+      appConfigProvider.select((value) => value.stateItem.subId),
+    );
 
     return SubListState(subList: subs, activeSubId: activeSubId);
   }
@@ -32,7 +32,8 @@ class SubListNotifier extends _$SubListNotifier {
   Future<void> updateActiveSub(String newActiveSubId) async {
     var config = ref.read(appConfigProvider);
 
-    if (config.subItems.isNotEmpty && newActiveSubId != config.stateItem.subId) {
+    if (config.subItems.isNotEmpty &&
+        newActiveSubId != config.stateItem.subId) {
       await ref.read(storeServiceProvider).updateActiveSub(newActiveSubId);
     }
     state = state.copyWith(activeSubId: newActiveSubId);

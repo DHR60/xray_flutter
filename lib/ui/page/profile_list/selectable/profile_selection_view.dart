@@ -94,7 +94,9 @@ class _ProfileSelectionViewState extends ConsumerState<ProfileSelectionView> {
             subList: _subList,
             initialSelectedSubId: _profileFilter.subId,
             onSelectionChanged: (selectedSubId) {
-              _updateProfileFilter(_profileFilter.copyWith(subId: selectedSubId));
+              _updateProfileFilter(
+                _profileFilter.copyWith(subId: selectedSubId),
+              );
             },
           ),
         ),

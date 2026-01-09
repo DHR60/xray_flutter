@@ -21,10 +21,12 @@ abstract class RoutingListState with _$RoutingListState {
 class RoutingListNotifier extends _$RoutingListNotifier {
   @override
   RoutingListState build() {
-    final items = ref.watch(appConfigProvider.select(
-        (value) => value.routingItems));
-    final activeRoutingId = ref.watch(appConfigProvider.select(
-        (value) => value.stateItem.routingId));
+    final items = ref.watch(
+      appConfigProvider.select((value) => value.routingItems),
+    );
+    final activeRoutingId = ref.watch(
+      appConfigProvider.select((value) => value.stateItem.routingId),
+    );
     return RoutingListState(items: items, activeRoutingId: activeRoutingId);
   }
 
@@ -41,8 +43,7 @@ class RoutingListNotifier extends _$RoutingListNotifier {
     await ref.read(storeServiceProvider).deleteRoutingItemById(routingId);
   }
 
-  Future<void> handleRoutingSettingResult(
-      RoutingSettingResult? intent) async {
+  Future<void> handleRoutingSettingResult(RoutingSettingResult? intent) async {
     if (intent is RoutingSettingUpsert) {
       await upsertRouting(intent.routingItem);
     } else if (intent is RoutingSettingDelete) {

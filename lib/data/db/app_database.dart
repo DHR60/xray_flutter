@@ -20,11 +20,7 @@ LazyDatabase _openConnection() {
   });
 }
 
-@DriftDatabase(tables: [
-  ProfileItem,
-  ProfileTestItem,
-  ProfileStatItem,
-])
+@DriftDatabase(tables: [ProfileItem, ProfileTestItem, ProfileStatItem])
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? e]) : super(e ?? _openConnection());
 

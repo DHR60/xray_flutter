@@ -7,7 +7,7 @@ class ProfileStatItem extends Table {
   late final todayUp = int64().clientDefault(() => BigInt.zero)();
   late final todayDown = int64().clientDefault(() => BigInt.zero)();
   late final dateNow = int64().clientDefault(() => BigInt.zero)();
-  
+
   @override
   Set<Column<Object>> get primaryKey => {indexId};
 }

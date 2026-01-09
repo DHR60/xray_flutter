@@ -264,10 +264,13 @@ class ProfileRepoImpl implements ProfileRepo {
         }
       });
 
-      final inserted = await (_database.select(_database.profileItem)
-            ..where((tbl) => tbl.isSub.equals(true) & tbl.subid.equals(subId))
-            ..orderBy([(tbl) => OrderingTerm(expression: tbl.orderIndex)]))
-          .get();
+      final inserted =
+          await (_database.select(_database.profileItem)
+                ..where(
+                  (tbl) => tbl.isSub.equals(true) & tbl.subid.equals(subId),
+                )
+                ..orderBy([(tbl) => OrderingTerm(expression: tbl.orderIndex)]))
+              .get();
 
       return inserted;
     });

@@ -32,8 +32,9 @@ abstract class ProfileListState with _$ProfileListState {
 class ProfileListNotifier extends _$ProfileListNotifier {
   @override
   ProfileListState build() {
-    var stateItem = ref.watch(appConfigProvider.select(
-        (value) => value.stateItem));
+    var stateItem = ref.watch(
+      appConfigProvider.select((value) => value.stateItem),
+    );
     String activeProfileId = stateItem.profileId;
 
     return ProfileListState(activeProfileId: activeProfileId);

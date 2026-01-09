@@ -22,7 +22,10 @@ class VlessFmt implements Fmtable {
     if (queryParams != null) {
       data = FmtUtils.resolveFromQueryParams(queryParams, data);
       // resolve allowInsecure for compatibility
-      final allowInsecure = FmtUtils.getQueryValue(queryParams, 'allowInsecure');
+      final allowInsecure = FmtUtils.getQueryValue(
+        queryParams,
+        'allowInsecure',
+      );
       if (allowInsecure == '1' || allowInsecure == 'true') {
         data = data.copyWith(allowInsecure: 'true');
       }
@@ -30,9 +33,7 @@ class VlessFmt implements Fmtable {
         flow: FmtUtils.getQueryValue(queryParams, 'flow'),
         vlessEncryption: FmtUtils.getQueryValue(queryParams, 'encryption'),
       );
-      data = data.copyWith(
-        jsonData: Utils.toJsonString(extra.toJson()),
-      );
+      data = data.copyWith(jsonData: Utils.toJsonString(extra.toJson()));
     }
 
     return Success(data);
