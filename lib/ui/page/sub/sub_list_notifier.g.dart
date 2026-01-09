@@ -41,7 +41,7 @@ final class SubListNotifierProvider
   }
 }
 
-String _$subListNotifierHash() => r'bc4420ab4ac2ee0f048758144b779758fe19b056';
+String _$subListNotifierHash() => r'f758ec74e55ede8b2c07f22bfd4ae731750e169e';
 
 abstract class _$SubListNotifier extends $Notifier<SubListState> {
   SubListState build();

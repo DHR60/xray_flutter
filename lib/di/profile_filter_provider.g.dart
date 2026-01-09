@@ -42,7 +42,7 @@ final class ProfileFilterNotifierProvider
 }
 
 String _$profileFilterNotifierHash() =>
-    r'd28c8897c9b630404fba515f8acc3e69069bf17e';
+    r'33091057bed4eaa14564331b5ed3b15d6776b837';
 
 abstract class _$ProfileFilterNotifier extends $Notifier<ProfileFilter> {
   ProfileFilter build();
