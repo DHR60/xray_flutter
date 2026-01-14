@@ -14,7 +14,6 @@ class ProfileItem extends Table {
   late final isSub = boolean().clientDefault(() => true)();
   late final address = text().clientDefault(() => '')();
   late final port = integer().clientDefault(() => 0)();
-  late final ports = text().clientDefault(() => '')();
   late final id = text().clientDefault(() => '')();
   late final security = text().clientDefault(() => '')();
   late final network = text().clientDefault(() => '')();
@@ -35,6 +34,7 @@ class ProfileItem extends Table {
   late final displayLog = boolean().clientDefault(() => true)();
   late final xhttpExtra = text().clientDefault(() => '')();
   late final cert = text().clientDefault(() => '')();
+  late final certSha256 = text().clientDefault(() => '')();
   late final customConfig = text().clientDefault(() => '')();
   late final customOutbound = text().clientDefault(() => '')();
   late final jsonData = text().clientDefault(() => '')();

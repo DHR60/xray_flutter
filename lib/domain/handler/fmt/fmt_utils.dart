@@ -108,6 +108,13 @@ class FmtUtils {
     return queryParams[key]!;
   }
 
+  static String getQueryValueOrDefault(Map<String, String>? queryParams, String key, String defaultValue) {
+    if (queryParams == null || !queryParams.containsKey(key)) {
+      return defaultValue;
+    }
+    return queryParams[key]!;
+  }
+
   static String getQueryDecoded(Map<String, String>? queryParams, String key) {
     final value = getQueryValue(queryParams, key);
     if (value.isEmpty) {
@@ -132,6 +139,7 @@ class FmtUtils {
       query['alpn'] = data.alpn;
     }
     if (data.allowInsecure == 'true') {
+      query['allowInsecure'] = '1';
       query['insecure'] = '1';
     }
     return query;
@@ -227,6 +235,7 @@ class FmtUtils {
           query['alpn'] = data.alpn;
         }
         if (data.allowInsecure == 'true') {
+          query['allowInsecure'] = '1';
           query['insecure'] = '1';
         }
       } else if (data.security == GlobalConst.transportSecurityReality) {
@@ -244,6 +253,9 @@ class FmtUtils {
         }
         if (data.mldsa65Verify.isNotEmpty) {
           query['pqv'] = data.mldsa65Verify;
+        }
+        if (data.certSha256.isNotEmpty) {
+          query['pcs'] = data.certSha256;
         }
       }
     }
@@ -323,11 +335,23 @@ class FmtUtils {
       sni: getQueryValue(queryParams, 'sni'),
       fingerprint: getQueryValue(queryParams, 'fp'),
       alpn: getQueryValue(queryParams, 'alpn'),
-      allowInsecure: getQueryValue(queryParams, 'insecure'),
+      allowInsecure: allowInsecureFromQueryParams(queryParams) ? 'true' : 'false',
       publicKey: getQueryValue(queryParams, 'pbk'),
       shortId: getQueryValue(queryParams, 'sid'),
       spiderX: getQueryValue(queryParams, 'spx'),
       mldsa65Verify: getQueryValue(queryParams, 'pqv'),
+      certSha256: getQueryValue(queryParams, 'pcs'),
     );
+  }
+
+  static bool allowInsecureFromQueryParams(
+    Map<String, String>? queryParams,
+  ) {
+    if (queryParams == null) {
+      return false;
+    }
+    final allowInsecure = getQueryValue(queryParams, 'allowInsecure');
+    final insecure = getQueryValue(queryParams, 'insecure');
+    return allowInsecure == '1' || insecure == '1';
   }
 }

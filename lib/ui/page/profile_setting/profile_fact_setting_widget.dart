@@ -4,6 +4,7 @@ import 'package:xray_flutter/core/enum/config_type.dart';
 import 'package:xray_flutter/data/db/app_database.dart';
 import 'package:xray_flutter/ui/page/profile_setting/custom_setting_widget.dart';
 import 'package:xray_flutter/ui/page/profile_setting/http_setting_widget.dart';
+import 'package:xray_flutter/ui/page/profile_setting/hysteria2_setting_widget.dart';
 import 'package:xray_flutter/ui/page/profile_setting/shadowsocks_setting_widget.dart';
 import 'package:xray_flutter/ui/page/profile_setting/socks_setting_widget.dart';
 import 'package:xray_flutter/ui/page/profile_setting/trojan_setting_widget.dart';
@@ -55,6 +56,12 @@ class ProfileFactSettingWidget extends ConsumerWidget {
         );
       case EConfigType.wireguard:
         return WireguardSettingWidget(
+          profile: actProfile,
+          isNew: isNew,
+          subId: subId,
+        );
+      case EConfigType.hysteria2:
+        return Hysteria2SettingWidget(
           profile: actProfile,
           isNew: isNew,
           subId: subId,

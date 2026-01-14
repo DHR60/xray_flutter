@@ -5,6 +5,7 @@ import 'package:xray_flutter/data/db/app_database.dart';
 import 'package:xray_flutter/data/model/profile_item_factory.dart';
 import 'package:xray_flutter/domain/core/domain_error.dart';
 import 'package:xray_flutter/domain/core/result.dart';
+import 'package:xray_flutter/domain/handler/fmt/hy2_fact.dart';
 import 'package:xray_flutter/domain/handler/fmt/shadowsocks_fmt.dart';
 import 'package:xray_flutter/domain/handler/fmt/trojan_fmt.dart';
 import 'package:xray_flutter/domain/handler/fmt/vless_fmt.dart';
@@ -25,6 +26,8 @@ class FmtFact {
         return TrojanFmt().parse(uri, base);
       } else if (_matchProtocol(uri, EConfigType.shadowsocks)) {
         return ShadowsocksFmt().parse(uri, base);
+      } else if (_matchProtocol(uri, EConfigType.hysteria2)) {
+        return Hy2Fact().parse(uri, base);
       }
       return Failure(ValidationError('Unsupported shared URI format'));
     } catch (e) {
@@ -43,6 +46,8 @@ class FmtFact {
           return Success(TrojanFmt().build(data));
         case EConfigType.shadowsocks:
           return Success(ShadowsocksFmt().build(data));
+        case EConfigType.hysteria2:
+          return Success(Hy2Fact().build(data));
         default:
           return Failure(ValidationError('Unsupported shared URI format'));
       }

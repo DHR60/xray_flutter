@@ -111,16 +111,6 @@ class $ProfileItemTable extends ProfileItem
     requiredDuringInsert: false,
     clientDefault: () => 0,
   );
-  static const VerificationMeta _portsMeta = const VerificationMeta('ports');
-  @override
-  late final GeneratedColumn<String> ports = GeneratedColumn<String>(
-    'ports',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-    clientDefault: () => '',
-  );
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
@@ -350,6 +340,18 @@ class $ProfileItemTable extends ProfileItem
     requiredDuringInsert: false,
     clientDefault: () => '',
   );
+  static const VerificationMeta _certSha256Meta = const VerificationMeta(
+    'certSha256',
+  );
+  @override
+  late final GeneratedColumn<String> certSha256 = GeneratedColumn<String>(
+    'cert_sha256',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    clientDefault: () => '',
+  );
   static const VerificationMeta _customConfigMeta = const VerificationMeta(
     'customConfig',
   );
@@ -397,7 +399,6 @@ class $ProfileItemTable extends ProfileItem
     isSub,
     address,
     port,
-    ports,
     id,
     security,
     network,
@@ -418,6 +419,7 @@ class $ProfileItemTable extends ProfileItem
     displayLog,
     xhttpExtra,
     cert,
+    certSha256,
     customConfig,
     customOutbound,
     jsonData,
@@ -485,12 +487,6 @@ class $ProfileItemTable extends ProfileItem
       context.handle(
         _portMeta,
         port.isAcceptableOrUnknown(data['port']!, _portMeta),
-      );
-    }
-    if (data.containsKey('ports')) {
-      context.handle(
-        _portsMeta,
-        ports.isAcceptableOrUnknown(data['ports']!, _portsMeta),
       );
     }
     if (data.containsKey('id')) {
@@ -622,6 +618,12 @@ class $ProfileItemTable extends ProfileItem
         cert.isAcceptableOrUnknown(data['cert']!, _certMeta),
       );
     }
+    if (data.containsKey('cert_sha256')) {
+      context.handle(
+        _certSha256Meta,
+        certSha256.isAcceptableOrUnknown(data['cert_sha256']!, _certSha256Meta),
+      );
+    }
     if (data.containsKey('custom_config')) {
       context.handle(
         _customConfigMeta,
@@ -692,10 +694,6 @@ class $ProfileItemTable extends ProfileItem
       port: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}port'],
-      )!,
-      ports: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}ports'],
       )!,
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
@@ -779,6 +777,10 @@ class $ProfileItemTable extends ProfileItem
         DriftSqlType.string,
         data['${effectivePrefix}cert'],
       )!,
+      certSha256: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}cert_sha256'],
+      )!,
       customConfig: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}custom_config'],
@@ -817,7 +819,6 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
   final bool isSub;
   final String address;
   final int port;
-  final String ports;
   final String id;
   final String security;
   final String network;
@@ -838,6 +839,7 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
   final bool displayLog;
   final String xhttpExtra;
   final String cert;
+  final String certSha256;
   final String customConfig;
   final String customOutbound;
   final String jsonData;
@@ -851,7 +853,6 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
     required this.isSub,
     required this.address,
     required this.port,
-    required this.ports,
     required this.id,
     required this.security,
     required this.network,
@@ -872,6 +873,7 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
     required this.displayLog,
     required this.xhttpExtra,
     required this.cert,
+    required this.certSha256,
     required this.customConfig,
     required this.customOutbound,
     required this.jsonData,
@@ -892,7 +894,6 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
     map['is_sub'] = Variable<bool>(isSub);
     map['address'] = Variable<String>(address);
     map['port'] = Variable<int>(port);
-    map['ports'] = Variable<String>(ports);
     map['id'] = Variable<String>(id);
     map['security'] = Variable<String>(security);
     map['network'] = Variable<String>(network);
@@ -919,6 +920,7 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
     map['display_log'] = Variable<bool>(displayLog);
     map['xhttp_extra'] = Variable<String>(xhttpExtra);
     map['cert'] = Variable<String>(cert);
+    map['cert_sha256'] = Variable<String>(certSha256);
     map['custom_config'] = Variable<String>(customConfig);
     map['custom_outbound'] = Variable<String>(customOutbound);
     map['json_data'] = Variable<String>(jsonData);
@@ -936,7 +938,6 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
       isSub: Value(isSub),
       address: Value(address),
       port: Value(port),
-      ports: Value(ports),
       id: Value(id),
       security: Value(security),
       network: Value(network),
@@ -961,6 +962,7 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
       displayLog: Value(displayLog),
       xhttpExtra: Value(xhttpExtra),
       cert: Value(cert),
+      certSha256: Value(certSha256),
       customConfig: Value(customConfig),
       customOutbound: Value(customOutbound),
       jsonData: Value(jsonData),
@@ -984,7 +986,6 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
       isSub: serializer.fromJson<bool>(json['isSub']),
       address: serializer.fromJson<String>(json['address']),
       port: serializer.fromJson<int>(json['port']),
-      ports: serializer.fromJson<String>(json['ports']),
       id: serializer.fromJson<String>(json['id']),
       security: serializer.fromJson<String>(json['security']),
       network: serializer.fromJson<String>(json['network']),
@@ -1007,6 +1008,7 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
       displayLog: serializer.fromJson<bool>(json['displayLog']),
       xhttpExtra: serializer.fromJson<String>(json['xhttpExtra']),
       cert: serializer.fromJson<String>(json['cert']),
+      certSha256: serializer.fromJson<String>(json['certSha256']),
       customConfig: serializer.fromJson<String>(json['customConfig']),
       customOutbound: serializer.fromJson<String>(json['customOutbound']),
       jsonData: serializer.fromJson<String>(json['jsonData']),
@@ -1027,7 +1029,6 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
       'isSub': serializer.toJson<bool>(isSub),
       'address': serializer.toJson<String>(address),
       'port': serializer.toJson<int>(port),
-      'ports': serializer.toJson<String>(ports),
       'id': serializer.toJson<String>(id),
       'security': serializer.toJson<String>(security),
       'network': serializer.toJson<String>(network),
@@ -1050,6 +1051,7 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
       'displayLog': serializer.toJson<bool>(displayLog),
       'xhttpExtra': serializer.toJson<String>(xhttpExtra),
       'cert': serializer.toJson<String>(cert),
+      'certSha256': serializer.toJson<String>(certSha256),
       'customConfig': serializer.toJson<String>(customConfig),
       'customOutbound': serializer.toJson<String>(customOutbound),
       'jsonData': serializer.toJson<String>(jsonData),
@@ -1066,7 +1068,6 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
     bool? isSub,
     String? address,
     int? port,
-    String? ports,
     String? id,
     String? security,
     String? network,
@@ -1087,6 +1088,7 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
     bool? displayLog,
     String? xhttpExtra,
     String? cert,
+    String? certSha256,
     String? customConfig,
     String? customOutbound,
     String? jsonData,
@@ -1100,7 +1102,6 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
     isSub: isSub ?? this.isSub,
     address: address ?? this.address,
     port: port ?? this.port,
-    ports: ports ?? this.ports,
     id: id ?? this.id,
     security: security ?? this.security,
     network: network ?? this.network,
@@ -1123,6 +1124,7 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
     displayLog: displayLog ?? this.displayLog,
     xhttpExtra: xhttpExtra ?? this.xhttpExtra,
     cert: cert ?? this.cert,
+    certSha256: certSha256 ?? this.certSha256,
     customConfig: customConfig ?? this.customConfig,
     customOutbound: customOutbound ?? this.customOutbound,
     jsonData: jsonData ?? this.jsonData,
@@ -1144,7 +1146,6 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
       isSub: data.isSub.present ? data.isSub.value : this.isSub,
       address: data.address.present ? data.address.value : this.address,
       port: data.port.present ? data.port.value : this.port,
-      ports: data.ports.present ? data.ports.value : this.ports,
       id: data.id.present ? data.id.value : this.id,
       security: data.security.present ? data.security.value : this.security,
       network: data.network.present ? data.network.value : this.network,
@@ -1183,6 +1184,9 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
           ? data.xhttpExtra.value
           : this.xhttpExtra,
       cert: data.cert.present ? data.cert.value : this.cert,
+      certSha256: data.certSha256.present
+          ? data.certSha256.value
+          : this.certSha256,
       customConfig: data.customConfig.present
           ? data.customConfig.value
           : this.customConfig,
@@ -1205,7 +1209,6 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
           ..write('isSub: $isSub, ')
           ..write('address: $address, ')
           ..write('port: $port, ')
-          ..write('ports: $ports, ')
           ..write('id: $id, ')
           ..write('security: $security, ')
           ..write('network: $network, ')
@@ -1226,6 +1229,7 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
           ..write('displayLog: $displayLog, ')
           ..write('xhttpExtra: $xhttpExtra, ')
           ..write('cert: $cert, ')
+          ..write('certSha256: $certSha256, ')
           ..write('customConfig: $customConfig, ')
           ..write('customOutbound: $customOutbound, ')
           ..write('jsonData: $jsonData')
@@ -1244,7 +1248,6 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
     isSub,
     address,
     port,
-    ports,
     id,
     security,
     network,
@@ -1265,6 +1268,7 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
     displayLog,
     xhttpExtra,
     cert,
+    certSha256,
     customConfig,
     customOutbound,
     jsonData,
@@ -1282,7 +1286,6 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
           other.isSub == this.isSub &&
           other.address == this.address &&
           other.port == this.port &&
-          other.ports == this.ports &&
           other.id == this.id &&
           other.security == this.security &&
           other.network == this.network &&
@@ -1303,6 +1306,7 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
           other.displayLog == this.displayLog &&
           other.xhttpExtra == this.xhttpExtra &&
           other.cert == this.cert &&
+          other.certSha256 == this.certSha256 &&
           other.customConfig == this.customConfig &&
           other.customOutbound == this.customOutbound &&
           other.jsonData == this.jsonData);
@@ -1318,7 +1322,6 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
   final Value<bool> isSub;
   final Value<String> address;
   final Value<int> port;
-  final Value<String> ports;
   final Value<String> id;
   final Value<String> security;
   final Value<String> network;
@@ -1339,6 +1342,7 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
   final Value<bool> displayLog;
   final Value<String> xhttpExtra;
   final Value<String> cert;
+  final Value<String> certSha256;
   final Value<String> customConfig;
   final Value<String> customOutbound;
   final Value<String> jsonData;
@@ -1353,7 +1357,6 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
     this.isSub = const Value.absent(),
     this.address = const Value.absent(),
     this.port = const Value.absent(),
-    this.ports = const Value.absent(),
     this.id = const Value.absent(),
     this.security = const Value.absent(),
     this.network = const Value.absent(),
@@ -1374,6 +1377,7 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
     this.displayLog = const Value.absent(),
     this.xhttpExtra = const Value.absent(),
     this.cert = const Value.absent(),
+    this.certSha256 = const Value.absent(),
     this.customConfig = const Value.absent(),
     this.customOutbound = const Value.absent(),
     this.jsonData = const Value.absent(),
@@ -1389,7 +1393,6 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
     this.isSub = const Value.absent(),
     this.address = const Value.absent(),
     this.port = const Value.absent(),
-    this.ports = const Value.absent(),
     this.id = const Value.absent(),
     this.security = const Value.absent(),
     this.network = const Value.absent(),
@@ -1410,6 +1413,7 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
     this.displayLog = const Value.absent(),
     this.xhttpExtra = const Value.absent(),
     this.cert = const Value.absent(),
+    this.certSha256 = const Value.absent(),
     this.customConfig = const Value.absent(),
     this.customOutbound = const Value.absent(),
     this.jsonData = const Value.absent(),
@@ -1425,7 +1429,6 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
     Expression<bool>? isSub,
     Expression<String>? address,
     Expression<int>? port,
-    Expression<String>? ports,
     Expression<String>? id,
     Expression<String>? security,
     Expression<String>? network,
@@ -1446,6 +1449,7 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
     Expression<bool>? displayLog,
     Expression<String>? xhttpExtra,
     Expression<String>? cert,
+    Expression<String>? certSha256,
     Expression<String>? customConfig,
     Expression<String>? customOutbound,
     Expression<String>? jsonData,
@@ -1461,7 +1465,6 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
       if (isSub != null) 'is_sub': isSub,
       if (address != null) 'address': address,
       if (port != null) 'port': port,
-      if (ports != null) 'ports': ports,
       if (id != null) 'id': id,
       if (security != null) 'security': security,
       if (network != null) 'network': network,
@@ -1482,6 +1485,7 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
       if (displayLog != null) 'display_log': displayLog,
       if (xhttpExtra != null) 'xhttp_extra': xhttpExtra,
       if (cert != null) 'cert': cert,
+      if (certSha256 != null) 'cert_sha256': certSha256,
       if (customConfig != null) 'custom_config': customConfig,
       if (customOutbound != null) 'custom_outbound': customOutbound,
       if (jsonData != null) 'json_data': jsonData,
@@ -1499,7 +1503,6 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
     Value<bool>? isSub,
     Value<String>? address,
     Value<int>? port,
-    Value<String>? ports,
     Value<String>? id,
     Value<String>? security,
     Value<String>? network,
@@ -1520,6 +1523,7 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
     Value<bool>? displayLog,
     Value<String>? xhttpExtra,
     Value<String>? cert,
+    Value<String>? certSha256,
     Value<String>? customConfig,
     Value<String>? customOutbound,
     Value<String>? jsonData,
@@ -1535,7 +1539,6 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
       isSub: isSub ?? this.isSub,
       address: address ?? this.address,
       port: port ?? this.port,
-      ports: ports ?? this.ports,
       id: id ?? this.id,
       security: security ?? this.security,
       network: network ?? this.network,
@@ -1556,6 +1559,7 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
       displayLog: displayLog ?? this.displayLog,
       xhttpExtra: xhttpExtra ?? this.xhttpExtra,
       cert: cert ?? this.cert,
+      certSha256: certSha256 ?? this.certSha256,
       customConfig: customConfig ?? this.customConfig,
       customOutbound: customOutbound ?? this.customOutbound,
       jsonData: jsonData ?? this.jsonData,
@@ -1594,9 +1598,6 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
     }
     if (port.present) {
       map['port'] = Variable<int>(port.value);
-    }
-    if (ports.present) {
-      map['ports'] = Variable<String>(ports.value);
     }
     if (id.present) {
       map['id'] = Variable<String>(id.value);
@@ -1660,6 +1661,9 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
     if (cert.present) {
       map['cert'] = Variable<String>(cert.value);
     }
+    if (certSha256.present) {
+      map['cert_sha256'] = Variable<String>(certSha256.value);
+    }
     if (customConfig.present) {
       map['custom_config'] = Variable<String>(customConfig.value);
     }
@@ -1687,7 +1691,6 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
           ..write('isSub: $isSub, ')
           ..write('address: $address, ')
           ..write('port: $port, ')
-          ..write('ports: $ports, ')
           ..write('id: $id, ')
           ..write('security: $security, ')
           ..write('network: $network, ')
@@ -1708,6 +1711,7 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
           ..write('displayLog: $displayLog, ')
           ..write('xhttpExtra: $xhttpExtra, ')
           ..write('cert: $cert, ')
+          ..write('certSha256: $certSha256, ')
           ..write('customConfig: $customConfig, ')
           ..write('customOutbound: $customOutbound, ')
           ..write('jsonData: $jsonData, ')
@@ -2518,7 +2522,6 @@ typedef $$ProfileItemTableCreateCompanionBuilder =
       Value<bool> isSub,
       Value<String> address,
       Value<int> port,
-      Value<String> ports,
       Value<String> id,
       Value<String> security,
       Value<String> network,
@@ -2539,6 +2542,7 @@ typedef $$ProfileItemTableCreateCompanionBuilder =
       Value<bool> displayLog,
       Value<String> xhttpExtra,
       Value<String> cert,
+      Value<String> certSha256,
       Value<String> customConfig,
       Value<String> customOutbound,
       Value<String> jsonData,
@@ -2555,7 +2559,6 @@ typedef $$ProfileItemTableUpdateCompanionBuilder =
       Value<bool> isSub,
       Value<String> address,
       Value<int> port,
-      Value<String> ports,
       Value<String> id,
       Value<String> security,
       Value<String> network,
@@ -2576,6 +2579,7 @@ typedef $$ProfileItemTableUpdateCompanionBuilder =
       Value<bool> displayLog,
       Value<String> xhttpExtra,
       Value<String> cert,
+      Value<String> certSha256,
       Value<String> customConfig,
       Value<String> customOutbound,
       Value<String> jsonData,
@@ -2634,11 +2638,6 @@ class $$ProfileItemTableFilterComposer
 
   ColumnFilters<int> get port => $composableBuilder(
     column: $table.port,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get ports => $composableBuilder(
-    column: $table.ports,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -2743,6 +2742,11 @@ class $$ProfileItemTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnFilters<String> get certSha256 => $composableBuilder(
+    column: $table.certSha256,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<String> get customConfig => $composableBuilder(
     column: $table.customConfig,
     builder: (column) => ColumnFilters(column),
@@ -2810,11 +2814,6 @@ class $$ProfileItemTableOrderingComposer
 
   ColumnOrderings<int> get port => $composableBuilder(
     column: $table.port,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get ports => $composableBuilder(
-    column: $table.ports,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -2918,6 +2917,11 @@ class $$ProfileItemTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get certSha256 => $composableBuilder(
+    column: $table.certSha256,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get customConfig => $composableBuilder(
     column: $table.customConfig,
     builder: (column) => ColumnOrderings(column),
@@ -2976,9 +2980,6 @@ class $$ProfileItemTableAnnotationComposer
 
   GeneratedColumn<int> get port =>
       $composableBuilder(column: $table.port, builder: (column) => column);
-
-  GeneratedColumn<String> get ports =>
-      $composableBuilder(column: $table.ports, builder: (column) => column);
 
   GeneratedColumn<String> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
@@ -3058,6 +3059,11 @@ class $$ProfileItemTableAnnotationComposer
   GeneratedColumn<String> get cert =>
       $composableBuilder(column: $table.cert, builder: (column) => column);
 
+  GeneratedColumn<String> get certSha256 => $composableBuilder(
+    column: $table.certSha256,
+    builder: (column) => column,
+  );
+
   GeneratedColumn<String> get customConfig => $composableBuilder(
     column: $table.customConfig,
     builder: (column) => column,
@@ -3112,7 +3118,6 @@ class $$ProfileItemTableTableManager
                 Value<bool> isSub = const Value.absent(),
                 Value<String> address = const Value.absent(),
                 Value<int> port = const Value.absent(),
-                Value<String> ports = const Value.absent(),
                 Value<String> id = const Value.absent(),
                 Value<String> security = const Value.absent(),
                 Value<String> network = const Value.absent(),
@@ -3133,6 +3138,7 @@ class $$ProfileItemTableTableManager
                 Value<bool> displayLog = const Value.absent(),
                 Value<String> xhttpExtra = const Value.absent(),
                 Value<String> cert = const Value.absent(),
+                Value<String> certSha256 = const Value.absent(),
                 Value<String> customConfig = const Value.absent(),
                 Value<String> customOutbound = const Value.absent(),
                 Value<String> jsonData = const Value.absent(),
@@ -3147,7 +3153,6 @@ class $$ProfileItemTableTableManager
                 isSub: isSub,
                 address: address,
                 port: port,
-                ports: ports,
                 id: id,
                 security: security,
                 network: network,
@@ -3168,6 +3173,7 @@ class $$ProfileItemTableTableManager
                 displayLog: displayLog,
                 xhttpExtra: xhttpExtra,
                 cert: cert,
+                certSha256: certSha256,
                 customConfig: customConfig,
                 customOutbound: customOutbound,
                 jsonData: jsonData,
@@ -3184,7 +3190,6 @@ class $$ProfileItemTableTableManager
                 Value<bool> isSub = const Value.absent(),
                 Value<String> address = const Value.absent(),
                 Value<int> port = const Value.absent(),
-                Value<String> ports = const Value.absent(),
                 Value<String> id = const Value.absent(),
                 Value<String> security = const Value.absent(),
                 Value<String> network = const Value.absent(),
@@ -3205,6 +3210,7 @@ class $$ProfileItemTableTableManager
                 Value<bool> displayLog = const Value.absent(),
                 Value<String> xhttpExtra = const Value.absent(),
                 Value<String> cert = const Value.absent(),
+                Value<String> certSha256 = const Value.absent(),
                 Value<String> customConfig = const Value.absent(),
                 Value<String> customOutbound = const Value.absent(),
                 Value<String> jsonData = const Value.absent(),
@@ -3219,7 +3225,6 @@ class $$ProfileItemTableTableManager
                 isSub: isSub,
                 address: address,
                 port: port,
-                ports: ports,
                 id: id,
                 security: security,
                 network: network,
@@ -3240,6 +3245,7 @@ class $$ProfileItemTableTableManager
                 displayLog: displayLog,
                 xhttpExtra: xhttpExtra,
                 cert: cert,
+                certSha256: certSha256,
                 customConfig: customConfig,
                 customOutbound: customOutbound,
                 jsonData: jsonData,

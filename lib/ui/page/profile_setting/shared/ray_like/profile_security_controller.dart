@@ -13,6 +13,9 @@ class ProfileSecurityController {
   final TextEditingController realitySpdxController;
   final TextEditingController mldsa65VerController;
 
+  final TextEditingController certController;
+  final TextEditingController certSha256Controller;
+
   ProfileSecurityController({
     String security = '',
     String sni = '',
@@ -23,6 +26,8 @@ class ProfileSecurityController {
     String realityShortId = '',
     String realitySpdx = '',
     String mldsa65Ver = '',
+    String cert = '',
+    String certSha256 = '',
   }) : securityController = TextEditingController(text: security),
        sniController = TextEditingController(text: sni),
        utlsFingerprintController = TextEditingController(text: utlsFingerprint),
@@ -31,7 +36,9 @@ class ProfileSecurityController {
        realityPbkController = TextEditingController(text: realityPbk),
        realityShortIdController = TextEditingController(text: realityShortId),
        realitySpdxController = TextEditingController(text: realitySpdx),
-       mldsa65VerController = TextEditingController(text: mldsa65Ver);
+       mldsa65VerController = TextEditingController(text: mldsa65Ver),
+       certController = TextEditingController(text: cert),
+       certSha256Controller = TextEditingController(text: certSha256);
 
   ProfileSecurityController.fromData(ProfileItemData data)
     : securityController = TextEditingController(text: data.streamSecurity),
@@ -42,7 +49,9 @@ class ProfileSecurityController {
       realityPbkController = TextEditingController(text: data.publicKey),
       realityShortIdController = TextEditingController(text: data.shortId),
       realitySpdxController = TextEditingController(text: data.spiderX),
-      mldsa65VerController = TextEditingController(text: data.mldsa65Verify);
+      mldsa65VerController = TextEditingController(text: data.mldsa65Verify),
+      certController = TextEditingController(text: data.cert),
+      certSha256Controller = TextEditingController(text: data.certSha256);
 
   void dispose() {
     securityController.dispose();
@@ -54,6 +63,8 @@ class ProfileSecurityController {
     realityShortIdController.dispose();
     realitySpdxController.dispose();
     mldsa65VerController.dispose();
+    certController.dispose();
+    certSha256Controller.dispose();
   }
 
   String get security => securityController.text;
@@ -65,4 +76,6 @@ class ProfileSecurityController {
   String get realityShortId => realityShortIdController.text;
   String get realitySpdx => realitySpdxController.text;
   String get mldsa65Ver => mldsa65VerController.text;
+  String get cert => certController.text;
+  String get certSha256 => certSha256Controller.text;
 }

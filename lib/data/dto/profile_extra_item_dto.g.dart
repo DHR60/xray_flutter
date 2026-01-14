@@ -20,6 +20,11 @@ _ProfileExtraItemDto _$ProfileExtraItemDtoFromJson(Map<String, dynamic> json) =>
       wireguardReserved: json['wireguardReserved'] as String?,
       wireguardPublicKey: json['wireguardPublicKey'] as String?,
       wireguardMtu: (json['wireguardMtu'] as num?)?.toInt(),
+      hy2HopPorts: json['hy2HopPorts'] as String?,
+      hy2HopInterval: json['hy2HopInterval'] as String?,
+      hy2Up: json['hy2Up'] as String?,
+      hy2Down: json['hy2Down'] as String?,
+      hy2ObfsPass: json['hy2ObfsPass'] as String?,
     );
 
 Map<String, dynamic> _$ProfileExtraItemDtoToJson(
@@ -37,4 +42,9 @@ Map<String, dynamic> _$ProfileExtraItemDtoToJson(
   'wireguardReserved': instance.wireguardReserved,
   'wireguardPublicKey': instance.wireguardPublicKey,
   'wireguardMtu': instance.wireguardMtu,
+  'hy2HopPorts': instance.hy2HopPorts,
+  'hy2HopInterval': instance.hy2HopInterval,
+  'hy2Up': instance.hy2Up,
+  'hy2Down': instance.hy2Down,
+  'hy2ObfsPass': instance.hy2ObfsPass,
 };

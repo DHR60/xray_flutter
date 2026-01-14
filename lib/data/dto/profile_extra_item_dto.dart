@@ -19,6 +19,11 @@ abstract class ProfileExtraItemDto with _$ProfileExtraItemDto {
     String? wireguardReserved,
     String? wireguardPublicKey,
     int? wireguardMtu,
+    String? hy2HopPorts,
+    String? hy2HopInterval,
+    String? hy2Up,
+    String? hy2Down,
+    String? hy2ObfsPass,
   }) = _ProfileExtraItemDto;
 
   factory ProfileExtraItemDto.fromJson(Map<String, dynamic> json) =>

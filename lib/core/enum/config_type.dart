@@ -5,6 +5,7 @@ enum EConfigType {
   trojan,
   shadowsocks,
   wireguard,
+  hysteria2,
   socks,
   http,
   custom,

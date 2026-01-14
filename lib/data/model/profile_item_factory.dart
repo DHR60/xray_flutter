@@ -16,6 +16,7 @@ class ProfileItemFactory {
       allowInsecure: '',
       alpn: '',
       cert: '',
+      certSha256: '',
       configType: EConfigType.vless,
       configVersion: 0,
       displayLog: true,
@@ -27,7 +28,6 @@ class ProfileItemFactory {
       jsonData: '',
       mldsa65Verify: '',
       path: '',
-      ports: '',
       publicKey: '',
       requestHost: '',
       security: '',
@@ -84,6 +84,7 @@ class ProfileItemFactory {
         a.allowInsecure == b.allowInsecure &&
         a.alpn == b.alpn &&
         a.cert == b.cert &&
+        a.certSha256 == b.certSha256 &&
         a.configType == b.configType &&
         a.fingerprint == b.fingerprint &&
         a.headerType == b.headerType &&
@@ -91,7 +92,6 @@ class ProfileItemFactory {
         normalizedANetwork == normalizedBNetwork &&
         a.mldsa65Verify == b.mldsa65Verify &&
         a.path == b.path &&
-        a.ports == b.ports &&
         a.publicKey == b.publicKey &&
         a.requestHost == b.requestHost &&
         a.security == b.security &&

@@ -12,6 +12,7 @@ class VlessFmt implements Fmtable {
     final uri = Uri.parse(uriStr);
 
     var data = base.copyWith(
+      configType: EConfigType.vless,
       address: FmtUtils.tryIDNEncode(uri.host) ?? uri.host,
       port: uri.port,
       remarks: FmtUtils.urlDecode(uri.fragment),
@@ -31,7 +32,7 @@ class VlessFmt implements Fmtable {
       }
       final extra = ProfileExtraItemDto(
         flow: FmtUtils.getQueryValue(queryParams, 'flow'),
-        vlessEncryption: FmtUtils.getQueryValue(queryParams, 'encryption'),
+        vlessEncryption: FmtUtils.getQueryValueOrDefault(queryParams, 'encryption', 'none'),
       );
       data = data.copyWith(jsonData: Utils.toJsonString(extra.toJson()));
     }

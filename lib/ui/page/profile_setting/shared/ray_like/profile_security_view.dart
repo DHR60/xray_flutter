@@ -6,7 +6,16 @@ import 'package:xray_flutter/ui/page/profile_setting/shared/ray_like/profile_sec
 
 class ProfileSecurityView extends ConsumerStatefulWidget {
   final ProfileSecurityController controller;
-  const ProfileSecurityView({super.key, required this.controller});
+  final bool tlsOnly;
+  final bool alpnEnabled;
+  final bool fingerprintEnabled;
+  const ProfileSecurityView({
+    super.key,
+    required this.controller,
+    this.tlsOnly = false,
+    this.alpnEnabled = true,
+    this.fingerprintEnabled = true,
+  });
 
   @override
   ConsumerState<ProfileSecurityView> createState() =>
@@ -127,9 +136,12 @@ class _ProfileSecurityViewState extends ConsumerState<ProfileSecurityView> {
               ? null
               : widget.controller.securityController.text,
           decoration: const InputDecoration(labelText: "安全设置"),
-          items: GlobalConst.transportSecurityList
-              .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-              .toList(),
+          items:
+              (widget.tlsOnly
+                      ? GlobalConst.transportSecurityTlsOnlyList
+                      : GlobalConst.transportSecurityList)
+                  .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+                  .toList(),
           onChanged: (value) {
             if (value != null) {
               widget.controller.securityController.text = value;
@@ -150,11 +162,13 @@ class _ProfileSecurityViewState extends ConsumerState<ProfileSecurityView> {
             items: GlobalConst.utlsFingerprintList
                 .map((e) => DropdownMenuItem(value: e, child: Text(e)))
                 .toList(),
-            onChanged: (value) {
-              if (value != null) {
-                widget.controller.utlsFingerprintController.text = value;
-              }
-            },
+            onChanged: widget.fingerprintEnabled
+                ? (value) {
+                    if (value != null) {
+                      widget.controller.utlsFingerprintController.text = value;
+                    }
+                  }
+                : null,
           ),
         ],
         if (isTls) ...[
@@ -166,11 +180,13 @@ class _ProfileSecurityViewState extends ConsumerState<ProfileSecurityView> {
             items: GlobalConst.alpnList
                 .map((e) => DropdownMenuItem(value: e, child: Text(e)))
                 .toList(),
-            onChanged: (value) {
-              if (value != null) {
-                widget.controller.alpnController.text = value;
-              }
-            },
+            onChanged: widget.alpnEnabled
+                ? (value) {
+                    if (value != null) {
+                      widget.controller.alpnController.text = value;
+                    }
+                  }
+                : null,
           ),
           DropdownButtonFormField<String>(
             initialValue: widget.controller.allowInsecureController.text.isEmpty
@@ -185,6 +201,19 @@ class _ProfileSecurityViewState extends ConsumerState<ProfileSecurityView> {
                 widget.controller.allowInsecureController.text = value;
               }
             },
+          ),
+          TextFormField(
+            controller: widget.controller.certController,
+            decoration: const InputDecoration(labelText: "证书 (Cert)"),
+            keyboardType: TextInputType.multiline,
+            maxLines: null,
+            minLines: 3,
+          ),
+          TextFormField(
+            controller: widget.controller.certSha256Controller,
+            decoration: const InputDecoration(
+              labelText: "证书 SHA-256 (Cert SHA-256)",
+            ),
           ),
         ],
         if (isReality) ...[

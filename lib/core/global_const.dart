@@ -134,6 +134,10 @@ class GlobalConst {
     transportSecurityTls,
     transportSecurityReality,
   ];
+  static const List<String> transportSecurityTlsOnlyList = [
+    "",
+    transportSecurityTls,
+  ];
 
   static const List<String> alpnList = [
     "",
@@ -167,6 +171,7 @@ class GlobalConst {
     "Shadowsocks": EConfigType.shadowsocks,
     "Trojan": EConfigType.trojan,
     "WireGuard": EConfigType.wireguard,
+    "Hysteria2": EConfigType.hysteria2,
     "SOCKS": EConfigType.socks,
     "HTTP": EConfigType.http,
     "Custom": EConfigType.custom,
@@ -180,6 +185,7 @@ class GlobalConst {
     EConfigType.shadowsocks: "Shadowsocks",
     EConfigType.trojan: "Trojan",
     EConfigType.wireguard: "WireGuard",
+    EConfigType.hysteria2: "Hysteria2",
     EConfigType.socks: "SOCKS",
     EConfigType.http: "HTTP",
     EConfigType.custom: "Custom",
@@ -223,6 +229,7 @@ class GlobalConst {
     EConfigType.shadowsocks: ['ss://'],
     EConfigType.trojan: ['trojan://'],
     EConfigType.wireguard: ['wireguard://'],
+    EConfigType.hysteria2: ['hysteria2://', 'hy2://'],
     EConfigType.socks: ['socks://'],
     EConfigType.http: ['http://'],
   };

@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ProfileExtraItemDto {
 
- String? get flow; String? get alterId; String? get vlessEncryption; String? get vlessVisionSeed; bool? get ssPluginEnabled; String? get ssPlugin; String? get ssPluginParam; String? get wireguardLocalAddress; String? get wireguardPreSharedKey; String? get wireguardReserved; String? get wireguardPublicKey; int? get wireguardMtu;
+ String? get flow; String? get alterId; String? get vlessEncryption; String? get vlessVisionSeed; bool? get ssPluginEnabled; String? get ssPlugin; String? get ssPluginParam; String? get wireguardLocalAddress; String? get wireguardPreSharedKey; String? get wireguardReserved; String? get wireguardPublicKey; int? get wireguardMtu; String? get hy2HopPorts; String? get hy2HopInterval; String? get hy2Up; String? get hy2Down; String? get hy2ObfsPass;
 /// Create a copy of ProfileExtraItemDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $ProfileExtraItemDtoCopyWith<ProfileExtraItemDto> get copyWith => _$ProfileExtra
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProfileExtraItemDto&&(identical(other.flow, flow) || other.flow == flow)&&(identical(other.alterId, alterId) || other.alterId == alterId)&&(identical(other.vlessEncryption, vlessEncryption) || other.vlessEncryption == vlessEncryption)&&(identical(other.vlessVisionSeed, vlessVisionSeed) || other.vlessVisionSeed == vlessVisionSeed)&&(identical(other.ssPluginEnabled, ssPluginEnabled) || other.ssPluginEnabled == ssPluginEnabled)&&(identical(other.ssPlugin, ssPlugin) || other.ssPlugin == ssPlugin)&&(identical(other.ssPluginParam, ssPluginParam) || other.ssPluginParam == ssPluginParam)&&(identical(other.wireguardLocalAddress, wireguardLocalAddress) || other.wireguardLocalAddress == wireguardLocalAddress)&&(identical(other.wireguardPreSharedKey, wireguardPreSharedKey) || other.wireguardPreSharedKey == wireguardPreSharedKey)&&(identical(other.wireguardReserved, wireguardReserved) || other.wireguardReserved == wireguardReserved)&&(identical(other.wireguardPublicKey, wireguardPublicKey) || other.wireguardPublicKey == wireguardPublicKey)&&(identical(other.wireguardMtu, wireguardMtu) || other.wireguardMtu == wireguardMtu));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProfileExtraItemDto&&(identical(other.flow, flow) || other.flow == flow)&&(identical(other.alterId, alterId) || other.alterId == alterId)&&(identical(other.vlessEncryption, vlessEncryption) || other.vlessEncryption == vlessEncryption)&&(identical(other.vlessVisionSeed, vlessVisionSeed) || other.vlessVisionSeed == vlessVisionSeed)&&(identical(other.ssPluginEnabled, ssPluginEnabled) || other.ssPluginEnabled == ssPluginEnabled)&&(identical(other.ssPlugin, ssPlugin) || other.ssPlugin == ssPlugin)&&(identical(other.ssPluginParam, ssPluginParam) || other.ssPluginParam == ssPluginParam)&&(identical(other.wireguardLocalAddress, wireguardLocalAddress) || other.wireguardLocalAddress == wireguardLocalAddress)&&(identical(other.wireguardPreSharedKey, wireguardPreSharedKey) || other.wireguardPreSharedKey == wireguardPreSharedKey)&&(identical(other.wireguardReserved, wireguardReserved) || other.wireguardReserved == wireguardReserved)&&(identical(other.wireguardPublicKey, wireguardPublicKey) || other.wireguardPublicKey == wireguardPublicKey)&&(identical(other.wireguardMtu, wireguardMtu) || other.wireguardMtu == wireguardMtu)&&(identical(other.hy2HopPorts, hy2HopPorts) || other.hy2HopPorts == hy2HopPorts)&&(identical(other.hy2HopInterval, hy2HopInterval) || other.hy2HopInterval == hy2HopInterval)&&(identical(other.hy2Up, hy2Up) || other.hy2Up == hy2Up)&&(identical(other.hy2Down, hy2Down) || other.hy2Down == hy2Down)&&(identical(other.hy2ObfsPass, hy2ObfsPass) || other.hy2ObfsPass == hy2ObfsPass));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,flow,alterId,vlessEncryption,vlessVisionSeed,ssPluginEnabled,ssPlugin,ssPluginParam,wireguardLocalAddress,wireguardPreSharedKey,wireguardReserved,wireguardPublicKey,wireguardMtu);
+int get hashCode => Object.hash(runtimeType,flow,alterId,vlessEncryption,vlessVisionSeed,ssPluginEnabled,ssPlugin,ssPluginParam,wireguardLocalAddress,wireguardPreSharedKey,wireguardReserved,wireguardPublicKey,wireguardMtu,hy2HopPorts,hy2HopInterval,hy2Up,hy2Down,hy2ObfsPass);
 
 @override
 String toString() {
-  return 'ProfileExtraItemDto(flow: $flow, alterId: $alterId, vlessEncryption: $vlessEncryption, vlessVisionSeed: $vlessVisionSeed, ssPluginEnabled: $ssPluginEnabled, ssPlugin: $ssPlugin, ssPluginParam: $ssPluginParam, wireguardLocalAddress: $wireguardLocalAddress, wireguardPreSharedKey: $wireguardPreSharedKey, wireguardReserved: $wireguardReserved, wireguardPublicKey: $wireguardPublicKey, wireguardMtu: $wireguardMtu)';
+  return 'ProfileExtraItemDto(flow: $flow, alterId: $alterId, vlessEncryption: $vlessEncryption, vlessVisionSeed: $vlessVisionSeed, ssPluginEnabled: $ssPluginEnabled, ssPlugin: $ssPlugin, ssPluginParam: $ssPluginParam, wireguardLocalAddress: $wireguardLocalAddress, wireguardPreSharedKey: $wireguardPreSharedKey, wireguardReserved: $wireguardReserved, wireguardPublicKey: $wireguardPublicKey, wireguardMtu: $wireguardMtu, hy2HopPorts: $hy2HopPorts, hy2HopInterval: $hy2HopInterval, hy2Up: $hy2Up, hy2Down: $hy2Down, hy2ObfsPass: $hy2ObfsPass)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $ProfileExtraItemDtoCopyWith<$Res>  {
   factory $ProfileExtraItemDtoCopyWith(ProfileExtraItemDto value, $Res Function(ProfileExtraItemDto) _then) = _$ProfileExtraItemDtoCopyWithImpl;
 @useResult
 $Res call({
- String? flow, String? alterId, String? vlessEncryption, String? vlessVisionSeed, bool? ssPluginEnabled, String? ssPlugin, String? ssPluginParam, String? wireguardLocalAddress, String? wireguardPreSharedKey, String? wireguardReserved, String? wireguardPublicKey, int? wireguardMtu
+ String? flow, String? alterId, String? vlessEncryption, String? vlessVisionSeed, bool? ssPluginEnabled, String? ssPlugin, String? ssPluginParam, String? wireguardLocalAddress, String? wireguardPreSharedKey, String? wireguardReserved, String? wireguardPublicKey, int? wireguardMtu, String? hy2HopPorts, String? hy2HopInterval, String? hy2Up, String? hy2Down, String? hy2ObfsPass
 });
 
 
@@ -65,7 +65,7 @@ class _$ProfileExtraItemDtoCopyWithImpl<$Res>
 
 /// Create a copy of ProfileExtraItemDto
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? flow = freezed,Object? alterId = freezed,Object? vlessEncryption = freezed,Object? vlessVisionSeed = freezed,Object? ssPluginEnabled = freezed,Object? ssPlugin = freezed,Object? ssPluginParam = freezed,Object? wireguardLocalAddress = freezed,Object? wireguardPreSharedKey = freezed,Object? wireguardReserved = freezed,Object? wireguardPublicKey = freezed,Object? wireguardMtu = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? flow = freezed,Object? alterId = freezed,Object? vlessEncryption = freezed,Object? vlessVisionSeed = freezed,Object? ssPluginEnabled = freezed,Object? ssPlugin = freezed,Object? ssPluginParam = freezed,Object? wireguardLocalAddress = freezed,Object? wireguardPreSharedKey = freezed,Object? wireguardReserved = freezed,Object? wireguardPublicKey = freezed,Object? wireguardMtu = freezed,Object? hy2HopPorts = freezed,Object? hy2HopInterval = freezed,Object? hy2Up = freezed,Object? hy2Down = freezed,Object? hy2ObfsPass = freezed,}) {
   return _then(_self.copyWith(
 flow: freezed == flow ? _self.flow : flow // ignore: cast_nullable_to_non_nullable
 as String?,alterId: freezed == alterId ? _self.alterId : alterId // ignore: cast_nullable_to_non_nullable
@@ -79,7 +79,12 @@ as String?,wireguardPreSharedKey: freezed == wireguardPreSharedKey ? _self.wireg
 as String?,wireguardReserved: freezed == wireguardReserved ? _self.wireguardReserved : wireguardReserved // ignore: cast_nullable_to_non_nullable
 as String?,wireguardPublicKey: freezed == wireguardPublicKey ? _self.wireguardPublicKey : wireguardPublicKey // ignore: cast_nullable_to_non_nullable
 as String?,wireguardMtu: freezed == wireguardMtu ? _self.wireguardMtu : wireguardMtu // ignore: cast_nullable_to_non_nullable
-as int?,
+as int?,hy2HopPorts: freezed == hy2HopPorts ? _self.hy2HopPorts : hy2HopPorts // ignore: cast_nullable_to_non_nullable
+as String?,hy2HopInterval: freezed == hy2HopInterval ? _self.hy2HopInterval : hy2HopInterval // ignore: cast_nullable_to_non_nullable
+as String?,hy2Up: freezed == hy2Up ? _self.hy2Up : hy2Up // ignore: cast_nullable_to_non_nullable
+as String?,hy2Down: freezed == hy2Down ? _self.hy2Down : hy2Down // ignore: cast_nullable_to_non_nullable
+as String?,hy2ObfsPass: freezed == hy2ObfsPass ? _self.hy2ObfsPass : hy2ObfsPass // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -164,10 +169,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? flow,  String? alterId,  String? vlessEncryption,  String? vlessVisionSeed,  bool? ssPluginEnabled,  String? ssPlugin,  String? ssPluginParam,  String? wireguardLocalAddress,  String? wireguardPreSharedKey,  String? wireguardReserved,  String? wireguardPublicKey,  int? wireguardMtu)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? flow,  String? alterId,  String? vlessEncryption,  String? vlessVisionSeed,  bool? ssPluginEnabled,  String? ssPlugin,  String? ssPluginParam,  String? wireguardLocalAddress,  String? wireguardPreSharedKey,  String? wireguardReserved,  String? wireguardPublicKey,  int? wireguardMtu,  String? hy2HopPorts,  String? hy2HopInterval,  String? hy2Up,  String? hy2Down,  String? hy2ObfsPass)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ProfileExtraItemDto() when $default != null:
-return $default(_that.flow,_that.alterId,_that.vlessEncryption,_that.vlessVisionSeed,_that.ssPluginEnabled,_that.ssPlugin,_that.ssPluginParam,_that.wireguardLocalAddress,_that.wireguardPreSharedKey,_that.wireguardReserved,_that.wireguardPublicKey,_that.wireguardMtu);case _:
+return $default(_that.flow,_that.alterId,_that.vlessEncryption,_that.vlessVisionSeed,_that.ssPluginEnabled,_that.ssPlugin,_that.ssPluginParam,_that.wireguardLocalAddress,_that.wireguardPreSharedKey,_that.wireguardReserved,_that.wireguardPublicKey,_that.wireguardMtu,_that.hy2HopPorts,_that.hy2HopInterval,_that.hy2Up,_that.hy2Down,_that.hy2ObfsPass);case _:
   return orElse();
 
 }
@@ -185,10 +190,10 @@ return $default(_that.flow,_that.alterId,_that.vlessEncryption,_that.vlessVision
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? flow,  String? alterId,  String? vlessEncryption,  String? vlessVisionSeed,  bool? ssPluginEnabled,  String? ssPlugin,  String? ssPluginParam,  String? wireguardLocalAddress,  String? wireguardPreSharedKey,  String? wireguardReserved,  String? wireguardPublicKey,  int? wireguardMtu)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? flow,  String? alterId,  String? vlessEncryption,  String? vlessVisionSeed,  bool? ssPluginEnabled,  String? ssPlugin,  String? ssPluginParam,  String? wireguardLocalAddress,  String? wireguardPreSharedKey,  String? wireguardReserved,  String? wireguardPublicKey,  int? wireguardMtu,  String? hy2HopPorts,  String? hy2HopInterval,  String? hy2Up,  String? hy2Down,  String? hy2ObfsPass)  $default,) {final _that = this;
 switch (_that) {
 case _ProfileExtraItemDto():
-return $default(_that.flow,_that.alterId,_that.vlessEncryption,_that.vlessVisionSeed,_that.ssPluginEnabled,_that.ssPlugin,_that.ssPluginParam,_that.wireguardLocalAddress,_that.wireguardPreSharedKey,_that.wireguardReserved,_that.wireguardPublicKey,_that.wireguardMtu);case _:
+return $default(_that.flow,_that.alterId,_that.vlessEncryption,_that.vlessVisionSeed,_that.ssPluginEnabled,_that.ssPlugin,_that.ssPluginParam,_that.wireguardLocalAddress,_that.wireguardPreSharedKey,_that.wireguardReserved,_that.wireguardPublicKey,_that.wireguardMtu,_that.hy2HopPorts,_that.hy2HopInterval,_that.hy2Up,_that.hy2Down,_that.hy2ObfsPass);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -205,10 +210,10 @@ return $default(_that.flow,_that.alterId,_that.vlessEncryption,_that.vlessVision
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? flow,  String? alterId,  String? vlessEncryption,  String? vlessVisionSeed,  bool? ssPluginEnabled,  String? ssPlugin,  String? ssPluginParam,  String? wireguardLocalAddress,  String? wireguardPreSharedKey,  String? wireguardReserved,  String? wireguardPublicKey,  int? wireguardMtu)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? flow,  String? alterId,  String? vlessEncryption,  String? vlessVisionSeed,  bool? ssPluginEnabled,  String? ssPlugin,  String? ssPluginParam,  String? wireguardLocalAddress,  String? wireguardPreSharedKey,  String? wireguardReserved,  String? wireguardPublicKey,  int? wireguardMtu,  String? hy2HopPorts,  String? hy2HopInterval,  String? hy2Up,  String? hy2Down,  String? hy2ObfsPass)?  $default,) {final _that = this;
 switch (_that) {
 case _ProfileExtraItemDto() when $default != null:
-return $default(_that.flow,_that.alterId,_that.vlessEncryption,_that.vlessVisionSeed,_that.ssPluginEnabled,_that.ssPlugin,_that.ssPluginParam,_that.wireguardLocalAddress,_that.wireguardPreSharedKey,_that.wireguardReserved,_that.wireguardPublicKey,_that.wireguardMtu);case _:
+return $default(_that.flow,_that.alterId,_that.vlessEncryption,_that.vlessVisionSeed,_that.ssPluginEnabled,_that.ssPlugin,_that.ssPluginParam,_that.wireguardLocalAddress,_that.wireguardPreSharedKey,_that.wireguardReserved,_that.wireguardPublicKey,_that.wireguardMtu,_that.hy2HopPorts,_that.hy2HopInterval,_that.hy2Up,_that.hy2Down,_that.hy2ObfsPass);case _:
   return null;
 
 }
@@ -220,7 +225,7 @@ return $default(_that.flow,_that.alterId,_that.vlessEncryption,_that.vlessVision
 @JsonSerializable()
 
 class _ProfileExtraItemDto implements ProfileExtraItemDto {
-  const _ProfileExtraItemDto({this.flow, this.alterId, this.vlessEncryption, this.vlessVisionSeed, this.ssPluginEnabled, this.ssPlugin, this.ssPluginParam, this.wireguardLocalAddress, this.wireguardPreSharedKey, this.wireguardReserved, this.wireguardPublicKey, this.wireguardMtu});
+  const _ProfileExtraItemDto({this.flow, this.alterId, this.vlessEncryption, this.vlessVisionSeed, this.ssPluginEnabled, this.ssPlugin, this.ssPluginParam, this.wireguardLocalAddress, this.wireguardPreSharedKey, this.wireguardReserved, this.wireguardPublicKey, this.wireguardMtu, this.hy2HopPorts, this.hy2HopInterval, this.hy2Up, this.hy2Down, this.hy2ObfsPass});
   factory _ProfileExtraItemDto.fromJson(Map<String, dynamic> json) => _$ProfileExtraItemDtoFromJson(json);
 
 @override final  String? flow;
@@ -235,6 +240,11 @@ class _ProfileExtraItemDto implements ProfileExtraItemDto {
 @override final  String? wireguardReserved;
 @override final  String? wireguardPublicKey;
 @override final  int? wireguardMtu;
+@override final  String? hy2HopPorts;
+@override final  String? hy2HopInterval;
+@override final  String? hy2Up;
+@override final  String? hy2Down;
+@override final  String? hy2ObfsPass;
 
 /// Create a copy of ProfileExtraItemDto
 /// with the given fields replaced by the non-null parameter values.
@@ -249,16 +259,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProfileExtraItemDto&&(identical(other.flow, flow) || other.flow == flow)&&(identical(other.alterId, alterId) || other.alterId == alterId)&&(identical(other.vlessEncryption, vlessEncryption) || other.vlessEncryption == vlessEncryption)&&(identical(other.vlessVisionSeed, vlessVisionSeed) || other.vlessVisionSeed == vlessVisionSeed)&&(identical(other.ssPluginEnabled, ssPluginEnabled) || other.ssPluginEnabled == ssPluginEnabled)&&(identical(other.ssPlugin, ssPlugin) || other.ssPlugin == ssPlugin)&&(identical(other.ssPluginParam, ssPluginParam) || other.ssPluginParam == ssPluginParam)&&(identical(other.wireguardLocalAddress, wireguardLocalAddress) || other.wireguardLocalAddress == wireguardLocalAddress)&&(identical(other.wireguardPreSharedKey, wireguardPreSharedKey) || other.wireguardPreSharedKey == wireguardPreSharedKey)&&(identical(other.wireguardReserved, wireguardReserved) || other.wireguardReserved == wireguardReserved)&&(identical(other.wireguardPublicKey, wireguardPublicKey) || other.wireguardPublicKey == wireguardPublicKey)&&(identical(other.wireguardMtu, wireguardMtu) || other.wireguardMtu == wireguardMtu));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProfileExtraItemDto&&(identical(other.flow, flow) || other.flow == flow)&&(identical(other.alterId, alterId) || other.alterId == alterId)&&(identical(other.vlessEncryption, vlessEncryption) || other.vlessEncryption == vlessEncryption)&&(identical(other.vlessVisionSeed, vlessVisionSeed) || other.vlessVisionSeed == vlessVisionSeed)&&(identical(other.ssPluginEnabled, ssPluginEnabled) || other.ssPluginEnabled == ssPluginEnabled)&&(identical(other.ssPlugin, ssPlugin) || other.ssPlugin == ssPlugin)&&(identical(other.ssPluginParam, ssPluginParam) || other.ssPluginParam == ssPluginParam)&&(identical(other.wireguardLocalAddress, wireguardLocalAddress) || other.wireguardLocalAddress == wireguardLocalAddress)&&(identical(other.wireguardPreSharedKey, wireguardPreSharedKey) || other.wireguardPreSharedKey == wireguardPreSharedKey)&&(identical(other.wireguardReserved, wireguardReserved) || other.wireguardReserved == wireguardReserved)&&(identical(other.wireguardPublicKey, wireguardPublicKey) || other.wireguardPublicKey == wireguardPublicKey)&&(identical(other.wireguardMtu, wireguardMtu) || other.wireguardMtu == wireguardMtu)&&(identical(other.hy2HopPorts, hy2HopPorts) || other.hy2HopPorts == hy2HopPorts)&&(identical(other.hy2HopInterval, hy2HopInterval) || other.hy2HopInterval == hy2HopInterval)&&(identical(other.hy2Up, hy2Up) || other.hy2Up == hy2Up)&&(identical(other.hy2Down, hy2Down) || other.hy2Down == hy2Down)&&(identical(other.hy2ObfsPass, hy2ObfsPass) || other.hy2ObfsPass == hy2ObfsPass));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,flow,alterId,vlessEncryption,vlessVisionSeed,ssPluginEnabled,ssPlugin,ssPluginParam,wireguardLocalAddress,wireguardPreSharedKey,wireguardReserved,wireguardPublicKey,wireguardMtu);
+int get hashCode => Object.hash(runtimeType,flow,alterId,vlessEncryption,vlessVisionSeed,ssPluginEnabled,ssPlugin,ssPluginParam,wireguardLocalAddress,wireguardPreSharedKey,wireguardReserved,wireguardPublicKey,wireguardMtu,hy2HopPorts,hy2HopInterval,hy2Up,hy2Down,hy2ObfsPass);
 
 @override
 String toString() {
-  return 'ProfileExtraItemDto(flow: $flow, alterId: $alterId, vlessEncryption: $vlessEncryption, vlessVisionSeed: $vlessVisionSeed, ssPluginEnabled: $ssPluginEnabled, ssPlugin: $ssPlugin, ssPluginParam: $ssPluginParam, wireguardLocalAddress: $wireguardLocalAddress, wireguardPreSharedKey: $wireguardPreSharedKey, wireguardReserved: $wireguardReserved, wireguardPublicKey: $wireguardPublicKey, wireguardMtu: $wireguardMtu)';
+  return 'ProfileExtraItemDto(flow: $flow, alterId: $alterId, vlessEncryption: $vlessEncryption, vlessVisionSeed: $vlessVisionSeed, ssPluginEnabled: $ssPluginEnabled, ssPlugin: $ssPlugin, ssPluginParam: $ssPluginParam, wireguardLocalAddress: $wireguardLocalAddress, wireguardPreSharedKey: $wireguardPreSharedKey, wireguardReserved: $wireguardReserved, wireguardPublicKey: $wireguardPublicKey, wireguardMtu: $wireguardMtu, hy2HopPorts: $hy2HopPorts, hy2HopInterval: $hy2HopInterval, hy2Up: $hy2Up, hy2Down: $hy2Down, hy2ObfsPass: $hy2ObfsPass)';
 }
 
 
@@ -269,7 +279,7 @@ abstract mixin class _$ProfileExtraItemDtoCopyWith<$Res> implements $ProfileExtr
   factory _$ProfileExtraItemDtoCopyWith(_ProfileExtraItemDto value, $Res Function(_ProfileExtraItemDto) _then) = __$ProfileExtraItemDtoCopyWithImpl;
 @override @useResult
 $Res call({
- String? flow, String? alterId, String? vlessEncryption, String? vlessVisionSeed, bool? ssPluginEnabled, String? ssPlugin, String? ssPluginParam, String? wireguardLocalAddress, String? wireguardPreSharedKey, String? wireguardReserved, String? wireguardPublicKey, int? wireguardMtu
+ String? flow, String? alterId, String? vlessEncryption, String? vlessVisionSeed, bool? ssPluginEnabled, String? ssPlugin, String? ssPluginParam, String? wireguardLocalAddress, String? wireguardPreSharedKey, String? wireguardReserved, String? wireguardPublicKey, int? wireguardMtu, String? hy2HopPorts, String? hy2HopInterval, String? hy2Up, String? hy2Down, String? hy2ObfsPass
 });
 
 
@@ -286,7 +296,7 @@ class __$ProfileExtraItemDtoCopyWithImpl<$Res>
 
 /// Create a copy of ProfileExtraItemDto
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? flow = freezed,Object? alterId = freezed,Object? vlessEncryption = freezed,Object? vlessVisionSeed = freezed,Object? ssPluginEnabled = freezed,Object? ssPlugin = freezed,Object? ssPluginParam = freezed,Object? wireguardLocalAddress = freezed,Object? wireguardPreSharedKey = freezed,Object? wireguardReserved = freezed,Object? wireguardPublicKey = freezed,Object? wireguardMtu = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? flow = freezed,Object? alterId = freezed,Object? vlessEncryption = freezed,Object? vlessVisionSeed = freezed,Object? ssPluginEnabled = freezed,Object? ssPlugin = freezed,Object? ssPluginParam = freezed,Object? wireguardLocalAddress = freezed,Object? wireguardPreSharedKey = freezed,Object? wireguardReserved = freezed,Object? wireguardPublicKey = freezed,Object? wireguardMtu = freezed,Object? hy2HopPorts = freezed,Object? hy2HopInterval = freezed,Object? hy2Up = freezed,Object? hy2Down = freezed,Object? hy2ObfsPass = freezed,}) {
   return _then(_ProfileExtraItemDto(
 flow: freezed == flow ? _self.flow : flow // ignore: cast_nullable_to_non_nullable
 as String?,alterId: freezed == alterId ? _self.alterId : alterId // ignore: cast_nullable_to_non_nullable
@@ -300,7 +310,12 @@ as String?,wireguardPreSharedKey: freezed == wireguardPreSharedKey ? _self.wireg
 as String?,wireguardReserved: freezed == wireguardReserved ? _self.wireguardReserved : wireguardReserved // ignore: cast_nullable_to_non_nullable
 as String?,wireguardPublicKey: freezed == wireguardPublicKey ? _self.wireguardPublicKey : wireguardPublicKey // ignore: cast_nullable_to_non_nullable
 as String?,wireguardMtu: freezed == wireguardMtu ? _self.wireguardMtu : wireguardMtu // ignore: cast_nullable_to_non_nullable
-as int?,
+as int?,hy2HopPorts: freezed == hy2HopPorts ? _self.hy2HopPorts : hy2HopPorts // ignore: cast_nullable_to_non_nullable
+as String?,hy2HopInterval: freezed == hy2HopInterval ? _self.hy2HopInterval : hy2HopInterval // ignore: cast_nullable_to_non_nullable
+as String?,hy2Up: freezed == hy2Up ? _self.hy2Up : hy2Up // ignore: cast_nullable_to_non_nullable
+as String?,hy2Down: freezed == hy2Down ? _self.hy2Down : hy2Down // ignore: cast_nullable_to_non_nullable
+as String?,hy2ObfsPass: freezed == hy2ObfsPass ? _self.hy2ObfsPass : hy2ObfsPass // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

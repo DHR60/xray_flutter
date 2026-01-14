@@ -24,6 +24,8 @@ extension XrayConfigOutboundService on XrayConfigService {
         return _genShadowsocksOutbound();
       case EConfigType.wireguard:
         return _genWireguardOutbound();
+      case EConfigType.hysteria2:
+        return _genHysteria2Outbound();
       case EConfigType.socks:
         return _genSocksOutbound();
       case EConfigType.http:
@@ -135,6 +137,20 @@ extension XrayConfigOutboundService on XrayConfigService {
     );
   }
 
+  Outbound4Ray _genHysteria2Outbound() {
+    return Outbound4Ray(
+      protocol: 'hysteria',
+      settings: OutboundSettings4Ray.hysteria(
+        settings: HysteriaOutboundSettings4Ray(
+          version: 2,
+          address: profileContext.profile.address,
+          port: profileContext.profile.port,
+        ),
+      ),
+      streamSettings: _genStreamSettings(),
+    );
+  }
+
   Outbound4Ray _genSocksOutbound() {
     return Outbound4Ray(
       protocol: 'socks',
@@ -214,6 +230,45 @@ extension XrayConfigOutboundService on XrayConfigService {
           mldsa65Verify: profileContext.profile.mldsa65Verify,
         ),
       );
+    }
+
+    if (profileContext.profile.configType == EConfigType.hysteria2) {
+      final extra = ProfileExtraItemDto.fromString(
+        profileContext.profile.jsonData,
+      );
+      streamSettings = streamSettings.copyWith(
+        network: 'hysteria',
+        hysteriaSettings: HysteriaTransport4Ray(
+          version: 2,
+          auth: profileContext.profile.id,
+          up: extra.hy2Up?.isNotEmpty == true ? extra.hy2Up : null,
+          down: extra.hy2Down?.isNotEmpty == true
+              ? extra.hy2Down
+              : null,
+          udphop: extra.hy2HopPorts?.isNotEmpty == true
+              ? UdpHop4Ray(
+                  port: extra.hy2HopPorts!,
+                  interval: extra.hy2HopInterval?.isNotEmpty == true
+                      ? extra.hy2HopInterval!
+                      : null,
+                )
+              : null,
+        ),
+        udpmasks: extra.hy2ObfsPass?.isNotEmpty == true
+            ? [
+                UdpMask4Ray(
+                  type: 'salamander',
+                  settings: UdpMaskSettings4Ray(
+                    password: extra.hy2ObfsPass!,
+                  ),
+                ),
+              ]
+            : null,
+      );
+      return streamSettings;
+    }
+    if (profileContext.profile.configType == EConfigType.wireguard) {
+      return streamSettings;
     }
 
     switch (transportType) {
