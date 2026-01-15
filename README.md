@@ -2,7 +2,9 @@
 
 Xray 界面客户端，基于 Flutter 开发。
 
-[roadmap](roadmap.md)
+原型验证阶段，功能不完整，优先开发桌面平台，Android 平台仅为界面展示，IOS 平台不可用。
+
+目前实现功能及未来开发目标请查看项目路线图：[roadmap](roadmap.md)
 
 ## 参考与感谢
 
