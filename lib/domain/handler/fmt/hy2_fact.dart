@@ -60,7 +60,9 @@ class Hy2Fact implements Fmtable {
       queryParams['allowInsecure'] = '1';
     }
     if (data.certSha256.isNotEmpty == true) {
-      queryParams['pinSHA256'] = data.certSha256;
+      queryParams['pinSHA256'] = data.certSha256.contains('~')
+          ? data.certSha256.split('~').first
+          : data.certSha256;
     }
     if (extra.hy2HopPorts?.isNotEmpty == true) {
       queryParams['mport'] = extra.hy2HopPorts!;
