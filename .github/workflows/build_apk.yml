@@ -1,0 +1,76 @@
+name: Build APK
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v5
+      with:
+        submodules: 'recursive'
+        fetch-depth: '0'
+
+    - name: Set up JDK 21
+      uses: actions/setup-java@v5
+      with:
+        distribution: 'zulu'
+        java-version: '21'
+
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+      with:
+        log-accepted-android-sdk-licenses: false
+        cmdline-tools-version: '13114758'
+        packages: 'platforms;android-36.1 build-tools;36.1.0 platform-tools'
+
+    - name: Install Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        channel: stable
+
+    - name: Download libv2ray
+      uses: robinraju/release-downloader@v1.12
+      with:
+        repository: 'DHR60/AndroidLibXrayLite'
+        latest: true
+        fileName: 'libv2ray.aar'
+        out-file-path: 'android/app/libs/'
+
+    - name: Restore key.properties
+      run: |
+        printf "%s" "${{ secrets.KEY_PROPERTIES }}" > android/key.properties
+
+    - name: Restore android_release.keystore
+      run: |
+        echo "${{ secrets.ANDROID_RELEASE_KEYSTORE_BASE64 }}" | base64 -d > android/app/android_release.keystore
+
+    - name: Build Flutter APK
+      run: |
+        flutter pub get
+        flutter build apk --release --split-per-abi
+
+    - name: Rename Flutter APKs
+      run: |
+        mv build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk build/app/outputs/flutter-apk/xrayflutter-armeabi-v7a-release.apk
+        mv build/app/outputs/flutter-apk/app-arm64-v8a-release.apk build/app/outputs/flutter-apk/xrayflutter-arm64-v8a-release.apk
+        mv build/app/outputs/flutter-apk/app-x86_64-release.apk build/app/outputs/flutter-apk/xrayflutter-x86_64-release.apk
+
+    - name: Upload APK artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: apk-${{ github.ref_name }}-${{ github.run_number }}
+        path: build/app/outputs/flutter-apk/xrayflutter-*-release.apk
+
+    - name: Release Package
+      if: startsWith(github.ref, 'refs/tags/v')
+      uses: softprops/action-gh-release@v2
+      with:
+        files: build/app/outputs/flutter-apk/xrayflutter-*-release.apk
