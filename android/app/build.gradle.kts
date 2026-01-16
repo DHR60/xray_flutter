@@ -65,6 +65,8 @@ android {
             if (hasReleaseKeystore) {
                 signingConfig = signingConfigs.getByName("release")
             }
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "-debug"
         }
     }
 
