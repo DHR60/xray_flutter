@@ -51,6 +51,10 @@ class Utils {
     return configDir;
   }
 
+  static bool isAndroid() {
+    return Platform.isAndroid;
+  }
+
   static String generateUUID() {
     var uuid = const Uuid();
     return uuid.v4();

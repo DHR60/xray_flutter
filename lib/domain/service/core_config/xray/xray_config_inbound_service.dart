@@ -30,6 +30,24 @@ extension XrayConfigInboundService on XrayConfigService {
           destOverride: ['http', 'tls'],
         ),
       ),
+      if (Utils.isAndroid()) ...[
+        Inbound4Ray(
+          protocol: 'tun',
+          settings: InboundSettings4Ray.tun(
+            settings: TunInboundSettings4Ray(
+              name: 'xray0',
+              mtu: 1500,
+              userLevel: 8,
+            ),
+          ),
+          sniffing: Sniff4Ray(
+            enabled: profileContext.coreItem?.inbound.sniff ?? true,
+            routeOnly:
+                !(profileContext.coreItem?.inbound.overrideTarget ?? false),
+            destOverride: ['http', 'tls'],
+          ),
+        ),
+      ],
     ];
   }
 }

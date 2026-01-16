@@ -9,14 +9,12 @@ import android.net.VpnService
 import android.os.Build
 import android.os.ParcelFileDescriptor
 import com.clearpath.xray_flutter.core.Utils
-import com.clearpath.xray_flutter.model.TProxyModel
 import libv2ray.CoreCallbackHandler
 import libv2ray.CoreController
 import libv2ray.Libv2ray
 
 class SimpleVpnService : VpnService() {
     private var vpnInterface: ParcelFileDescriptor? = null
-    private var tProxyService: TProxyService? = null
     private lateinit var coreController: CoreController
 
     companion object {
@@ -42,7 +40,7 @@ class SimpleVpnService : VpnService() {
         }
 
         val config = intent?.getStringExtra("config")
-        val socksPort = intent?.getIntExtra("socksPort", 10808) ?: 10808
+        // val socksPort = intent?.getIntExtra("socksPort", 10808) ?: 10808
 
         if (config == null) {
             // If config is null, it might be a stop command or restart without config
@@ -72,15 +70,6 @@ class SimpleVpnService : VpnService() {
             startForeground(1, notification)
         }
 
-        // Start V2Ray Core
-        try {
-            coreController.startLoop(config)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            stopSelf()
-            return START_NOT_STICKY
-        }
-
         // Establish VPN Interface
         val builder = Builder()
         builder.setSession("XRayVPN")
@@ -95,20 +84,20 @@ class SimpleVpnService : VpnService() {
             e.printStackTrace()
         }
 
-        vpnInterface = builder.establish()
+        // Start V2Ray Core
+        try {
+            vpnInterface = builder.establish()
 
-        if (vpnInterface != null) {
-            // Start Tun2Socks
-            val model = TProxyModel(
-                context = this,
-                vpnInterface = vpnInterface!!,
-                socksPort = socksPort,
-                mtu = 1500
-            )
-            tProxyService = TProxyService(model)
-            tProxyService?.startTun2Socks()
-        } else {
+            if (vpnInterface == null) {
+                stopSelf()
+                return START_NOT_STICKY
+            }
+            val tunFd = vpnInterface?.fd ?: 0
+            coreController.startLoop(config, tunFd)
+        } catch (e: Exception) {
+            e.printStackTrace()
             stopSelf()
+            return START_NOT_STICKY
         }
 
         return START_STICKY
@@ -120,13 +109,6 @@ class SimpleVpnService : VpnService() {
     }
 
     private fun stopV2Ray() {
-        stopForeground(true)
-        try {
-            tProxyService?.stopTun2Socks()
-            tProxyService = null
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
         try {
             if (::coreController.isInitialized) {
                  coreController.stopLoop()
@@ -139,6 +121,11 @@ class SimpleVpnService : VpnService() {
             vpnInterface = null
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            stopForeground(STOP_FOREGROUND_REMOVE)
+        } else {
+            stopForeground(true)
         }
     }
 
