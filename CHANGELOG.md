@@ -1,3 +1,7 @@
+## 0.0.5
+
+- Fixes and improvements.
+
 ## 0.0.4
 
 - feat: add core settings.
