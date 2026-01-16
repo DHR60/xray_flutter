@@ -4,6 +4,9 @@ on:
   push:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -51,27 +54,27 @@ jobs:
       run: |
         mkdir -p temp/xray
         7z x temp/Xray-linux-64.zip -otemp/xray
-        mkdir -p build/linux/runner/Release/bin
-        cp -r temp/xray/* build/linux/runner/Release/bin/
+        mkdir -p build/linux/x64/release/bundle/bin
+        cp -r temp/xray/* build/linux/x64/release/bundle/bin/
 
     - name: Package Linux build
       shell: bash
       run: |
         mkdir -p release
-        cp -r build/linux/runner/Release/* release/
+        cp -r build/linux/x64/release/bundle/* release/
         cd release
-        7z a -tzip ../flutter_linux_release.zip *
+        7z a -tzip ../xrayflutter_linux_release.zip *
         cd ..
-        ls -lh flutter_linux_release.zip
+        ls -lh xrayflutter_linux_release.zip
 
     - name: Upload Linux build artifacts
       uses: actions/upload-artifact@v4
       with:
         name: linux-${{ github.ref_name }}-${{ github.run_number }}
-        path: flutter_linux_release.zip
+        path: xrayflutter_linux_release.zip
 
     - name: Release Package
       if: startsWith(github.ref, 'refs/tags/v')
       uses: softprops/action-gh-release@v2
       with:
-        files: flutter_linux_release.zip
+        files: xrayflutter_linux_release.zip
