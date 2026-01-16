@@ -1,3 +1,7 @@
+## 0.0.6
+
+- fix: ci build issues.
+
 ## 0.0.5
 
 - Fixes and improvements.
