@@ -70,6 +70,15 @@ class Utils {
     }
   }
 
+  static String listToString(List<String> list) {
+    return list.where((e) => e.isNotEmpty).join(',');
+  }
+
+  static List<String> parseListString(String listString) {
+    final list = listString.split(',').where((e) => e.isNotEmpty).toList();
+    return list;
+  }
+
   static String toJsonString(Map<String, dynamic> jsonMap) {
     return jsonEncode(jsonMap);
   }
