@@ -1,6 +1,6 @@
 import 'package:xray_flutter/data/db/app_database.dart';
 import 'package:xray_flutter/domain/core/result.dart';
-import 'package:xray_flutter/domain/handler/fmt/fmt_fact.dart';
+import 'package:xray_flutter/domain/helper/fmt/fmt_fact.dart';
 
 class GetUriByDataUseCase {
   GetUriByDataUseCase();

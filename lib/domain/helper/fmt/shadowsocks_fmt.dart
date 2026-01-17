@@ -3,8 +3,8 @@ import 'package:xray_flutter/core/utils.dart';
 import 'package:xray_flutter/data/db/app_database.dart';
 import 'package:xray_flutter/domain/core/domain_error.dart';
 import 'package:xray_flutter/domain/core/result.dart';
-import 'package:xray_flutter/domain/handler/fmt/fmt_utils.dart';
-import 'package:xray_flutter/domain/handler/fmt/fmtable.dart';
+import 'package:xray_flutter/domain/helper/fmt/fmt_utils.dart';
+import 'package:xray_flutter/domain/helper/fmt/fmtable.dart';
 
 class ShadowsocksFmt implements Fmtable {
   @override

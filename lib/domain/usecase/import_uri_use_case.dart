@@ -2,7 +2,7 @@ import 'package:xray_flutter/core/utils.dart';
 import 'package:xray_flutter/data/db/app_database.dart';
 import 'package:xray_flutter/domain/core/domain_error.dart';
 import 'package:xray_flutter/domain/core/result.dart';
-import 'package:xray_flutter/domain/handler/fmt/fmt_fact.dart';
+import 'package:xray_flutter/domain/helper/fmt/fmt_fact.dart';
 import 'package:xray_flutter/domain/service/store/store_service.dart';
 import 'package:xray_flutter/domain/usecase/upsert_profile_use_case.dart';
 

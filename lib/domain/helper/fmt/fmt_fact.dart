@@ -5,11 +5,11 @@ import 'package:xray_flutter/data/db/app_database.dart';
 import 'package:xray_flutter/data/model/profile_item_factory.dart';
 import 'package:xray_flutter/domain/core/domain_error.dart';
 import 'package:xray_flutter/domain/core/result.dart';
-import 'package:xray_flutter/domain/handler/fmt/hy2_fact.dart';
-import 'package:xray_flutter/domain/handler/fmt/shadowsocks_fmt.dart';
-import 'package:xray_flutter/domain/handler/fmt/trojan_fmt.dart';
-import 'package:xray_flutter/domain/handler/fmt/vless_fmt.dart';
-import 'package:xray_flutter/domain/handler/fmt/vmess_fmt.dart';
+import 'package:xray_flutter/domain/helper/fmt/hy2_fact.dart';
+import 'package:xray_flutter/domain/helper/fmt/shadowsocks_fmt.dart';
+import 'package:xray_flutter/domain/helper/fmt/trojan_fmt.dart';
+import 'package:xray_flutter/domain/helper/fmt/vless_fmt.dart';
+import 'package:xray_flutter/domain/helper/fmt/vmess_fmt.dart';
 
 class FmtFact {
   /// Note: ProfileItemData is nessesary to provide id and order
