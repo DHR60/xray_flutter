@@ -254,15 +254,17 @@ extension XrayConfigOutboundService on XrayConfigService {
                 )
               : null,
         ),
-        udpmasks: extra.hy2ObfsPass?.isNotEmpty == true
-            ? [
-                UdpMask4Ray(
+        finalmask: extra.hy2ObfsPass?.isNotEmpty == true
+            ? FinalMask4Ray(
+              udp: [
+                Mask4Ray(
                   type: 'salamander',
-                  settings: UdpMaskSettings4Ray(
+                  settings: MaskSettings4Ray(
                     password: extra.hy2ObfsPass!,
                   ),
                 ),
               ]
+            )
             : null,
       );
       return streamSettings;
@@ -320,14 +322,40 @@ extension XrayConfigOutboundService on XrayConfigService {
         );
         break;
       case ETransport.kcp:
+        var udpMaskList = <Mask4Ray>[];
+        if (GlobalConst.kcpMaskMap.containsKey(profileContext.profile.headerType)) {
+          udpMaskList.add(
+            Mask4Ray(
+              type: GlobalConst.kcpMaskMap[profileContext.profile.headerType]!,
+              settings: profileContext.profile.headerType == 'dns'
+                  ? MaskSettings4Ray(
+                      domain: profileContext.profile.requestHost,
+                    )
+                  : null,
+            ),
+          );
+        }
+        if (profileContext.profile.path.isEmpty) {
+          udpMaskList.add(
+            Mask4Ray(
+              type: 'mkcp-original',
+            ),
+          );
+        } else {
+          udpMaskList.add(
+            Mask4Ray(
+              type: 'mkcp-aes128gcm',
+              settings: MaskSettings4Ray(
+                password: profileContext.profile.path,
+              ),
+            ),
+          );
+        }
         streamSettings = streamSettings.copyWith(
           network: 'kcp',
-          kcpSettings: KcpTransport4Ray(
-            header: KcpHeader4Ray(
-              type: profileContext.profile.headerType,
-              domain: profileContext.profile.requestHost,
-            ),
-            seed: profileContext.profile.path,
+          kcpSettings: KcpTransport4Ray(),
+          finalmask: FinalMask4Ray(
+            udp: udpMaskList,
           ),
         );
         break;

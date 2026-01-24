@@ -118,6 +118,15 @@ class GlobalConst {
     "dns",
   ];
 
+  static const Map<String, String> kcpMaskMap = {
+    "srtp": "header-srtp",
+    "utp": "header-utp",
+    "wechat-video": "header-wechat",
+    "dtls": "header-dtls",
+    "wireguard": "header-wireguard",
+    "dns": "header-dns",
+  };
+
   static const Map<ETransport, List<String>> transportTypeMap = {
     ETransport.raw: rawTypes,
     ETransport.xhttp: xhttpTypes,
