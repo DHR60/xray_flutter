@@ -5,6 +5,8 @@ import 'package:xray_flutter/data/dto/profile_extra_item_dto.dart';
 import 'package:xray_flutter/ui/page/profile_setting/shared/profile_listen_controller.dart';
 import 'package:xray_flutter/ui/page/profile_setting/shared/profile_listen_view.dart';
 import 'package:xray_flutter/ui/page/profile_setting/shared/profile_setting_widget.dart';
+import 'package:xray_flutter/ui/page/profile_setting/shared/ray_like/profile_finalmask_controller.dart';
+import 'package:xray_flutter/ui/page/profile_setting/shared/ray_like/profile_finalmask_view.dart';
 
 class WireguardSettingWidget extends ConsumerStatefulWidget {
   final ProfileItemData profile;
@@ -34,6 +36,7 @@ class _WireguardSettingWidgetState extends ConsumerState<WireguardSettingWidget>
   late TextEditingController _preSharedKeyController;
   late TextEditingController _mtuController;
   late TextEditingController _reservedController;
+  late ProfileFinalmaskController _finalmaskController;
 
   @override
   void initState() {
@@ -61,6 +64,7 @@ class _WireguardSettingWidgetState extends ConsumerState<WireguardSettingWidget>
     _reservedController = TextEditingController(
       text: _extraDto.wireguardReserved?.toString() ?? '',
     );
+    _finalmaskController = ProfileFinalmaskController.fromData(widget.profile);
   }
 
   @override
@@ -73,6 +77,7 @@ class _WireguardSettingWidgetState extends ConsumerState<WireguardSettingWidget>
     _preSharedKeyController.dispose();
     _mtuController.dispose();
     _reservedController.dispose();
+    _finalmaskController.dispose();
     super.dispose();
   }
 
@@ -97,6 +102,7 @@ class _WireguardSettingWidgetState extends ConsumerState<WireguardSettingWidget>
       address: _listenController.addressText,
       port: _listenController.portValue,
       id: _secretKeyController.text,
+      finalmask: _finalmaskController.finalmask,
       jsonData: _extraDto.toString(),
     );
   }
@@ -151,6 +157,9 @@ class _WireguardSettingWidgetState extends ConsumerState<WireguardSettingWidget>
           controller: _reservedController,
           decoration: const InputDecoration(labelText: 'Reserved'),
         ),
+        const Divider(),
+        const Text('最终伪装层'),
+        ProfileFinalmaskView(controller: _finalmaskController),
       ],
     );
   }

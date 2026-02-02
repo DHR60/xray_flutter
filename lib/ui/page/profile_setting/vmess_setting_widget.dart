@@ -7,6 +7,8 @@ import 'package:xray_flutter/data/dto/profile_extra_item_dto.dart';
 import 'package:xray_flutter/ui/page/profile_setting/shared/profile_listen_controller.dart';
 import 'package:xray_flutter/ui/page/profile_setting/shared/profile_listen_view.dart';
 import 'package:xray_flutter/ui/page/profile_setting/shared/profile_setting_widget.dart';
+import 'package:xray_flutter/ui/page/profile_setting/shared/ray_like/profile_finalmask_controller.dart';
+import 'package:xray_flutter/ui/page/profile_setting/shared/ray_like/profile_finalmask_view.dart';
 import 'package:xray_flutter/ui/page/profile_setting/shared/ray_like/profile_security_controller.dart';
 import 'package:xray_flutter/ui/page/profile_setting/shared/ray_like/profile_security_view.dart';
 import 'package:xray_flutter/ui/page/profile_setting/shared/ray_like/profile_transport_controller.dart';
@@ -38,6 +40,7 @@ class _VmessSettingWidgetState extends ConsumerState<VmessSettingWidget>
   late TextEditingController _vmessSecurityController;
   late ProfileTransportController _transportController;
   late ProfileSecurityController _securityController;
+  late ProfileFinalmaskController _finalmaskController;
 
   @override
   void initState() {
@@ -60,6 +63,7 @@ class _VmessSettingWidgetState extends ConsumerState<VmessSettingWidget>
     );
     _transportController = ProfileTransportController.fromData(widget.profile);
     _securityController = ProfileSecurityController.fromData(widget.profile);
+    _finalmaskController = ProfileFinalmaskController.fromData(widget.profile);
   }
 
   @override
@@ -71,6 +75,7 @@ class _VmessSettingWidgetState extends ConsumerState<VmessSettingWidget>
     _vmessSecurityController.dispose();
     _transportController.dispose();
     _securityController.dispose();
+    _finalmaskController.dispose();
     super.dispose();
   }
 
@@ -106,6 +111,7 @@ class _VmessSettingWidgetState extends ConsumerState<VmessSettingWidget>
       shortId: _securityController.realityShortId,
       spiderX: _securityController.realitySpdx,
       mldsa65Verify: _securityController.mldsa65Ver,
+      finalmask: _finalmaskController.finalmask,
       jsonData: Utils.toJsonString(_extraDto.toJson()),
     );
   }
@@ -151,6 +157,9 @@ class _VmessSettingWidgetState extends ConsumerState<VmessSettingWidget>
         const Divider(),
         const Text('传输层安全设置'),
         ProfileSecurityView(controller: _securityController),
+        const Divider(),
+        const Text('最终伪装层'),
+        ProfileFinalmaskView(controller: _finalmaskController),
       ],
     );
   }

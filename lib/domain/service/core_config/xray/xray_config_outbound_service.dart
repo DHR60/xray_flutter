@@ -349,6 +349,15 @@ extension XrayConfigOutboundService on XrayConfigService {
         break;
     }
 
+    if (profileContext.profile.finalmask.isNotEmpty) {
+      final finalmask = FinalMask4Ray.fromJson(
+        Utils.fromJsonString(profileContext.profile.finalmask) ?? {},
+      );
+      if (finalmask.tcp != null || finalmask.udp != null) {
+        streamSettings = streamSettings.copyWith(finalmask: finalmask);
+      }
+    }
+
     return streamSettings;
   }
 }

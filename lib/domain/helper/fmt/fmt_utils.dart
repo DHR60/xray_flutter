@@ -220,6 +220,17 @@ class FmtUtils {
         }
         break;
     }
+    if (data.finalmask.isNotEmpty) {
+      // check json format and remove spaces
+      var jsonMap = Utils.fromJsonString(data.finalmask);
+      if (jsonMap != null) {
+        final finalmaskJson = FinalMask4Ray.fromJson(jsonMap);
+        final finalmaskString = Utils.toJsonString(finalmaskJson.toJson());
+        if (finalmaskString != '{}') {
+          query['fm'] = urlEncode(finalmaskString);
+        }
+      }
+    }
     return query;
   }
 
@@ -326,6 +337,19 @@ class FmtUtils {
           requestHost: getQueryDecoded(queryParams, 'host'),
         );
         break;
+    }
+    if (queryParams.containsKey('fm')) {
+      final fmStr = getQueryDecoded(queryParams, 'fm');
+      final fmJson = Utils.fromJsonString(fmStr);
+      if (fmJson != null) {
+        final finalmask = FinalMask4Ray.fromJson(fmJson);
+        final prettyFmStr = Utils.prettyJson(
+          Utils.toJsonString(finalmask.toJson()),
+        );
+        data = data.copyWith(
+          finalmask: prettyFmStr == '{}' ? null : prettyFmStr,
+        );
+      }
     }
     return data;
   }

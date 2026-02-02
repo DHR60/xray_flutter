@@ -41,6 +41,7 @@ class ProfileItemFactory {
       customOutbound: '',
       coreType: ECoreType.xray,
       preSocksProxy: null,
+      finalmask: '',
     );
   }
 
@@ -102,6 +103,6 @@ class ProfileItemFactory {
         a.xhttpExtra == b.xhttpExtra &&
         a.customConfig == b.customConfig &&
         a.customOutbound == b.customOutbound &&
-        aExtra == bExtra;
+        a.finalmask == b.finalmask;
   }
 }

@@ -376,6 +376,18 @@ class $ProfileItemTable extends ProfileItem
     requiredDuringInsert: false,
     clientDefault: () => '',
   );
+  static const VerificationMeta _finalmaskMeta = const VerificationMeta(
+    'finalmask',
+  );
+  @override
+  late final GeneratedColumn<String> finalmask = GeneratedColumn<String>(
+    'finalmask',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    clientDefault: () => '',
+  );
   static const VerificationMeta _jsonDataMeta = const VerificationMeta(
     'jsonData',
   );
@@ -422,6 +434,7 @@ class $ProfileItemTable extends ProfileItem
     certSha256,
     customConfig,
     customOutbound,
+    finalmask,
     jsonData,
   ];
   @override
@@ -642,6 +655,12 @@ class $ProfileItemTable extends ProfileItem
         ),
       );
     }
+    if (data.containsKey('finalmask')) {
+      context.handle(
+        _finalmaskMeta,
+        finalmask.isAcceptableOrUnknown(data['finalmask']!, _finalmaskMeta),
+      );
+    }
     if (data.containsKey('json_data')) {
       context.handle(
         _jsonDataMeta,
@@ -789,6 +808,10 @@ class $ProfileItemTable extends ProfileItem
         DriftSqlType.string,
         data['${effectivePrefix}custom_outbound'],
       )!,
+      finalmask: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}finalmask'],
+      )!,
       jsonData: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}json_data'],
@@ -842,6 +865,7 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
   final String certSha256;
   final String customConfig;
   final String customOutbound;
+  final String finalmask;
   final String jsonData;
   const ProfileItemData({
     required this.indexId,
@@ -876,6 +900,7 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
     required this.certSha256,
     required this.customConfig,
     required this.customOutbound,
+    required this.finalmask,
     required this.jsonData,
   });
   @override
@@ -923,6 +948,7 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
     map['cert_sha256'] = Variable<String>(certSha256);
     map['custom_config'] = Variable<String>(customConfig);
     map['custom_outbound'] = Variable<String>(customOutbound);
+    map['finalmask'] = Variable<String>(finalmask);
     map['json_data'] = Variable<String>(jsonData);
     return map;
   }
@@ -965,6 +991,7 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
       certSha256: Value(certSha256),
       customConfig: Value(customConfig),
       customOutbound: Value(customOutbound),
+      finalmask: Value(finalmask),
       jsonData: Value(jsonData),
     );
   }
@@ -1011,6 +1038,7 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
       certSha256: serializer.fromJson<String>(json['certSha256']),
       customConfig: serializer.fromJson<String>(json['customConfig']),
       customOutbound: serializer.fromJson<String>(json['customOutbound']),
+      finalmask: serializer.fromJson<String>(json['finalmask']),
       jsonData: serializer.fromJson<String>(json['jsonData']),
     );
   }
@@ -1054,6 +1082,7 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
       'certSha256': serializer.toJson<String>(certSha256),
       'customConfig': serializer.toJson<String>(customConfig),
       'customOutbound': serializer.toJson<String>(customOutbound),
+      'finalmask': serializer.toJson<String>(finalmask),
       'jsonData': serializer.toJson<String>(jsonData),
     };
   }
@@ -1091,6 +1120,7 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
     String? certSha256,
     String? customConfig,
     String? customOutbound,
+    String? finalmask,
     String? jsonData,
   }) => ProfileItemData(
     indexId: indexId ?? this.indexId,
@@ -1127,6 +1157,7 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
     certSha256: certSha256 ?? this.certSha256,
     customConfig: customConfig ?? this.customConfig,
     customOutbound: customOutbound ?? this.customOutbound,
+    finalmask: finalmask ?? this.finalmask,
     jsonData: jsonData ?? this.jsonData,
   );
   ProfileItemData copyWithCompanion(ProfileItemCompanion data) {
@@ -1193,6 +1224,7 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
       customOutbound: data.customOutbound.present
           ? data.customOutbound.value
           : this.customOutbound,
+      finalmask: data.finalmask.present ? data.finalmask.value : this.finalmask,
       jsonData: data.jsonData.present ? data.jsonData.value : this.jsonData,
     );
   }
@@ -1232,6 +1264,7 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
           ..write('certSha256: $certSha256, ')
           ..write('customConfig: $customConfig, ')
           ..write('customOutbound: $customOutbound, ')
+          ..write('finalmask: $finalmask, ')
           ..write('jsonData: $jsonData')
           ..write(')'))
         .toString();
@@ -1271,6 +1304,7 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
     certSha256,
     customConfig,
     customOutbound,
+    finalmask,
     jsonData,
   ]);
   @override
@@ -1309,6 +1343,7 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
           other.certSha256 == this.certSha256 &&
           other.customConfig == this.customConfig &&
           other.customOutbound == this.customOutbound &&
+          other.finalmask == this.finalmask &&
           other.jsonData == this.jsonData);
 }
 
@@ -1345,6 +1380,7 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
   final Value<String> certSha256;
   final Value<String> customConfig;
   final Value<String> customOutbound;
+  final Value<String> finalmask;
   final Value<String> jsonData;
   final Value<int> rowid;
   const ProfileItemCompanion({
@@ -1380,6 +1416,7 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
     this.certSha256 = const Value.absent(),
     this.customConfig = const Value.absent(),
     this.customOutbound = const Value.absent(),
+    this.finalmask = const Value.absent(),
     this.jsonData = const Value.absent(),
     this.rowid = const Value.absent(),
   });
@@ -1416,6 +1453,7 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
     this.certSha256 = const Value.absent(),
     this.customConfig = const Value.absent(),
     this.customOutbound = const Value.absent(),
+    this.finalmask = const Value.absent(),
     this.jsonData = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : indexId = Value(indexId);
@@ -1452,6 +1490,7 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
     Expression<String>? certSha256,
     Expression<String>? customConfig,
     Expression<String>? customOutbound,
+    Expression<String>? finalmask,
     Expression<String>? jsonData,
     Expression<int>? rowid,
   }) {
@@ -1488,6 +1527,7 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
       if (certSha256 != null) 'cert_sha256': certSha256,
       if (customConfig != null) 'custom_config': customConfig,
       if (customOutbound != null) 'custom_outbound': customOutbound,
+      if (finalmask != null) 'finalmask': finalmask,
       if (jsonData != null) 'json_data': jsonData,
       if (rowid != null) 'rowid': rowid,
     });
@@ -1526,6 +1566,7 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
     Value<String>? certSha256,
     Value<String>? customConfig,
     Value<String>? customOutbound,
+    Value<String>? finalmask,
     Value<String>? jsonData,
     Value<int>? rowid,
   }) {
@@ -1562,6 +1603,7 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
       certSha256: certSha256 ?? this.certSha256,
       customConfig: customConfig ?? this.customConfig,
       customOutbound: customOutbound ?? this.customOutbound,
+      finalmask: finalmask ?? this.finalmask,
       jsonData: jsonData ?? this.jsonData,
       rowid: rowid ?? this.rowid,
     );
@@ -1670,6 +1712,9 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
     if (customOutbound.present) {
       map['custom_outbound'] = Variable<String>(customOutbound.value);
     }
+    if (finalmask.present) {
+      map['finalmask'] = Variable<String>(finalmask.value);
+    }
     if (jsonData.present) {
       map['json_data'] = Variable<String>(jsonData.value);
     }
@@ -1714,6 +1759,7 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
           ..write('certSha256: $certSha256, ')
           ..write('customConfig: $customConfig, ')
           ..write('customOutbound: $customOutbound, ')
+          ..write('finalmask: $finalmask, ')
           ..write('jsonData: $jsonData, ')
           ..write('rowid: $rowid')
           ..write(')'))
@@ -2545,6 +2591,7 @@ typedef $$ProfileItemTableCreateCompanionBuilder =
       Value<String> certSha256,
       Value<String> customConfig,
       Value<String> customOutbound,
+      Value<String> finalmask,
       Value<String> jsonData,
       Value<int> rowid,
     });
@@ -2582,6 +2629,7 @@ typedef $$ProfileItemTableUpdateCompanionBuilder =
       Value<String> certSha256,
       Value<String> customConfig,
       Value<String> customOutbound,
+      Value<String> finalmask,
       Value<String> jsonData,
       Value<int> rowid,
     });
@@ -2754,6 +2802,11 @@ class $$ProfileItemTableFilterComposer
 
   ColumnFilters<String> get customOutbound => $composableBuilder(
     column: $table.customOutbound,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get finalmask => $composableBuilder(
+    column: $table.finalmask,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -2932,6 +2985,11 @@ class $$ProfileItemTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get finalmask => $composableBuilder(
+    column: $table.finalmask,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get jsonData => $composableBuilder(
     column: $table.jsonData,
     builder: (column) => ColumnOrderings(column),
@@ -3074,6 +3132,9 @@ class $$ProfileItemTableAnnotationComposer
     builder: (column) => column,
   );
 
+  GeneratedColumn<String> get finalmask =>
+      $composableBuilder(column: $table.finalmask, builder: (column) => column);
+
   GeneratedColumn<String> get jsonData =>
       $composableBuilder(column: $table.jsonData, builder: (column) => column);
 }
@@ -3141,6 +3202,7 @@ class $$ProfileItemTableTableManager
                 Value<String> certSha256 = const Value.absent(),
                 Value<String> customConfig = const Value.absent(),
                 Value<String> customOutbound = const Value.absent(),
+                Value<String> finalmask = const Value.absent(),
                 Value<String> jsonData = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ProfileItemCompanion(
@@ -3176,6 +3238,7 @@ class $$ProfileItemTableTableManager
                 certSha256: certSha256,
                 customConfig: customConfig,
                 customOutbound: customOutbound,
+                finalmask: finalmask,
                 jsonData: jsonData,
                 rowid: rowid,
               ),
@@ -3213,6 +3276,7 @@ class $$ProfileItemTableTableManager
                 Value<String> certSha256 = const Value.absent(),
                 Value<String> customConfig = const Value.absent(),
                 Value<String> customOutbound = const Value.absent(),
+                Value<String> finalmask = const Value.absent(),
                 Value<String> jsonData = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ProfileItemCompanion.insert(
@@ -3248,6 +3312,7 @@ class $$ProfileItemTableTableManager
                 certSha256: certSha256,
                 customConfig: customConfig,
                 customOutbound: customOutbound,
+                finalmask: finalmask,
                 jsonData: jsonData,
                 rowid: rowid,
               ),

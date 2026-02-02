@@ -106,6 +106,7 @@ class _HttpSettingWidgetState extends ConsumerState<HttpSettingWidget>
           decoration: const InputDecoration(labelText: '密码 (Password)'),
         ),
         const Divider(),
+        const Text('传输层安全设置'),
         ProfileSecurityView(controller: _securityController),
       ],
     );

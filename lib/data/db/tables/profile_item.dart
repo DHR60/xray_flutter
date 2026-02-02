@@ -37,6 +37,7 @@ class ProfileItem extends Table {
   late final certSha256 = text().clientDefault(() => '')();
   late final customConfig = text().clientDefault(() => '')();
   late final customOutbound = text().clientDefault(() => '')();
+  late final finalmask = text().clientDefault(() => '')();
   late final jsonData = text().clientDefault(() => '')();
 
   @override
