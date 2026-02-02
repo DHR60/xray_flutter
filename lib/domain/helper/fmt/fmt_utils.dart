@@ -108,7 +108,11 @@ class FmtUtils {
     return queryParams[key]!;
   }
 
-  static String getQueryValueOrDefault(Map<String, String>? queryParams, String key, String defaultValue) {
+  static String getQueryValueOrDefault(
+    Map<String, String>? queryParams,
+    String key,
+    String defaultValue,
+  ) {
     if (queryParams == null || !queryParams.containsKey(key)) {
       return defaultValue;
     }
@@ -335,7 +339,9 @@ class FmtUtils {
       sni: getQueryValue(queryParams, 'sni'),
       fingerprint: getQueryValue(queryParams, 'fp'),
       alpn: getQueryValue(queryParams, 'alpn'),
-      allowInsecure: allowInsecureFromQueryParams(queryParams) ? 'true' : 'false',
+      allowInsecure: allowInsecureFromQueryParams(queryParams)
+          ? 'true'
+          : 'false',
       publicKey: getQueryValue(queryParams, 'pbk'),
       shortId: getQueryValue(queryParams, 'sid'),
       spiderX: getQueryValue(queryParams, 'spx'),
@@ -344,9 +350,7 @@ class FmtUtils {
     );
   }
 
-  static bool allowInsecureFromQueryParams(
-    Map<String, String>? queryParams,
-  ) {
+  static bool allowInsecureFromQueryParams(Map<String, String>? queryParams) {
     if (queryParams == null) {
       return false;
     }

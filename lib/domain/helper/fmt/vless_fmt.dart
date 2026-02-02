@@ -32,7 +32,11 @@ class VlessFmt implements Fmtable {
       }
       final extra = ProfileExtraItemDto(
         flow: FmtUtils.getQueryValue(queryParams, 'flow'),
-        vlessEncryption: FmtUtils.getQueryValueOrDefault(queryParams, 'encryption', 'none'),
+        vlessEncryption: FmtUtils.getQueryValueOrDefault(
+          queryParams,
+          'encryption',
+          'none',
+        ),
       );
       data = data.copyWith(jsonData: Utils.toJsonString(extra.toJson()));
     }

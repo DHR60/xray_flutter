@@ -242,9 +242,7 @@ extension XrayConfigOutboundService on XrayConfigService {
           version: 2,
           auth: profileContext.profile.id,
           up: extra.hy2Up?.isNotEmpty == true ? extra.hy2Up : null,
-          down: extra.hy2Down?.isNotEmpty == true
-              ? extra.hy2Down
-              : null,
+          down: extra.hy2Down?.isNotEmpty == true ? extra.hy2Down : null,
           udphop: extra.hy2HopPorts?.isNotEmpty == true
               ? UdpHop4Ray(
                   port: extra.hy2HopPorts!,
@@ -256,15 +254,13 @@ extension XrayConfigOutboundService on XrayConfigService {
         ),
         finalmask: extra.hy2ObfsPass?.isNotEmpty == true
             ? FinalMask4Ray(
-              udp: [
-                Mask4Ray(
-                  type: 'salamander',
-                  settings: MaskSettings4Ray(
-                    password: extra.hy2ObfsPass!,
+                udp: [
+                  Mask4Ray(
+                    type: 'salamander',
+                    settings: MaskSettings4Ray(password: extra.hy2ObfsPass!),
                   ),
-                ),
-              ]
-            )
+                ],
+              )
             : null,
       );
       return streamSettings;
@@ -323,40 +319,32 @@ extension XrayConfigOutboundService on XrayConfigService {
         break;
       case ETransport.kcp:
         var udpMaskList = <Mask4Ray>[];
-        if (GlobalConst.kcpMaskMap.containsKey(profileContext.profile.headerType)) {
+        if (GlobalConst.kcpMaskMap.containsKey(
+          profileContext.profile.headerType,
+        )) {
           udpMaskList.add(
             Mask4Ray(
               type: GlobalConst.kcpMaskMap[profileContext.profile.headerType]!,
               settings: profileContext.profile.headerType == 'dns'
-                  ? MaskSettings4Ray(
-                      domain: profileContext.profile.requestHost,
-                    )
+                  ? MaskSettings4Ray(domain: profileContext.profile.requestHost)
                   : null,
             ),
           );
         }
         if (profileContext.profile.path.isEmpty) {
-          udpMaskList.add(
-            Mask4Ray(
-              type: 'mkcp-original',
-            ),
-          );
+          udpMaskList.add(Mask4Ray(type: 'mkcp-original'));
         } else {
           udpMaskList.add(
             Mask4Ray(
               type: 'mkcp-aes128gcm',
-              settings: MaskSettings4Ray(
-                password: profileContext.profile.path,
-              ),
+              settings: MaskSettings4Ray(password: profileContext.profile.path),
             ),
           );
         }
         streamSettings = streamSettings.copyWith(
           network: 'kcp',
           kcpSettings: KcpTransport4Ray(),
-          finalmask: FinalMask4Ray(
-            udp: udpMaskList,
-          ),
+          finalmask: FinalMask4Ray(udp: udpMaskList),
         );
         break;
     }
