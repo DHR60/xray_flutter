@@ -104,7 +104,7 @@ class RoutingListWidget extends ConsumerWidget {
                   ),
                 );
               },
-              onReorder: (oldIndex, newIndex) {
+              onReorderItem: (oldIndex, newIndex) {
                 ref
                     .read(appConfigProvider.notifier)
                     .reorderRoutingItems(oldIndex, newIndex);

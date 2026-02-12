@@ -131,7 +131,7 @@ class ProfileListView extends ConsumerWidget {
               ),
             );
           },
-          onReorder: (oldIndex, newIndex) {
+          onReorderItem: (oldIndex, newIndex) {
             final filter = ref.read(profileFilterProvider);
             ref
                 .read(storeServiceProvider)

@@ -293,7 +293,7 @@ class _RoutingSettingWidgetState extends ConsumerState<RoutingSettingWidget> {
                     ),
                   );
                 },
-                onReorder: (oldIndex, newIndex) {
+                onReorderItem: (oldIndex, newIndex) {
                   routingSettingNotifier.reorderRule(oldIndex, newIndex);
                 },
               ),

@@ -145,11 +145,6 @@ class ProfileRepoImpl implements ProfileRepo {
     String? subId,
   }) async {
     return _database.transaction(() async {
-      // Flutter's ReorderableListView gives newIndex in the list *after* removal.
-      if (oldIndex < newIndex) {
-        newIndex -= 1;
-      }
-
       // Only read the fields needed for reordering.
       final query = _database.selectOnly(_database.profileItem)
         ..addColumns([

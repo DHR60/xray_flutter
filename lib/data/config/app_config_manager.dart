@@ -96,9 +96,6 @@ class AppConfigManager {
     int newIndex,
   ) {
     final newItems = List<SubItemDto>.from(items);
-    if (oldIndex < newIndex) {
-      newIndex -= 1;
-    }
     final item = newItems.removeAt(oldIndex);
     newItems.insert(newIndex, item);
     return fixOrderIndicesForSubItems(newItems);
@@ -134,9 +131,6 @@ class AppConfigManager {
     int newIndex,
   ) {
     final newItems = List<RoutingItemDto>.from(items);
-    if (oldIndex < newIndex) {
-      newIndex -= 1;
-    }
     final item = newItems.removeAt(oldIndex);
     newItems.insert(newIndex, item);
     return fixOrderIndicesForRoutingItems(newItems);
@@ -180,9 +174,6 @@ class AppConfigManager {
     int newIndex,
   ) {
     final newRules = List<RuleItemDto>.from(rules);
-    if (oldIndex < newIndex) {
-      newIndex -= 1;
-    }
     final item = newRules.removeAt(oldIndex);
     newRules.insert(newIndex, item);
     return fixOrderIndicesForRules(newRules);

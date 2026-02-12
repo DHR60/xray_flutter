@@ -47,7 +47,7 @@ class SubListView extends ConsumerWidget {
           ),
         );
       },
-      onReorder: (oldIndex, newIndex) {
+      onReorderItem: (oldIndex, newIndex) {
         ref
             .read(appConfigProvider.notifier)
             .reorderSubItems(oldIndex, newIndex);

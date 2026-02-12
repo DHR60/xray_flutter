@@ -379,7 +379,7 @@ class _JsonEditWidgetState extends ConsumerState<JsonEditWidget> {
                                     Theme.of(context)
                                         .colorScheme
                                         .surfaceContainerHighest
-                                        .withOpacity(0),
+                                        .withValues(alpha: 0),
                                   ],
                                 ),
                               ),
@@ -406,7 +406,7 @@ class _JsonEditWidgetState extends ConsumerState<JsonEditWidget> {
                                     Theme.of(context)
                                         .colorScheme
                                         .surfaceContainerHighest
-                                        .withOpacity(0),
+                                        .withValues(alpha: 0),
                                   ],
                                 ),
                               ),
