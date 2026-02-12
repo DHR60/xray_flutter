@@ -100,9 +100,10 @@ class _MyHomePageStateState extends ConsumerState<MyHomePageState> {
       if (!mounted) return;
 
       if (result is Failure) {
+        final errorMessage = result.toString();
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(const SnackBar(content: Text('没有可导入的配置')));
+        ).showSnackBar(SnackBar(content: Text('导入失败：$errorMessage')));
       } else if (result is Success<List<ProfileItemData>>) {
         final successCount = result.data.length;
         ScaffoldMessenger.of(

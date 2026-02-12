@@ -283,11 +283,22 @@ extension XrayConfigOutboundService on XrayConfigService {
             host: profileContext.profile.requestHost,
             path: profileContext.profile.path,
             mode: profileContext.profile.headerType,
-            extra: XHttpExtra4Ray.fromJson(
-              Utils.fromJsonString(profileContext.profile.xhttpExtra) ?? {},
-            ),
           ),
         );
+        if (profileContext.profile.xhttpExtra.isNotEmpty) {
+          try {
+            final extra = XHttpExtra4Ray.fromJson(
+              Utils.fromJsonString(profileContext.profile.xhttpExtra) ?? {},
+            );
+            streamSettings = streamSettings.copyWith(
+              xhttpSettings: streamSettings.xhttpSettings?.copyWith(
+                extra: extra,
+              ),
+            );
+          } catch (e) {
+            // Ignored
+          }
+        }
         break;
       case ETransport.grpc:
         streamSettings = streamSettings.copyWith(
@@ -350,11 +361,15 @@ extension XrayConfigOutboundService on XrayConfigService {
     }
 
     if (profileContext.profile.finalmask.isNotEmpty) {
-      final finalmask = FinalMask4Ray.fromJson(
-        Utils.fromJsonString(profileContext.profile.finalmask) ?? {},
-      );
-      if (finalmask.tcp != null || finalmask.udp != null) {
-        streamSettings = streamSettings.copyWith(finalmask: finalmask);
+      try {
+        final finalmask = FinalMask4Ray.fromJson(
+          Utils.fromJsonString(profileContext.profile.finalmask) ?? {},
+        );
+        if (finalmask.tcp != null || finalmask.udp != null) {
+          streamSettings = streamSettings.copyWith(finalmask: finalmask);
+        }
+      } catch (e) {
+        // Ignored
       }
     }
 
