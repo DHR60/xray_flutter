@@ -1,6 +1,5 @@
 import 'package:drift/drift.dart';
 import 'package:xray_flutter/data/db/app_database.dart';
-import 'package:xray_flutter/data/db/converter/uuid_blob_converter.dart';
 import 'package:xray_flutter/data/model/profile_item_factory.dart';
 import 'package:xray_flutter/domain/repo/profile_repo.dart';
 

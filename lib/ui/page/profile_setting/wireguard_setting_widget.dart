@@ -25,7 +25,8 @@ class WireguardSettingWidget extends ConsumerStatefulWidget {
       _WireguardSettingWidgetState();
 }
 
-class _WireguardSettingWidgetState extends ConsumerState<WireguardSettingWidget> {
+class _WireguardSettingWidgetState
+    extends ConsumerState<WireguardSettingWidget> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late ProfileExtraItemDto _extraDto;
   late TextEditingController _remarkController;

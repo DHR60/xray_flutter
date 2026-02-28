@@ -193,10 +193,7 @@ class _ProfileSettingWidgetState extends ConsumerState<ProfileSettingWidget> {
               return SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Form(
-                    key: widget.formKey,
-                    child: widget.formContent,
-                  ),
+                  child: Form(key: widget.formKey, child: widget.formContent),
                 ),
               );
             } else {

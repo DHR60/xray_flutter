@@ -28,7 +28,8 @@ class Hysteria2SettingWidget extends ConsumerStatefulWidget {
       _Hysteria2SettingWidgetState();
 }
 
-class _Hysteria2SettingWidgetState extends ConsumerState<Hysteria2SettingWidget> {
+class _Hysteria2SettingWidgetState
+    extends ConsumerState<Hysteria2SettingWidget> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late ProfileExtraItemDto _extraDto;
   late TextEditingController _remarkController;
