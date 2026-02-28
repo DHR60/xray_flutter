@@ -25,8 +25,8 @@ class WireguardSettingWidget extends ConsumerStatefulWidget {
       _WireguardSettingWidgetState();
 }
 
-class _WireguardSettingWidgetState extends ConsumerState<WireguardSettingWidget>
-    with ProfileEditorMixin {
+class _WireguardSettingWidgetState extends ConsumerState<WireguardSettingWidget> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late ProfileExtraItemDto _extraDto;
   late TextEditingController _remarkController;
   late ProfileListenController _listenController;
@@ -81,14 +81,7 @@ class _WireguardSettingWidgetState extends ConsumerState<WireguardSettingWidget>
     super.dispose();
   }
 
-  @override
-  ProfileItemData get originalProfile => widget.profile;
-
-  @override
-  String? get subId => widget.subId;
-
-  @override
-  ProfileItemData buildProfile() {
+  ProfileItemData _buildProfile() {
     _extraDto = _extraDto.copyWith(
       wireguardLocalAddress: _localAddressController.text,
       wireguardPublicKey: _publicKeyController.text,
@@ -107,8 +100,7 @@ class _WireguardSettingWidgetState extends ConsumerState<WireguardSettingWidget>
     );
   }
 
-  @override
-  Widget buildFormContent(BuildContext context) {
+  Widget _buildFormContent(BuildContext context) {
     return Column(
       children: [
         const Text('配置项'),
@@ -170,7 +162,10 @@ class _WireguardSettingWidgetState extends ConsumerState<WireguardSettingWidget>
       title: 'Wireguard Setting',
       profile: widget.profile,
       isNew: widget.isNew,
-      controller: this,
+      formKey: _formKey,
+      formContent: _buildFormContent(context),
+      onBuildProfile: _buildProfile,
+      subId: widget.subId,
     );
   }
 }

@@ -22,8 +22,8 @@ class SocksSettingWidget extends ConsumerStatefulWidget {
   ConsumerState<SocksSettingWidget> createState() => _SocksSettingWidgetState();
 }
 
-class _SocksSettingWidgetState extends ConsumerState<SocksSettingWidget>
-    with ProfileEditorMixin {
+class _SocksSettingWidgetState extends ConsumerState<SocksSettingWidget> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late ProfileExtraItemDto _extraDto;
   late TextEditingController _remarkController;
   late ProfileListenController _listenController;
@@ -53,14 +53,7 @@ class _SocksSettingWidgetState extends ConsumerState<SocksSettingWidget>
     super.dispose();
   }
 
-  @override
-  ProfileItemData get originalProfile => widget.profile;
-
-  @override
-  String? get subId => widget.subId;
-
-  @override
-  ProfileItemData buildProfile() {
+  ProfileItemData _buildProfile() {
     return widget.profile.copyWith(
       remarks: _remarkController.text,
       address: _listenController.addressText,
@@ -71,8 +64,7 @@ class _SocksSettingWidgetState extends ConsumerState<SocksSettingWidget>
     );
   }
 
-  @override
-  Widget buildFormContent(BuildContext context) {
+  Widget _buildFormContent(BuildContext context) {
     return Column(
       children: [
         const Text('配置项'),
@@ -101,7 +93,10 @@ class _SocksSettingWidgetState extends ConsumerState<SocksSettingWidget>
       title: 'Socks Setting',
       profile: widget.profile,
       isNew: widget.isNew,
-      controller: this,
+      formKey: _formKey,
+      formContent: _buildFormContent(context),
+      onBuildProfile: _buildProfile,
+      subId: widget.subId,
     );
   }
 }

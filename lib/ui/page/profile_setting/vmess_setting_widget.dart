@@ -30,8 +30,8 @@ class VmessSettingWidget extends ConsumerStatefulWidget {
   ConsumerState<VmessSettingWidget> createState() => _VmessSettingWidgetState();
 }
 
-class _VmessSettingWidgetState extends ConsumerState<VmessSettingWidget>
-    with ProfileEditorMixin {
+class _VmessSettingWidgetState extends ConsumerState<VmessSettingWidget> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late ProfileExtraItemDto _extraDto;
   late TextEditingController _remarkController;
   late ProfileListenController _listenController;
@@ -79,14 +79,7 @@ class _VmessSettingWidgetState extends ConsumerState<VmessSettingWidget>
     super.dispose();
   }
 
-  @override
-  ProfileItemData get originalProfile => widget.profile;
-
-  @override
-  String? get subId => widget.subId;
-
-  @override
-  ProfileItemData buildProfile() {
+  ProfileItemData _buildProfile() {
     final vmessAlterId = int.tryParse(_alterIdController.text) ?? 0;
 
     _extraDto = _extraDto.copyWith(alterId: vmessAlterId.toString());
@@ -116,8 +109,7 @@ class _VmessSettingWidgetState extends ConsumerState<VmessSettingWidget>
     );
   }
 
-  @override
-  Widget buildFormContent(BuildContext context) {
+  Widget _buildFormContent(BuildContext context) {
     return Column(
       children: [
         const Text('配置项'),
@@ -170,7 +162,10 @@ class _VmessSettingWidgetState extends ConsumerState<VmessSettingWidget>
       title: 'VMess Setting',
       profile: widget.profile,
       isNew: widget.isNew,
-      controller: this,
+      formKey: _formKey,
+      formContent: _buildFormContent(context),
+      onBuildProfile: _buildProfile,
+      subId: widget.subId,
     );
   }
 }

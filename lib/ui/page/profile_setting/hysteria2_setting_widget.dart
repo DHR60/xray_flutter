@@ -28,8 +28,8 @@ class Hysteria2SettingWidget extends ConsumerStatefulWidget {
       _Hysteria2SettingWidgetState();
 }
 
-class _Hysteria2SettingWidgetState extends ConsumerState<Hysteria2SettingWidget>
-    with ProfileEditorMixin {
+class _Hysteria2SettingWidgetState extends ConsumerState<Hysteria2SettingWidget> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late ProfileExtraItemDto _extraDto;
   late TextEditingController _remarkController;
   late ProfileListenController _listenController;
@@ -87,14 +87,7 @@ class _Hysteria2SettingWidgetState extends ConsumerState<Hysteria2SettingWidget>
     super.dispose();
   }
 
-  @override
-  ProfileItemData get originalProfile => widget.profile;
-
-  @override
-  String? get subId => widget.subId;
-
-  @override
-  ProfileItemData buildProfile() {
+  ProfileItemData _buildProfile() {
     _extraDto = _extraDto.copyWith(
       hy2ObfsPass: _obfsPassController.text,
       hy2HopPorts: _hopPortsController.text,
@@ -122,8 +115,7 @@ class _Hysteria2SettingWidgetState extends ConsumerState<Hysteria2SettingWidget>
     );
   }
 
-  @override
-  Widget buildFormContent(BuildContext context) {
+  Widget _buildFormContent(BuildContext context) {
     return Column(
       children: [
         const Text('配置项'),
@@ -245,7 +237,10 @@ class _Hysteria2SettingWidgetState extends ConsumerState<Hysteria2SettingWidget>
       title: 'Hysteria2 Setting',
       profile: widget.profile,
       isNew: widget.isNew,
-      controller: this,
+      formKey: _formKey,
+      formContent: _buildFormContent(context),
+      onBuildProfile: _buildProfile,
+      subId: widget.subId,
     );
   }
 }

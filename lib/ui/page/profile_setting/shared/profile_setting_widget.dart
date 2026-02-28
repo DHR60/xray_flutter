@@ -8,26 +8,24 @@ import 'package:xray_flutter/ui/page/profile_setting/profile_setting_result.dart
 import 'package:xray_flutter/ui/page/profile_setting/shared/profile_preview_view.dart';
 import 'package:xray_flutter/ui/page/shared/json_edit_widget.dart';
 
-abstract class ProfileEditorController {
-  GlobalKey<FormState> get formKey;
-
-  Widget buildFormContent(BuildContext context);
-
-  ProfileItemData? saveAndGetProfile();
-}
-
 class ProfileSettingWidget extends ConsumerStatefulWidget {
   final String title;
   final ProfileItemData profile;
   final bool isNew;
-  final ProfileEditorController controller;
+  final GlobalKey<FormState> formKey;
+  final Widget formContent;
+  final ProfileItemData Function() onBuildProfile;
+  final String? subId;
 
   const ProfileSettingWidget({
     super.key,
     required this.title,
     required this.profile,
     required this.isNew,
-    required this.controller,
+    required this.formKey,
+    required this.formContent,
+    required this.onBuildProfile,
+    this.subId,
   });
 
   @override
@@ -64,10 +62,8 @@ class _ProfileSettingWidgetState extends ConsumerState<ProfileSettingWidget> {
   }
 
   void _saveProfile(BuildContext context) {
-    final savedProfile = widget.controller.saveAndGetProfile();
-    if (savedProfile != null) {
-      Navigator.of(context).pop(ProfileSettingUpsert(_currentProfile));
-    }
+    if (!widget.formKey.currentState!.validate()) return;
+    Navigator.of(context).pop(ProfileSettingUpsert(_currentProfile));
   }
 
   void _deleteProfile(BuildContext context) {
@@ -75,12 +71,14 @@ class _ProfileSettingWidgetState extends ConsumerState<ProfileSettingWidget> {
   }
 
   ProfileItemData get _currentProfile {
-    final ProfileItemData profileFromForm =
-        widget.controller.saveAndGetProfile() ?? widget.profile;
-    if (profileFromForm.configType == EConfigType.custom) {
-      return profileFromForm;
+    var profile = widget.onBuildProfile();
+    if (widget.subId != null) {
+      profile = profile.copyWith(subid: widget.subId);
     }
-    return profileFromForm.copyWith(
+    if (profile.configType == EConfigType.custom) {
+      return profile;
+    }
+    return profile.copyWith(
       customOutbound: _customOutboundJson,
       customConfig: _customConfigJson,
     );
@@ -196,8 +194,8 @@ class _ProfileSettingWidgetState extends ConsumerState<ProfileSettingWidget> {
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Form(
-                    key: widget.controller.formKey,
-                    child: widget.controller.buildFormContent(context),
+                    key: widget.formKey,
+                    child: widget.formContent,
                   ),
                 ),
               );
@@ -210,8 +208,8 @@ class _ProfileSettingWidgetState extends ConsumerState<ProfileSettingWidget> {
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Form(
-                          key: widget.controller.formKey,
-                          child: widget.controller.buildFormContent(context),
+                          key: widget.formKey,
+                          child: widget.formContent,
                         ),
                       ),
                     ),
@@ -249,30 +247,5 @@ class _ProfileSettingWidgetState extends ConsumerState<ProfileSettingWidget> {
         ),
       ),
     );
-  }
-}
-
-mixin ProfileEditorMixin<T extends ConsumerStatefulWidget> on ConsumerState<T>
-    implements ProfileEditorController {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  @override
-  GlobalKey<FormState> get formKey => _formKey;
-
-  ProfileItemData get originalProfile;
-
-  String? get subId;
-
-  ProfileItemData buildProfile();
-
-  @override
-  ProfileItemData? saveAndGetProfile() {
-    if (!_formKey.currentState!.validate()) return null;
-
-    var profile = buildProfile();
-    if (subId != null) {
-      profile = profile.copyWith(subid: subId);
-    }
-    return profile;
   }
 }

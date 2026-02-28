@@ -22,8 +22,8 @@ class CustomSettingWidget extends ConsumerStatefulWidget {
       _CustomSettingWidgetState();
 }
 
-class _CustomSettingWidgetState extends ConsumerState<CustomSettingWidget>
-    with ProfileEditorMixin {
+class _CustomSettingWidgetState extends ConsumerState<CustomSettingWidget> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late ProfileExtraItemDto _extraDto;
   late TextEditingController _remarkController;
   late bool _isOutboundOnly;
@@ -50,14 +50,7 @@ class _CustomSettingWidgetState extends ConsumerState<CustomSettingWidget>
     super.dispose();
   }
 
-  @override
-  ProfileItemData get originalProfile => widget.profile;
-
-  @override
-  String? get subId => widget.subId;
-
-  @override
-  ProfileItemData buildProfile() {
+  ProfileItemData _buildProfile() {
     return widget.profile.copyWith(
       remarks: _remarkController.text,
       customConfig: _isOutboundOnly ? '' : _customJson,
@@ -66,8 +59,7 @@ class _CustomSettingWidgetState extends ConsumerState<CustomSettingWidget>
     );
   }
 
-  @override
-  Widget buildFormContent(BuildContext context) {
+  Widget _buildFormContent(BuildContext context) {
     return Column(
       children: [
         const Text('配置项'),
@@ -115,7 +107,10 @@ class _CustomSettingWidgetState extends ConsumerState<CustomSettingWidget>
       title: 'Custom Setting',
       profile: widget.profile,
       isNew: widget.isNew,
-      controller: this,
+      formKey: _formKey,
+      formContent: _buildFormContent(context),
+      onBuildProfile: _buildProfile,
+      subId: widget.subId,
     );
   }
 }

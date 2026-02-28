@@ -24,8 +24,8 @@ class HttpSettingWidget extends ConsumerStatefulWidget {
   ConsumerState<HttpSettingWidget> createState() => _HttpSettingWidgetState();
 }
 
-class _HttpSettingWidgetState extends ConsumerState<HttpSettingWidget>
-    with ProfileEditorMixin {
+class _HttpSettingWidgetState extends ConsumerState<HttpSettingWidget> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late ProfileExtraItemDto _extraDto;
   late TextEditingController _remarkController;
   late ProfileListenController _listenController;
@@ -58,14 +58,7 @@ class _HttpSettingWidgetState extends ConsumerState<HttpSettingWidget>
     super.dispose();
   }
 
-  @override
-  ProfileItemData get originalProfile => widget.profile;
-
-  @override
-  String? get subId => widget.subId;
-
-  @override
-  ProfileItemData buildProfile() {
+  ProfileItemData _buildProfile() {
     return widget.profile.copyWith(
       remarks: _remarkController.text,
       address: _listenController.addressText,
@@ -85,8 +78,7 @@ class _HttpSettingWidgetState extends ConsumerState<HttpSettingWidget>
     );
   }
 
-  @override
-  Widget buildFormContent(BuildContext context) {
+  Widget _buildFormContent(BuildContext context) {
     return Column(
       children: [
         const Text('配置项'),
@@ -118,7 +110,10 @@ class _HttpSettingWidgetState extends ConsumerState<HttpSettingWidget>
       title: 'Http Setting',
       profile: widget.profile,
       isNew: widget.isNew,
-      controller: this,
+      formKey: _formKey,
+      formContent: _buildFormContent(context),
+      onBuildProfile: _buildProfile,
+      subId: widget.subId,
     );
   }
 }

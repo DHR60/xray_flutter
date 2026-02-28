@@ -30,8 +30,8 @@ class TrojanSettingWidget extends ConsumerStatefulWidget {
       _TrojanSettingWidgetState();
 }
 
-class _TrojanSettingWidgetState extends ConsumerState<TrojanSettingWidget>
-    with ProfileEditorMixin {
+class _TrojanSettingWidgetState extends ConsumerState<TrojanSettingWidget> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late ProfileExtraItemDto _extraDto;
   late TextEditingController _remarkController;
   late ProfileListenController _listenController;
@@ -67,14 +67,7 @@ class _TrojanSettingWidgetState extends ConsumerState<TrojanSettingWidget>
     super.dispose();
   }
 
-  @override
-  ProfileItemData get originalProfile => widget.profile;
-
-  @override
-  String? get subId => widget.subId;
-
-  @override
-  ProfileItemData buildProfile() {
+  ProfileItemData _buildProfile() {
     return widget.profile.copyWith(
       remarks: _remarkController.text,
       address: _listenController.addressText,
@@ -99,8 +92,7 @@ class _TrojanSettingWidgetState extends ConsumerState<TrojanSettingWidget>
     );
   }
 
-  @override
-  Widget buildFormContent(BuildContext context) {
+  Widget _buildFormContent(BuildContext context) {
     return Column(
       children: [
         const Text('配置项'),
@@ -135,7 +127,10 @@ class _TrojanSettingWidgetState extends ConsumerState<TrojanSettingWidget>
       title: 'Trojan Setting',
       profile: widget.profile,
       isNew: widget.isNew,
-      controller: this,
+      formKey: _formKey,
+      formContent: _buildFormContent(context),
+      onBuildProfile: _buildProfile,
+      subId: widget.subId,
     );
   }
 }

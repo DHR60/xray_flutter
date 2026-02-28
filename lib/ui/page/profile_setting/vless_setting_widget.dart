@@ -30,8 +30,8 @@ class VlessSettingWidget extends ConsumerStatefulWidget {
   ConsumerState<VlessSettingWidget> createState() => _VlessSettingWidgetState();
 }
 
-class _VlessSettingWidgetState extends ConsumerState<VlessSettingWidget>
-    with ProfileEditorMixin {
+class _VlessSettingWidgetState extends ConsumerState<VlessSettingWidget> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late ProfileExtraItemDto _extraDto;
   late TextEditingController _remarkController;
   late ProfileListenController _listenController;
@@ -77,14 +77,7 @@ class _VlessSettingWidgetState extends ConsumerState<VlessSettingWidget>
     super.dispose();
   }
 
-  @override
-  ProfileItemData get originalProfile => widget.profile;
-
-  @override
-  String? get subId => widget.subId;
-
-  @override
-  ProfileItemData buildProfile() {
+  ProfileItemData _buildProfile() {
     final vlessEncryption = _vlessEncryptionController.text;
 
     _extraDto = _extraDto.copyWith(
@@ -116,8 +109,7 @@ class _VlessSettingWidgetState extends ConsumerState<VlessSettingWidget>
     );
   }
 
-  @override
-  Widget buildFormContent(BuildContext context) {
+  Widget _buildFormContent(BuildContext context) {
     return Column(
       children: [
         const Text('配置项'),
@@ -173,7 +165,10 @@ class _VlessSettingWidgetState extends ConsumerState<VlessSettingWidget>
       title: 'VLESS Setting',
       profile: widget.profile,
       isNew: widget.isNew,
-      controller: this,
+      formKey: _formKey,
+      formContent: _buildFormContent(context),
+      onBuildProfile: _buildProfile,
+      subId: widget.subId,
     );
   }
 }
