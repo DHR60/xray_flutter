@@ -9,17 +9,15 @@ class $ProfileItemTable extends ProfileItem
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $ProfileItemTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _indexIdMeta = const VerificationMeta(
-    'indexId',
-  );
   @override
-  late final GeneratedColumn<String> indexId = GeneratedColumn<String>(
-    'index_id',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
+  late final GeneratedColumnWithTypeConverter<String, Uint8List> indexId =
+      GeneratedColumn<Uint8List>(
+        'index_id',
+        aliasedName,
+        false,
+        type: DriftSqlType.blob,
+        requiredDuringInsert: true,
+      ).withConverter<String>($ProfileItemTable.$converterindexId);
   @override
   late final GeneratedColumnWithTypeConverter<EConfigType, String> configType =
       GeneratedColumn<String>(
@@ -449,14 +447,6 @@ class $ProfileItemTable extends ProfileItem
   }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('index_id')) {
-      context.handle(
-        _indexIdMeta,
-        indexId.isAcceptableOrUnknown(data['index_id']!, _indexIdMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_indexIdMeta);
-    }
     if (data.containsKey('config_version')) {
       context.handle(
         _configVersionMeta,
@@ -676,10 +666,12 @@ class $ProfileItemTable extends ProfileItem
   ProfileItemData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ProfileItemData(
-      indexId: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}index_id'],
-      )!,
+      indexId: $ProfileItemTable.$converterindexId.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.blob,
+          data['${effectivePrefix}index_id'],
+        )!,
+      ),
       configType: $ProfileItemTable.$converterconfigType.fromSql(
         attachedDatabase.typeMapping.read(
           DriftSqlType.string,
@@ -824,6 +816,8 @@ class $ProfileItemTable extends ProfileItem
     return $ProfileItemTable(attachedDatabase, alias);
   }
 
+  static TypeConverter<String, Uint8List> $converterindexId =
+      const UuidBlobConverter();
   static JsonTypeConverter2<EConfigType, String, String> $converterconfigType =
       const EnumNameConverter<EConfigType>(EConfigType.values);
   static JsonTypeConverter2<ECoreType, String, String> $convertercoreType =
@@ -906,7 +900,11 @@ class ProfileItemData extends DataClass implements Insertable<ProfileItemData> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['index_id'] = Variable<String>(indexId);
+    {
+      map['index_id'] = Variable<Uint8List>(
+        $ProfileItemTable.$converterindexId.toSql(indexId),
+      );
+    }
     {
       map['config_type'] = Variable<String>(
         $ProfileItemTable.$converterconfigType.toSql(configType),
@@ -1458,7 +1456,7 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
     this.rowid = const Value.absent(),
   }) : indexId = Value(indexId);
   static Insertable<ProfileItemData> custom({
-    Expression<String>? indexId,
+    Expression<Uint8List>? indexId,
     Expression<String>? configType,
     Expression<int>? configVersion,
     Expression<String>? remarks,
@@ -1613,7 +1611,9 @@ class ProfileItemCompanion extends UpdateCompanion<ProfileItemData> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     if (indexId.present) {
-      map['index_id'] = Variable<String>(indexId.value);
+      map['index_id'] = Variable<Uint8List>(
+        $ProfileItemTable.$converterindexId.toSql(indexId.value),
+      );
     }
     if (configType.present) {
       map['config_type'] = Variable<String>(
@@ -2643,10 +2643,11 @@ class $$ProfileItemTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<String> get indexId => $composableBuilder(
-    column: $table.indexId,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnWithTypeConverterFilters<String, String, Uint8List> get indexId =>
+      $composableBuilder(
+        column: $table.indexId,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
 
   ColumnWithTypeConverterFilters<EConfigType, EConfigType, String>
   get configType => $composableBuilder(
@@ -2825,7 +2826,7 @@ class $$ProfileItemTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<String> get indexId => $composableBuilder(
+  ColumnOrderings<Uint8List> get indexId => $composableBuilder(
     column: $table.indexId,
     builder: (column) => ColumnOrderings(column),
   );
@@ -3005,7 +3006,7 @@ class $$ProfileItemTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<String> get indexId =>
+  GeneratedColumnWithTypeConverter<String, Uint8List> get indexId =>
       $composableBuilder(column: $table.indexId, builder: (column) => column);
 
   GeneratedColumnWithTypeConverter<EConfigType, String> get configType =>

@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:xray_flutter/data/db/app_database.dart';
+import 'package:xray_flutter/data/db/converter/uuid_blob_converter.dart';
 import 'package:xray_flutter/data/model/profile_item_factory.dart';
 import 'package:xray_flutter/domain/repo/profile_repo.dart';
 
@@ -70,21 +71,21 @@ class ProfileRepoImpl implements ProfileRepo {
   Future<int> deleteProfile(String indexId) {
     return (_database.delete(
       _database.profileItem,
-    )..where((tbl) => tbl.indexId.equals(indexId))).go();
+    )..where((tbl) => tbl.indexId.equalsValue(indexId))).go();
   }
 
   @override
   Future<int> updateProfile(ProfileItemData data) {
     return (_database.update(
       _database.profileItem,
-    )..where((tbl) => tbl.indexId.equals(data.indexId))).write(data);
+    )..where((tbl) => tbl.indexId.equalsValue(data.indexId))).write(data);
   }
 
   @override
   Future<ProfileItemData?> getProfileById(String indexId) {
     return (_database.select(
       _database.profileItem,
-    )..where((tbl) => tbl.indexId.equals(indexId))).getSingleOrNull();
+    )..where((tbl) => tbl.indexId.equalsValue(indexId))).getSingleOrNull();
   }
 
   @override
@@ -122,7 +123,7 @@ class ProfileRepoImpl implements ProfileRepo {
         final profile = profiles[i];
         if (profile.orderIndex != i) {
           await (_database.update(_database.profileItem)
-                ..where((tbl) => tbl.indexId.equals(profile.indexId)))
+                ..where((tbl) => tbl.indexId.equalsValue(profile.indexId)))
               .write(profile.copyWith(orderIndex: i));
         }
       }
@@ -177,7 +178,7 @@ class ProfileRepoImpl implements ProfileRepo {
       final items = rows
           .map(
             (r) => (
-              id: r.read(_database.profileItem.indexId)!,
+              id: r.readWithConverter(_database.profileItem.indexId)!,
               orderIndex: r.read(_database.profileItem.orderIndex)!,
             ),
           )
@@ -206,7 +207,7 @@ class ProfileRepoImpl implements ProfileRepo {
           batch.update(
             _database.profileItem,
             ProfileItemCompanion(orderIndex: Value(desiredOrderIndex)),
-            where: (tbl) => tbl.indexId.equals(id),
+            where: (tbl) => tbl.indexId.equalsValue(id),
           );
         }
       });

@@ -57,7 +57,7 @@ class Utils {
 
   static String generateUUID() {
     var uuid = const Uuid();
-    return uuid.v4();
+    return uuid.v7();
   }
 
   static String? prettyJson(String jsonString) {

@@ -9,6 +9,7 @@ import 'package:xray_flutter/core/enum/config_type.dart';
 import 'package:xray_flutter/core/enum/core_type.dart';
 import 'package:xray_flutter/data/db/tables/profile_stat_item.dart';
 import 'package:xray_flutter/data/db/tables/profile_test_item.dart';
+import 'package:xray_flutter/data/db/converter/uuid_blob_converter.dart';
 
 part 'app_database.g.dart';
 

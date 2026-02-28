@@ -1,9 +1,10 @@
 import 'package:drift/drift.dart';
 import 'package:xray_flutter/core/enum/config_type.dart';
 import 'package:xray_flutter/core/enum/core_type.dart';
+import 'package:xray_flutter/data/db/converter/uuid_blob_converter.dart';
 
 class ProfileItem extends Table {
-  late final indexId = text()();
+  late final indexId = blob().map(const UuidBlobConverter())();
   late final configType = textEnum<EConfigType>().clientDefault(
     () => 'unknown',
   )();
